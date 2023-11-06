@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Patches.h"
 #include "RBXHooks.h"
+#include "OtherHooks.h"
 
 #include <detours.h>
 
@@ -18,6 +19,11 @@ static std::map<void*, void*> hooks = {
 
     // ===== `RBX::ScriptContext` member function hooks =====
     { &RBX::ScriptContext__openState, RBX__ScriptContext__openState_hook },
+
+    // ===== other hooks =====
+    { &sub_6C34D0, sub_6C34D0_hook },
+    { &sub_6C47A0, sub_6C47A0_hook },
+    { &sub_794AF0, sub_794AF0_hook },
 };
 
 #ifdef _DEBUG
@@ -61,7 +67,24 @@ static void initializeHooks()
         throw patchError("DetourTransactionCommit returned %d", error);
 }
 
+static void writeBytes(void* address, const char* data, size_t size, DWORD flags)
+{
+    DWORD oldFlags;
+    if (!VirtualProtect(address, size, flags, &oldFlags))
+        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (1)", address, (DWORD)address + size);
+
+    std::memcpy(address, data, size);
+
+    if (!VirtualProtect(address, size, oldFlags, &oldFlags))
+        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, (DWORD)address + size);
+}
+
 void Patches::initialize()
 {
+    // ===== bypass certificate checks =====
+    // RBX::Http::httpGetPostWinInet is a very large function, so let's just patch it instead of hooking it
+    // we are writing a jmp from 0x006EAAB0 to 0x006EABF7
+    writeBytes(reinterpret_cast<void*>(0x006EAAB0), "\xE9\x42\x01\x00\x00", 5, PAGE_EXECUTE_READWRITE);
+
     initializeHooks();
 }
