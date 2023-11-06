@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "RBXHooks.h"
 #include "LuaApiExtensions.h"
+#include "UrlHelper.h"
 
 // ===== `RBX::ContentProvider` member function hooks =====
 
 RBX::ContentProvider__verifyScriptSignature_t RBX::ContentProvider__verifyScriptSignature = reinterpret_cast<RBX::ContentProvider__verifyScriptSignature_t>(0x00654380);
 
+// never require script signatures (1)
 void __cdecl RBX__ContentProvider__verifyScriptSignature_hook(vc90::std::string* source, bool required)
 {
 	RBX::ContentProvider__verifyScriptSignature(source, false);
@@ -13,6 +15,7 @@ void __cdecl RBX__ContentProvider__verifyScriptSignature_hook(vc90::std::string*
 
 RBX::ContentProvider__verifyRequestedScriptSignature_t RBX::ContentProvider__verifyRequestedScriptSignature = reinterpret_cast<RBX::ContentProvider__verifyRequestedScriptSignature_t>(0x00654B90);
 
+// never require script signatures (2)
 void __cdecl RBX__ContentProvider__verifyRequestedScriptSignature_hook(vc90::std::string* source, vc90::std::string* assetId, bool required)
 {
 	RBX::ContentProvider__verifyRequestedScriptSignature(source, assetId, false);
@@ -22,15 +25,42 @@ void __cdecl RBX__ContentProvider__verifyRequestedScriptSignature_hook(vc90::std
 
 RBX::Http__constructor_t RBX::Http__constructor = reinterpret_cast<RBX::Http__constructor_t>(0x00420090);
 
+// reconstruct asset urls to use the assetdelivery api
 RBX::Http* __fastcall RBX__Http__constructor_hook(RBX::Http* _this, void*, vc90::std::string* url)
 {
-	// TODO: PARSE URL AND MODIFY TO USE NEW ASSET API
+	const char* urlCStr = (*vc90::std::string__c_str)(url);
+
+	UrlHelper urlHelper(urlCStr);
+
+	std::string& hostname = urlHelper.hostname;
+	std::string& path = urlHelper.path;
+
+	std::transform(path.begin(), path.end(), path.begin(), std::tolower);
+
+	if ((hostname == "roblox.com" || hostname == "www.roblox.com" || hostname == "assetgame.roblox.com") &&
+		(path == "asset" || path == "asset/"))
+	{
+		urlHelper.protocol = "https";
+		urlHelper.hostname = "assetdelivery.roblox.com";
+		urlHelper.path = "v1/asset/";
+
+		std::string newUrlStr = urlHelper.BuildUrl();
+
+		auto newUrl = vc90::std::create_string(newUrlStr.c_str());
+
+		auto result = RBX::Http__constructor(_this, newUrl);
+
+		(*vc90::std::string__destructor)(newUrl);
+
+		return result;
+	}
 
 	return RBX::Http__constructor(_this, url);
 }
 
 RBX::Http__trustCheck_t RBX::Http__trustCheck = reinterpret_cast<RBX::Http__trustCheck_t>(0x005B6300);
 
+// allow content from any url
 bool __cdecl RBX__Http__trustCheck_hook(const char* url)
 {
 	return true;
@@ -40,6 +70,7 @@ bool __cdecl RBX__Http__trustCheck_hook(const char* url)
 
 RBX::DataModel__startCoreScripts_t RBX::DataModel__startCoreScripts = reinterpret_cast<RBX::DataModel__startCoreScripts_t>(0x005F67A0);
 
+// execute a local Studio.ashx
 void __fastcall RBX__DataModel__startCoreScripts_hook(RBX::DataModel* _this, void*, RBX::AdornRbxGfx* adorn)
 {
 	RBX::GuiBuilder guiBuilder;
@@ -53,6 +84,7 @@ void __fastcall RBX__DataModel__startCoreScripts_hook(RBX::DataModel* _this, voi
 
 RBX::ScriptContext__openState_t RBX::ScriptContext__openState = reinterpret_cast<RBX::ScriptContext__openState_t>(0x00625BF0);
 
+// add extensions to the Lua api
 void __fastcall RBX__ScriptContext__openState_hook(RBX::ScriptContext* _this)
 {
 	if (!_this->globalState)
