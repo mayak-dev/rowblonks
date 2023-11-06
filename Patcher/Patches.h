@@ -2,5 +2,5 @@
 
 namespace Patches
 {
-	void initializeHooks();
+	void initialize();
 }
