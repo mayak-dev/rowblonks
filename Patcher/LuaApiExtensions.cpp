@@ -10,7 +10,7 @@ int Lua::addLocalCoreScript(lua_State* L)
     const char* name = luaL_checkstring(L, 1);
     auto parent = Lua::checkInstance(L, 2);
 
-    std::string source = "rbxasset://..\\extra\\corescripts\\";
+    std::string source = "rbxasset://../extra/corescripts/";
     source += name;
     source += ".lua";
 
@@ -25,6 +25,8 @@ int Lua::addLocalCoreScript(lua_State* L)
     RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(coreScript), nameStr);
 
     (*vc90::std::string__destructor)(nameStr);
+
+    RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(coreScript), true);
 
     auto dataModel = Lua::getDataModel(L);
     auto scriptContext = RBX::DataModel__find__ScriptContext(dataModel);
@@ -51,7 +53,7 @@ int Lua::registerLocalLibrary(lua_State* L)
     
     // script objects can only be registered as a library if their source property is set
     // so we have to read the library file ourselves and set the property
-    std::string path = g_gamePath + "\\extra\\libraries\\";
+    std::string path = g_gamePath + "/extra/libraries/";
     path += name;
     path += ".lua";
 
@@ -66,6 +68,8 @@ int Lua::registerLocalLibrary(lua_State* L)
 
     RBX::Script__setDisabled(script, true);
     RBX::Script__setSource(script, sourceStr);
+
+    RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(script), true);
 
     auto dataModel = Lua::getDataModel(L);
     auto scriptContext = RBX::DataModel__find__ScriptContext(dataModel);
