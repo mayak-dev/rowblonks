@@ -39,6 +39,37 @@ int Lua::addLocalCoreScript(lua_State* L)
     return 0;
 }
 
+int Lua::addLocalStarterScript(lua_State* L)
+{
+    const char* name = luaL_checkstring(L, 1);
+    auto parent = Lua::checkInstance(L, 2);
+
+    std::string source = "rbxasset://../extra/corescripts/";
+    source += name;
+    source += ".lua";
+
+    auto starterScript = RBX::create_StarterScript(source.c_str());
+
+    // i don't know a good place to put this
+    // create a boost::shared_ptr<RBX::StarterScript>
+    ((void* (__thiscall*)(void*, RBX::StarterScript*, bool))0x0061AE90)((*vc90::operator_new)(8), starterScript, false);
+
+    auto nameStr = vc90::std::create_string(name);
+
+    RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(starterScript), nameStr);
+
+    (*vc90::std::string__destructor)(nameStr);
+
+    RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(starterScript), true);
+
+    auto dataModel = Lua::getDataModel(L);
+    auto scriptContext = RBX::DataModel__find__ScriptContext(dataModel);
+
+    RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(starterScript), reinterpret_cast<RBX::Instance*>(scriptContext));
+
+    return 0;
+}
+
 int Lua::registerLocalLibrary(lua_State* L)
 {
     const char* name = luaL_checkstring(L, 1);

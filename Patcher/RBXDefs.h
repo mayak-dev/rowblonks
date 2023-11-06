@@ -102,6 +102,27 @@ namespace RBX
 		return result;
 	}
 
+	// ===== `StarterScript` class =====
+
+	class StarterScript;
+
+	const auto StarterScript__constructor = reinterpret_cast<StarterScript* (__thiscall*)(StarterScript*, vc90::std::string * source)>(0x00663C50);
+
+	// constructor helper
+	inline StarterScript* create_StarterScript(const char* source)
+	{
+		constexpr size_t sizeof_StarterScript = 200;
+
+		auto newSource = vc90::std::create_string(source);
+
+		auto result = reinterpret_cast<StarterScript*>((*vc90::operator_new)(sizeof_StarterScript));
+		StarterScript__constructor(result, newSource);
+
+		(*vc90::std::string__destructor)(newSource);
+
+		return result;
+	}
+
 	// ===== `ContentProvider` class =====
 
 	class ContentProvider;

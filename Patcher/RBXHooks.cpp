@@ -66,6 +66,9 @@ void __fastcall RBX__ScriptContext__openState_hook(RBX::ScriptContext* _this)
 			lua_pushcfunction(_this->globalState, Lua::addLocalCoreScript);
 			lua_setglobal(_this->globalState, "AddLocalCoreScript");
 
+			lua_pushcfunction(_this->globalState, Lua::addLocalStarterScript);
+			lua_setglobal(_this->globalState, "AddLocalStarterScript");
+
 			lua_pushcfunction(_this->globalState, Lua::registerLocalLibrary);
 			lua_setglobal(_this->globalState, "RegisterLocalLibrary");
 		}
