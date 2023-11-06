@@ -4,7 +4,9 @@
 
 namespace vc90
 {
-	const auto operator_new = reinterpret_cast<void* (__cdecl*)(size_t)>(0x00A42FC0);
+	const auto operator_new = reinterpret_cast<void* (__cdecl**)(size_t)>(0x00A42FC0);
+
+	const auto _RTDynamicCast = reinterpret_cast<PVOID (__cdecl**)(PVOID inptr, LONG VfDelta, PVOID SrcType, PVOID TargetType, BOOL isReference)>(0x00A40A24);
 
 	namespace std
 	{
@@ -13,20 +15,20 @@ namespace vc90
 
 		class string;
 
-		const auto string__constructor = reinterpret_cast<string* (__thiscall*)(string* _this, const char*)>(0x00A404C4);
-		const auto string__destructor = reinterpret_cast<void(__thiscall*)(string* _this)>(0x00A404D0);
+		const auto string__constructor = reinterpret_cast<string* (__thiscall**)(string* _this, const char*)>(0x00A404C4);
+		const auto string__destructor = reinterpret_cast<void(__thiscall**)(string* _this)>(0x00A404D0);
 
 		// constructor helper
 		inline string* create_string(const char* str)
 		{
 			constexpr size_t sizeof_string = 28;
 
-			string* result = reinterpret_cast<string*>(operator_new(sizeof_string));
-			string__constructor(result, str);
+			auto result = reinterpret_cast<string*>((*operator_new)(sizeof_string));
+			(*string__constructor)(result, str);
 
 			return result;
 		}
 
-		const auto string__c_str = reinterpret_cast<const char* (__thiscall*)(string* _this)>(0x00A404CC);
+		const auto string__c_str = reinterpret_cast<const char* (__thiscall**)(string* _this)>(0x00A404CC);
 	}
 }
