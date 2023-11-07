@@ -20,6 +20,9 @@ static std::map<void*, void*> hooks = {
     // ===== `RBX::ScriptContext` member function hooks =====
     { &RBX::ScriptContext__openState, RBX__ScriptContext__openState_hook },
 
+    // ===== `RBX::Network::Replicator::RockyItem` member function hooks =====
+    { &RBX::Network::Replicator__RockyItem__write, RBX__Network__Replicator__RockyItem__write_hook },
+
     // ===== other hooks =====
     { &sub_6C34D0, sub_6C34D0_hook },
     { &sub_6C47A0, sub_6C47A0_hook },
@@ -79,12 +82,35 @@ static void writeBytes(void* address, const char* data, size_t size, DWORD flags
         throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, (DWORD)address + size);
 }
 
+static void fillBytes(void* address, int value, size_t size, DWORD flags)
+{
+    DWORD oldFlags;
+    if (!VirtualProtect(address, size, flags, &oldFlags))
+        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (1)", address, (DWORD)address + size);
+
+    std::memset(address, value, size);
+
+    if (!VirtualProtect(address, size, oldFlags, &oldFlags))
+        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, (DWORD)address + size);
+}
+
 void Patches::initialize()
 {
-    // ===== bypass certificate checks =====
-    // RBX::Http::httpGetPostWinInet is a very large function, so let's just patch it instead of hooking it
-    // we are writing a jmp from 0x006EAAB0 to 0x006EABF7
+    // ===== bypass SSL certificate checks =====
+    // we are writing a JMP from 0x006EAAB0 to 0x006EABF7, within RBX::Http::httpGetPostWinInet
     writeBytes(reinterpret_cast<void*>(0x006EAAB0), "\xE9\x42\x01\x00\x00", 5, PAGE_EXECUTE_READWRITE);
+
+    // SECURITY BYPASS
+    // ===== high-privilege "Local url" scripts =====
+    // have these scripts execute with identity 7
+    // this is replacing PUSH 1 with PUSH 7
+    fillBytes(reinterpret_cast<void*>(0x00478637), 7, 1, PAGE_EXECUTE_READWRITE);
+
+    // SECURITY BYPASS
+    // ===== always send a clean value for RBX::DataModel::sendStats =====
+    // this is so that the server doesn't receive any so-called "hack flags"
+    // write `XOR EDX, EDX` followed by a series of NOPs where these flags would normally be stored in EDX
+    writeBytes(reinterpret_cast<void*>(0x005105A5), "\x33\xD2\x90\x90\x90\x90\x90", 7, PAGE_EXECUTE_READWRITE);
 
     initializeHooks();
 }

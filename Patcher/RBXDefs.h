@@ -149,4 +149,15 @@ namespace RBX
 	// HOOK
 	typedef bool(__cdecl* Http__trustCheck_t)(const char* url);
 	extern Http__trustCheck_t Http__trustCheck;
+
+	namespace Network
+	{
+		// ===== `Replicator::RockyItem` class =====
+
+		class Replicator__RockyItem;
+
+		// HOOK
+		typedef bool(__thiscall* Replicator__RockyItem__write_t)(Replicator__RockyItem* _this, void* bitStream);
+		extern Replicator__RockyItem__write_t Replicator__RockyItem__write;
+	}
 }

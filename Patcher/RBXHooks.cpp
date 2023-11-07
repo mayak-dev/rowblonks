@@ -7,6 +7,7 @@
 
 RBX::ContentProvider__verifyScriptSignature_t RBX::ContentProvider__verifyScriptSignature = reinterpret_cast<RBX::ContentProvider__verifyScriptSignature_t>(0x00654380);
 
+// SECURITY BYPASS
 // never require script signatures (1)
 void __cdecl RBX__ContentProvider__verifyScriptSignature_hook(vc90::std::string* source, bool required)
 {
@@ -15,6 +16,7 @@ void __cdecl RBX__ContentProvider__verifyScriptSignature_hook(vc90::std::string*
 
 RBX::ContentProvider__verifyRequestedScriptSignature_t RBX::ContentProvider__verifyRequestedScriptSignature = reinterpret_cast<RBX::ContentProvider__verifyRequestedScriptSignature_t>(0x00654B90);
 
+// SECURITY BYPASS
 // never require script signatures (2)
 void __cdecl RBX__ContentProvider__verifyRequestedScriptSignature_hook(vc90::std::string* source, vc90::std::string* assetId, bool required)
 {
@@ -105,4 +107,15 @@ void __fastcall RBX__ScriptContext__openState_hook(RBX::ScriptContext* _this)
 			lua_setglobal(_this->globalState, "RegisterLocalLibrary");
 		}
 	}
+}
+
+// ===== `RBX::Network::Replicator::RockyItem` member function hooks =====
+
+RBX::Network::Replicator__RockyItem__write_t RBX::Network::Replicator__RockyItem__write = reinterpret_cast<RBX::Network::Replicator__RockyItem__write_t>(0x004F98A0);
+
+// SECURITY BYPASS
+// never send rocky items to the server
+bool __fastcall RBX__Network__Replicator__RockyItem__write_hook(RBX::Network::Replicator__RockyItem* _this, void*, void* bitStream)
+{
+	return true;
 }
