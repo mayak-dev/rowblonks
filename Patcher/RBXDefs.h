@@ -7,7 +7,13 @@ namespace RBX
 {
 	// ===== `Instance` class =====
 
-	class Instance;
+	class Instance
+	{
+	private:
+		char padding1[68];
+	public:
+		Instance* parent;
+	};
 
 	const auto Instance__setParent = reinterpret_cast<void(__thiscall*)(Instance* _this, Instance* newParent)>(0x00597910);
 

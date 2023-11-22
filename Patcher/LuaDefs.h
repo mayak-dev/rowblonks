@@ -15,6 +15,8 @@ const auto luaL_checklstring = reinterpret_cast<const char* (__cdecl*)(lua_State
 
 const auto luaL_checkudata = reinterpret_cast<void* (__cdecl*)(lua_State* L, int ud, const char* tname)>(0x00764080);
 
+const auto luaL_error = reinterpret_cast<int(__cdecl*)(lua_State* L, const char* fmt, ...)>(0x00763710);
+
 const auto lua_settop = reinterpret_cast<void(__cdecl*)(lua_State* L, int idx)>(0x00762370);
 
 #define LUA_REGISTRYINDEX	(-10000)
@@ -29,3 +31,34 @@ const auto lua_settop = reinterpret_cast<void(__cdecl*)(lua_State* L, int idx)>(
 #define luaL_checkstring(L,n)   (luaL_checklstring(L, (n), NULL))
 
 #define lua_pop(L,n)            lua_settop(L, -(n)-1)
+
+namespace RBX
+{
+	class ScriptContext;
+}
+
+// gets allocated and constructed right before the lua_State in memory
+class RobloxExtraSpace
+{
+public:
+	class Shared
+	{
+	private:
+		char padding1[4];
+	public:
+		RBX::ScriptContext* scriptContext;
+	} * shared;
+
+private:
+	char padding1[4];
+
+public:
+	int identity : 5;
+
+	static inline RobloxExtraSpace* get(lua_State* L)
+	{
+		constexpr size_t sizeof_RobloxExtraSpace = 32;
+
+		return reinterpret_cast<RobloxExtraSpace*>(reinterpret_cast<DWORD>(L) - sizeof_RobloxExtraSpace);
+	}
+};

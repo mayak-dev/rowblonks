@@ -17,8 +17,15 @@ RBX::Instance* Lua::checkInstance(lua_State* L, int n)
 
 RBX::DataModel* Lua::getDataModel(lua_State* L)
 {
-    lua_getglobal(L, "game");
-    auto dataModel = reinterpret_cast<RBX::DataModel*>(checkInstance(L, -1));
-    lua_pop(L, 1);
+    auto scriptContext = RobloxExtraSpace::get(L)->shared->scriptContext;
+    auto dataModel = reinterpret_cast<RBX::DataModel*>(reinterpret_cast<RBX::Instance*>(scriptContext)->parent);
     return dataModel;
+}
+
+void Lua::checkIdentity(lua_State* L, int minIdentity, const char* action)
+{
+    int identity = RobloxExtraSpace::get(L)->identity;
+
+    if (identity < minIdentity)
+        luaL_error(L, "Insufficient permissions to %s (expected identity >= %d, got %d)", action, minIdentity, identity);
 }
