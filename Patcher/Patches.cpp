@@ -7,26 +7,26 @@
 
 static std::map<void*, void*> hooks = {
     // ===== `RBX::ContentProvider` member function hooks =====
-    { &RBX::ContentProvider__verifyScriptSignature, RBX__ContentProvider__verifyScriptSignature_hook },
-    { &RBX::ContentProvider__verifyRequestedScriptSignature, RBX__ContentProvider__verifyScriptSignature_hook },
+    { &RBX::ContentProvider__verifyScriptSignature, hook_RBX__ContentProvider__verifyScriptSignature },
+    { &RBX::ContentProvider__verifyRequestedScriptSignature, hook_RBX__ContentProvider__verifyScriptSignature },
 
     // ===== `RBX:Http` member function hooks =====
-    { &RBX::Http__constructor, RBX__Http__constructor_hook },
-    { &RBX::Http__trustCheck, RBX__Http__trustCheck_hook },
+    { &RBX::Http__constructor, hook_RBX__Http__constructor },
+    { &RBX::Http__trustCheck, hook_RBX__Http__trustCheck },
 
     // ===== `RBX::DataModel` member function hooks =====
-    { &RBX::DataModel__startCoreScripts, RBX__DataModel__startCoreScripts_hook },
+    { &RBX::DataModel__startCoreScripts, hook_RBX__DataModel__startCoreScripts },
 
     // ===== `RBX::ScriptContext` member function hooks =====
-    { &RBX::ScriptContext__openState, RBX__ScriptContext__openState_hook },
+    { &RBX::ScriptContext__openState, hook_RBX__ScriptContext__openState },
 
     // ===== `RBX::Network::Replicator::RockyItem` member function hooks =====
-    { &RBX::Network::Replicator__RockyItem__write, RBX__Network__Replicator__RockyItem__write_hook },
+    { &RBX::Network::Replicator__RockyItem__write, hook_RBX__Network__Replicator__RockyItem__write },
 
     // ===== other hooks =====
-    { &sub_6C34D0, sub_6C34D0_hook },
-    { &sub_6C47A0, sub_6C47A0_hook },
-    { &sub_794AF0, sub_794AF0_hook },
+    { &sub_6C34D0, hook_sub_6C34D0 },
+    { &sub_6C47A0, hook_sub_6C47A0 },
+    { &sub_794AF0, hook_sub_794AF0 },
 };
 
 #ifdef _DEBUG

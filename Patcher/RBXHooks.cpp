@@ -9,7 +9,7 @@ RBX::ContentProvider__verifyScriptSignature_t RBX::ContentProvider__verifyScript
 
 // SECURITY BYPASS
 // never require script signatures (1)
-void __cdecl RBX__ContentProvider__verifyScriptSignature_hook(vc90::std::string* source, bool required)
+void __cdecl hook_RBX__ContentProvider__verifyScriptSignature(vc90::std::string* source, bool required)
 {
 	RBX::ContentProvider__verifyScriptSignature(source, false);
 }
@@ -28,7 +28,7 @@ void __cdecl RBX__ContentProvider__verifyRequestedScriptSignature_hook(vc90::std
 RBX::Http__constructor_t RBX::Http__constructor = reinterpret_cast<RBX::Http__constructor_t>(0x00420090);
 
 // reconstruct asset urls to use the assetdelivery api
-RBX::Http* __fastcall RBX__Http__constructor_hook(RBX::Http* _this, void*, vc90::std::string* url)
+RBX::Http* __fastcall hook_RBX__Http__constructor(RBX::Http* _this, void*, vc90::std::string* url)
 {
 	const char* urlCStr = (*vc90::std::string__c_str)(url);
 
@@ -63,7 +63,7 @@ RBX::Http* __fastcall RBX__Http__constructor_hook(RBX::Http* _this, void*, vc90:
 RBX::Http__trustCheck_t RBX::Http__trustCheck = reinterpret_cast<RBX::Http__trustCheck_t>(0x005B6300);
 
 // allow content from any url
-bool __cdecl RBX__Http__trustCheck_hook(const char* url)
+bool __cdecl hook_RBX__Http__trustCheck(const char* url)
 {
 	return true;
 }
@@ -73,7 +73,7 @@ bool __cdecl RBX__Http__trustCheck_hook(const char* url)
 RBX::DataModel__startCoreScripts_t RBX::DataModel__startCoreScripts = reinterpret_cast<RBX::DataModel__startCoreScripts_t>(0x005F67A0);
 
 // execute a local Studio.ashx
-void __fastcall RBX__DataModel__startCoreScripts_hook(RBX::DataModel* _this, void*, RBX::AdornRbxGfx* adorn)
+void __fastcall hook_RBX__DataModel__startCoreScripts(RBX::DataModel* _this, void*, RBX::AdornRbxGfx* adorn)
 {
 	RBX::GuiBuilder guiBuilder;
 	RBX::GuiBuilder__buildGui(&guiBuilder, adorn, _this, _this->workspace);
@@ -87,7 +87,7 @@ void __fastcall RBX__DataModel__startCoreScripts_hook(RBX::DataModel* _this, voi
 RBX::ScriptContext__openState_t RBX::ScriptContext__openState = reinterpret_cast<RBX::ScriptContext__openState_t>(0x00625BF0);
 
 // add extensions to the Lua api
-void __fastcall RBX__ScriptContext__openState_hook(RBX::ScriptContext* _this)
+void __fastcall hook_RBX__ScriptContext__openState(RBX::ScriptContext* _this)
 {
 	if (!_this->globalState)
 	{
@@ -115,7 +115,7 @@ RBX::Network::Replicator__RockyItem__write_t RBX::Network::Replicator__RockyItem
 
 // SECURITY BYPASS
 // never send rocky items to the server
-bool __fastcall RBX__Network__Replicator__RockyItem__write_hook(RBX::Network::Replicator__RockyItem* _this, void*, void* bitStream)
+bool __fastcall hook_RBX__Network__Replicator__RockyItem__write(RBX::Network::Replicator__RockyItem* _this, void*, void* bitStream)
 {
 	return true;
 }
