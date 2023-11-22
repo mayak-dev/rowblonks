@@ -74,24 +74,24 @@ static void writeBytes(void* address, const char* data, size_t size, DWORD flags
 {
     DWORD oldFlags;
     if (!VirtualProtect(address, size, flags, &oldFlags))
-        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (1)", address, (DWORD)address + size);
+        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (1)", address, static_cast<DWORD>(address) + size);
 
     std::memcpy(address, data, size);
 
     if (!VirtualProtect(address, size, oldFlags, &oldFlags))
-        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, (DWORD)address + size);
+        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, static_cast<DWORD>(address)s + size);
 }
 
 static void fillBytes(void* address, int value, size_t size, DWORD flags)
 {
     DWORD oldFlags;
     if (!VirtualProtect(address, size, flags, &oldFlags))
-        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (1)", address, (DWORD)address + size);
+        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (1)", address, static_cast<DWORD>(address) + size);
 
     std::memset(address, value, size);
 
     if (!VirtualProtect(address, size, oldFlags, &oldFlags))
-        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, (DWORD)address + size);
+        throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, static_cast<DWORD>(address) + size);
 }
 
 void Patches::initialize()

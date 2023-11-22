@@ -18,7 +18,7 @@ int Lua::addLocalCoreScript(lua_State* L)
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::CoreScript>
-    ((void* (__thiscall*)(void*, RBX::CoreScript*, bool))0x0061AF40)((*vc90::operator_new)(8), coreScript, false);
+    (reinterpret_cast<void* (__thiscall*)(void*, RBX::CoreScript*, bool)>(0x0061AF40))((*vc90::operator_new)(8), coreScript, false);
 
     auto nameStr = vc90::std::create_string(name);
 
@@ -52,7 +52,7 @@ int Lua::addLocalStarterScript(lua_State* L)
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::StarterScript>
-    ((void* (__thiscall*)(void*, RBX::StarterScript*, bool))0x0061AE90)((*vc90::operator_new)(8), starterScript, false);
+    (reinterpret_cast<void* (__thiscall*)(void*, RBX::StarterScript*, bool)>(0x0061AE90))((*vc90::operator_new)(8), starterScript, false);
 
     auto nameStr = vc90::std::create_string(name);
 
@@ -78,7 +78,7 @@ int Lua::registerLocalLibrary(lua_State* L)
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::Script>
-    ((void* (__thiscall*)(void*, RBX::Script*, bool))0x00428EE0)((*vc90::operator_new)(8), script, false);
+    (reinterpret_cast<void* (__thiscall*)(void*, RBX::Script*, bool)>(0x00428EE0))((*vc90::operator_new)(8), script, false);
 
     std::stringstream sourceStream;
     
@@ -108,8 +108,8 @@ int Lua::registerLocalLibrary(lua_State* L)
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(script), reinterpret_cast<RBX::Instance*>(scriptContext));
 
     // not fully sure what this is, but this is done to register the script object as a library
-    auto ptr = *((DWORD**)scriptContext + 129) + 8;
-    auto res = ((RBX::Script** (__thiscall*)(void*, vc90::std::string*))0x006145A0)(ptr, nameStr);
+    auto ptr = *(reinterpret_cast<DWORD**>(scriptContext) + 129) + 8;
+    auto res = (reinterpret_cast<RBX::Script** (__thiscall*)(void*, vc90::std::string*)>(0x006145A0))(ptr, nameStr);
     *res = script;
 
     (*vc90::std::string__destructor)(nameStr);
