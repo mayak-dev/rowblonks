@@ -7,7 +7,7 @@
 
 int Lua::produceGameChat(lua_State* L)
 {
-    auto dataModel = Lua::getDataModel(L);
+    RBX::DataModel* dataModel = Lua::getScriptContextAndDataModel(L).second;
     auto networkServer = RBX::DataModel__find__Network__Server(dataModel);
 
     if (!networkServer)
@@ -53,8 +53,7 @@ int Lua::addLocalCoreScript(lua_State* L)
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(coreScript), true);
 
-    auto dataModel = Lua::getDataModel(L);
-    auto scriptContext = RBX::DataModel__find__ScriptContext(dataModel);
+    auto scriptContext = Lua::getScriptContextAndDataModel(L).first;
 
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(coreScript), parent);
 
@@ -89,8 +88,7 @@ int Lua::addLocalStarterScript(lua_State* L)
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(starterScript), true);
 
-    auto dataModel = Lua::getDataModel(L);
-    auto scriptContext = RBX::DataModel__find__ScriptContext(dataModel);
+    RBX::ScriptContext* scriptContext = Lua::getScriptContextAndDataModel(L).first;
 
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(starterScript), reinterpret_cast<RBX::Instance*>(scriptContext));
 
@@ -132,8 +130,7 @@ int Lua::registerLocalLibrary(lua_State* L)
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(script), true);
 
-    auto dataModel = Lua::getDataModel(L);
-    auto scriptContext = RBX::DataModel__find__ScriptContext(dataModel);
+    RBX::ScriptContext* scriptContext = Lua::getScriptContextAndDataModel(L).first;
     
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(script), reinterpret_cast<RBX::Instance*>(scriptContext));
 

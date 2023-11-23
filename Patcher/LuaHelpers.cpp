@@ -15,11 +15,11 @@ RBX::Instance* Lua::checkInstance(lua_State* L, int n)
     return result;
 }
 
-RBX::DataModel* Lua::getDataModel(lua_State* L)
+std::pair<RBX::ScriptContext*, RBX::DataModel*> Lua::getScriptContextAndDataModel(lua_State* L)
 {
     auto scriptContext = RobloxExtraSpace::get(L)->shared->scriptContext;
     auto dataModel = reinterpret_cast<RBX::DataModel*>(reinterpret_cast<RBX::Instance*>(scriptContext)->parent);
-    return dataModel;
+    return std::make_pair(scriptContext, dataModel);
 }
 
 void Lua::checkIdentity(lua_State* L, int minIdentity, const char* action)
