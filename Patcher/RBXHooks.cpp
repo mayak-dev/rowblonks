@@ -97,6 +97,9 @@ void __fastcall hook_RBX__ScriptContext__openState(RBX::ScriptContext* _this)
 
 		if (_this->globalState)
 		{
+			lua_pushcfunction(_this->globalState, Lua::produceGameChat);
+			lua_setglobal(_this->globalState, "ProduceGameChat");
+
 			lua_pushcfunction(_this->globalState, Lua::addLocalCoreScript);
 			lua_setglobal(_this->globalState, "AddLocalCoreScript");
 

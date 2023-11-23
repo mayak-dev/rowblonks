@@ -3,11 +3,34 @@
 #include "RBXDefs.h"
 #include "rowblonks.h"
 
+// ===== functionality for global/game chat messages =====
+
+int Lua::produceGameChat(lua_State* L)
+{
+    auto dataModel = Lua::getDataModel(L);
+    auto networkServer = RBX::DataModel__find__Network__Server(dataModel);
+
+    if (!networkServer)
+        luaL_error(L, "A NetworkServer must be active to produce game chat");
+
+    const char* message = luaL_checkstring(L, 1);
+   
+    auto players = RBX::DataModel__find__Players(dataModel);
+
+    auto messageStr = vc90::std::create_string(message);
+
+    RBX::Players__gameChat(players, messageStr);
+
+    (*vc90::std::string__destructor)(messageStr);
+
+    return 0;
+}
+
 // ===== functionality for local corescripts and libraries =====
 
 int Lua::addLocalCoreScript(lua_State* L)
 {
-    Lua::checkIdentity(L, 5, "add a local CoreScript");
+    Lua::checkIdentity(L, 4, "add a local CoreScript");
 
     const char* name = luaL_checkstring(L, 1);
     auto parent = Lua::checkInstance(L, 2);

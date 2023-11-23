@@ -5,6 +5,21 @@
 
 namespace RBX
 {
+	namespace Network
+	{
+		// ===== `Server` class =====
+
+		class Server;
+
+		// ===== `Replicator::RockyItem` class =====
+
+		class Replicator__RockyItem;
+
+		// HOOK
+		typedef bool(__thiscall* Replicator__RockyItem__write_t)(Replicator__RockyItem* _this, void* bitStream);
+		extern Replicator__RockyItem__write_t Replicator__RockyItem__write;
+	}
+
 	// ===== `Instance` class =====
 
 	class Instance
@@ -43,6 +58,8 @@ namespace RBX
 	};
 
 	const auto DataModel__find__ScriptContext = reinterpret_cast<class ScriptContext* (__thiscall*)(DataModel* _this)>(0x00468DA0);
+	const auto DataModel__find__Players = reinterpret_cast<class Players* (__thiscall*)(DataModel* _this)>(0x00414A30);
+	const auto DataModel__find__Network__Server = reinterpret_cast<Network::Server* (__thiscall*)(DataModel* _this)>(0x004D1150);
 
 	// HOOK
 	typedef void(__thiscall* DataModel__startCoreScripts_t)(DataModel* _this, AdornRbxGfx* adorn);
@@ -65,6 +82,12 @@ namespace RBX
 	const auto ScriptContext__addScript = reinterpret_cast<void(__thiscall*)(ScriptContext* _this, void* script)>(0x006282B0);
 
 	const auto ScriptContext__executeInNewThread = reinterpret_cast<void(__thiscall*)(ScriptContext* _this, int identity, const char* source, const char* name)>(0x00629A00);
+
+	// ===== `Players` class =====
+
+	class Players;
+
+	const auto Players__gameChat = reinterpret_cast<void(__thiscall*)(Players* _this, vc90::std::string* message)>(0x004CAE90);
 
 	// ===== `Script` class =====
 
@@ -155,15 +178,4 @@ namespace RBX
 	// HOOK
 	typedef bool(__cdecl* Http__trustCheck_t)(const char* url);
 	extern Http__trustCheck_t Http__trustCheck;
-
-	namespace Network
-	{
-		// ===== `Replicator::RockyItem` class =====
-
-		class Replicator__RockyItem;
-
-		// HOOK
-		typedef bool(__thiscall* Replicator__RockyItem__write_t)(Replicator__RockyItem* _this, void* bitStream);
-		extern Replicator__RockyItem__write_t Replicator__RockyItem__write;
-	}
 }
