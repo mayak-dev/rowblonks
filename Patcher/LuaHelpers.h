@@ -15,5 +15,5 @@ namespace Lua
 
 	std::pair<RBX::ScriptContext*, RBX::DataModel*> getScriptContextAndDataModel(lua_State* L);
 
-	void checkIdentity(lua_State* L, int minIdentity, const char* action);
+	void checkPermissions(lua_State* L, int role, const char* action);
 }

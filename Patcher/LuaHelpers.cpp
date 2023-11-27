@@ -22,10 +22,44 @@ std::pair<RBX::ScriptContext*, RBX::DataModel*> Lua::getScriptContextAndDataMode
     return std::make_pair(scriptContext, dataModel);
 }
 
-void Lua::checkIdentity(lua_State* L, int minIdentity, const char* action)
+// it would be a good idea to turn identities and permission roles into enums at some point
+void Lua::checkPermissions(lua_State* L, int role, const char* action)
 {
     int identity = RobloxExtraSpace::get(L)->identity;
 
-    if (identity < minIdentity)
-        luaL_error(L, "Insufficient permissions to %s (expected identity >= %d, got %d)", action, minIdentity, identity);
+    switch (identity)
+    {
+    case 0:
+    case 2:
+        if (role == 0)
+            return;
+
+        break;
+    case 1:
+    case 5:
+        if (role == 0 || role == 1 || role == 2 || role == 3)
+            return;
+
+        break;
+    case 3:
+        if (role == 0 || role == 1)
+            return;
+
+        break;
+    case 4:
+        if (role == 0 || role == 1 || role == 2)
+            return;
+
+        break;
+    case 6:
+    case 7:
+        return;
+    case 8:
+        if (role == 0 || role == 1 || role == 2 || role == 4)
+            return;
+
+        break;
+    }
+
+    luaL_error(L, "Insufficient permissions to %s. Identity %d does not have permission role %d.", action, identity, role);
 }

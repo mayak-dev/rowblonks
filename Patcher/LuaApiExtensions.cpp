@@ -30,7 +30,7 @@ int Lua::produceGameChat(lua_State* L)
 
 int Lua::addLocalCoreScript(lua_State* L)
 {
-    Lua::checkIdentity(L, 4, "add a local CoreScript");
+    Lua::checkPermissions(L, 2, "add a local CoreScript");
 
     const char* name = luaL_checkstring(L, 1);
     auto parent = Lua::checkInstance(L, 2);
@@ -65,7 +65,7 @@ int Lua::addLocalCoreScript(lua_State* L)
 
 int Lua::addLocalStarterScript(lua_State* L)
 {
-    Lua::checkIdentity(L, 5, "add a local StarterScript");
+    Lua::checkPermissions(L, 2, "add a local StarterScript");
 
     const char* name = luaL_checkstring(L, 1);
     auto parent = Lua::checkInstance(L, 2);
@@ -100,7 +100,7 @@ int Lua::registerLocalLibrary(lua_State* L)
     const char* name = luaL_checkstring(L, 1);
 
     if (strncmp(name, "Rbx", 3) == 0)
-        Lua::checkIdentity(L, 5, "register a local Rbx library");
+        Lua::checkPermissions(L, 2, "register a local Rbx library");
 
     auto script = RBX::create_Script();
 
