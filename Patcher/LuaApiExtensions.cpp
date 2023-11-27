@@ -3,9 +3,47 @@
 #include "RBXDefs.h"
 #include "rowblonks.h"
 
+static const luaL_Reg artemisLib[] = {
+    { "GetIdentity", Lua::Api::getIdentity },
+#ifdef _DEBUG
+    { "SpoofIdentity", Lua::Api::spoofIdentity },
+#endif
+
+    { "ProduceGameChat", Lua::Api::produceGameChat },
+
+    { "AddLocalCoreScript", Lua::Api::addLocalCoreScript },
+    { "AddLocalStarterScript", Lua::Api::addLocalStarterScript },
+    { "RegisterLocalLibrary", Lua::Api::registerLocalLibrary },
+
+    { nullptr, nullptr },
+};
+
+int Lua::openApiExtensionsLibrary(lua_State* L)
+{
+    luaL_register(L, "artemis", artemisLib);
+    return 1;
+}
+
+// ===== functionality related to script identities =====
+
+int Lua::Api::getIdentity(lua_State* L)
+{
+    int identity = RobloxExtraSpace::get(L)->identity;
+    lua_pushinteger(L, identity);
+    return 1;
+}
+
+// requires script to yield and resume to take effect
+int Lua::Api::spoofIdentity(lua_State* L)
+{
+    int identity = luaL_checkint(L, 1);
+    RobloxExtraSpace::get(L)->identity = identity;
+    return 0;
+}
+
 // ===== functionality for global/game chat messages =====
 
-int Lua::produceGameChat(lua_State* L)
+int Lua::Api::produceGameChat(lua_State* L)
 {
     RBX::DataModel* dataModel = Lua::getScriptContextAndDataModel(L).second;
     auto networkServer = RBX::DataModel__find__Network__Server(dataModel);
@@ -28,7 +66,7 @@ int Lua::produceGameChat(lua_State* L)
 
 // ===== functionality for local corescripts and libraries =====
 
-int Lua::addLocalCoreScript(lua_State* L)
+int Lua::Api::addLocalCoreScript(lua_State* L)
 {
     Lua::checkPermissions(L, 2, "add a local CoreScript");
 
@@ -63,7 +101,7 @@ int Lua::addLocalCoreScript(lua_State* L)
     return 0;
 }
 
-int Lua::addLocalStarterScript(lua_State* L)
+int Lua::Api::addLocalStarterScript(lua_State* L)
 {
     Lua::checkPermissions(L, 2, "add a local StarterScript");
 
@@ -95,7 +133,7 @@ int Lua::addLocalStarterScript(lua_State* L)
     return 0;
 }
 
-int Lua::registerLocalLibrary(lua_State* L)
+int Lua::Api::registerLocalLibrary(lua_State* L)
 {
     const char* name = luaL_checkstring(L, 1);
 

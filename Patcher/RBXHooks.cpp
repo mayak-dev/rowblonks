@@ -97,17 +97,19 @@ void __fastcall hook_RBX__ScriptContext__openState(RBX::ScriptContext* _this)
 
 		if (_this->globalState)
 		{
-			lua_pushcfunction(_this->globalState, Lua::produceGameChat);
-			lua_setglobal(_this->globalState, "ProduceGameChat");
+			Lua::protectLibrary(_this->globalState, "CFrame");
+			Lua::protectLibrary(_this->globalState, "Region3");
+			Lua::protectLibrary(_this->globalState, "Vector3");
+			Lua::protectLibrary(_this->globalState, "Vector2");
+			Lua::protectLibrary(_this->globalState, "Ray");
+			Lua::protectLibrary(_this->globalState, "Color3");
+			Lua::protectLibrary(_this->globalState, "BrickColor");
+			Lua::protectLibrary(_this->globalState, "UDim");
+			Lua::protectLibrary(_this->globalState, "UDim2");
+			Lua::protectLibrary(_this->globalState, "Faces");
+			Lua::protectLibrary(_this->globalState, "Axes");
 
-			lua_pushcfunction(_this->globalState, Lua::addLocalCoreScript);
-			lua_setglobal(_this->globalState, "AddLocalCoreScript");
-
-			lua_pushcfunction(_this->globalState, Lua::addLocalStarterScript);
-			lua_setglobal(_this->globalState, "AddLocalStarterScript");
-
-			lua_pushcfunction(_this->globalState, Lua::registerLocalLibrary);
-			lua_setglobal(_this->globalState, "RegisterLocalLibrary");
+			Lua::openProtectedLibrary(_this->globalState, "artemis", Lua::openApiExtensionsLibrary);
 		}
 	}
 }

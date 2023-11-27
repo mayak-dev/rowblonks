@@ -4,13 +4,23 @@ struct lua_State;
 
 namespace Lua
 {
-	// ===== functionality for global/game chat messages =====
+	int openApiExtensionsLibrary(lua_State* L);
 
-	int produceGameChat(lua_State* L);
+	namespace Api
+	{
+		// ===== functionality related to script identities =====
 
-	// ===== functionality for local corescripts and libraries =====
+		int getIdentity(lua_State* L);
+		int spoofIdentity(lua_State* L);
 
-	int addLocalCoreScript(lua_State* L);
-	int addLocalStarterScript(lua_State* L);
-	int registerLocalLibrary(lua_State* L);
+		// ===== functionality for global/game chat messages =====
+
+		int produceGameChat(lua_State* L);
+
+		// ===== functionality for local corescripts and libraries =====
+
+		int addLocalCoreScript(lua_State* L);
+		int addLocalStarterScript(lua_State* L);
+		int registerLocalLibrary(lua_State* L);
+	}
 }

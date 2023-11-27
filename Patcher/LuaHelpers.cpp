@@ -63,3 +63,40 @@ void Lua::checkPermissions(lua_State* L, int role, const char* action)
 
     luaL_error(L, "Insufficient permissions to %s. Identity %d does not have permission role %d.", action, identity, role);
 }
+
+static int protectedLibraryOnNewIndex(lua_State* L)
+{
+    luaL_error(L, "can't modify this library");
+    return 0;
+}
+
+// create a userdata that replaces the library table
+// the table will still be readable through the userdata's metatable, which will be locked
+void Lua::protectLibrary(lua_State* L, const char* name)
+{
+    lua_newuserdata(L, 0);
+
+    lua_newtable(L);
+
+    lua_getglobal(L, name);
+    lua_setfield(L, -2, "__index");
+
+    lua_pushcfunction(L, protectedLibraryOnNewIndex);
+    lua_setfield(L, -2, "__newindex");
+
+    lua_pushstring(L, "The metatable is locked");
+    lua_setfield(L, -2, "__metatable");
+
+    lua_setmetatable(L, -2);
+
+    lua_setglobal(L, name);
+}
+
+void Lua::openProtectedLibrary(lua_State* L, const char* name, lua_CFunction func)
+{
+    int n = func(L);
+
+    Lua::protectLibrary(L, name);
+
+    lua_pop(L, n);
+}
