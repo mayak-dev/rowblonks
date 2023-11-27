@@ -8,6 +8,6 @@ public:
 	UrlHelper();
 	UrlHelper(const std::string& url);
 
-	void ParseUrl(const std::string& url);
-	std::string BuildUrl();
+	void parseUrl(const std::string& url);
+	std::string buildUrl();
 };

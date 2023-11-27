@@ -7,7 +7,7 @@ UrlHelper::UrlHelper()
 
 UrlHelper::UrlHelper(const std::string& url)
 {
-	ParseUrl(url);
+	parseUrl(url);
 }
 
 static bool seekComponent(const std::string& url, size_t& position, const std::string& endStr, std::string& result)
@@ -27,7 +27,7 @@ static bool seekComponent(const std::string& url, size_t& position, const std::s
 
 const std::string protocolEnd = "://";
 
-void UrlHelper::ParseUrl(const std::string& url)
+void UrlHelper::parseUrl(const std::string& url)
 {
 	size_t position = 0;
 
@@ -43,7 +43,7 @@ void UrlHelper::ParseUrl(const std::string& url)
 	query = url.substr(position);
 }
 
-std::string UrlHelper::BuildUrl()
+std::string UrlHelper::buildUrl()
 {
 	std::string url;
 

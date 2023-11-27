@@ -46,7 +46,7 @@ RBX::Http* __fastcall hook_RBX__Http__constructor(RBX::Http* _this, void*, vc90:
 		urlHelper.hostname = "assetdelivery.roblox.com";
 		urlHelper.path = "v1/asset/";
 
-		std::string newUrlStr = urlHelper.BuildUrl();
+		std::string newUrlStr = urlHelper.buildUrl();
 
 		auto newUrl = vc90::std::create_string(newUrlStr.c_str());
 
