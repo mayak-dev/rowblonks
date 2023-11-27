@@ -61,7 +61,7 @@ void Lua::checkPermissions(lua_State* L, int role, const char* action)
         break;
     }
 
-    luaL_error(L, "Insufficient permissions to %s. Identity %d does not have permission role %d.", action, identity, role);
+    luaL_error(L, "Insufficient permissions to %s. Identity %d is not within permission role %d.", action, identity, role);
 }
 
 static int protectedLibraryOnNewIndex(lua_State* L)
