@@ -108,6 +108,7 @@ void __fastcall hook_RBX__ScriptContext__openState(RBX::ScriptContext* _this)
 			Lua::protectLibrary(_this->globalState, "UDim2");
 			Lua::protectLibrary(_this->globalState, "Faces");
 			Lua::protectLibrary(_this->globalState, "Axes");
+			Lua::protectLibrary(_this->globalState, "Instance");
 
 			Lua::openProtectedLibrary(_this->globalState, "artemis", Lua::openApiExtensionsLibrary);
 		}
