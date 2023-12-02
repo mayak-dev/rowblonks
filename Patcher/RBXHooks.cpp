@@ -2,6 +2,45 @@
 #include "RBXHooks.h"
 #include "LuaApiExtensions.h"
 #include "UrlHelper.h"
+#include "Config.h"
+
+// ===== `CRobloxWnd::RenderRequestJob` member function hooks =====
+
+CRobloxWnd__RenderRequestJob__sleepTime_t CRobloxWnd__RenderRequestJob__sleepTime = reinterpret_cast<CRobloxWnd__RenderRequestJob__sleepTime_t>(0x004881F0);
+
+// unlock fps (1)
+double* __fastcall hook_CRobloxWnd__RenderRequestJob__sleepTime(CRobloxWnd__RenderRequestJob* _this, void*, double* a2, int a3)
+{
+	if (_this->awake)
+		(reinterpret_cast<void(__thiscall*)(CRobloxWnd__RenderRequestJob*, double*, int, double)>(0x007FDDB0))(_this, a2, a3, Config::desiredFrameRate);
+	else
+		*a2 = std::numeric_limits<double>::max();
+
+	return a2;
+}
+
+// ===== `CRobloxWnd::UserInputJob` member function hooks =====
+
+CRobloxWnd__UserInputJob__sleepTime_t CRobloxWnd__UserInputJob__sleepTime = reinterpret_cast<CRobloxWnd__UserInputJob__sleepTime_t>(0x00486B30);
+
+// unlock fps (2)
+double* __fastcall hook_CRobloxWnd__UserInputJob__sleepTime(CRobloxWnd__UserInputJob* _this, void*, double* a2, int a3)
+{
+	(reinterpret_cast<void(__thiscall*)(CRobloxWnd__UserInputJob*, double*, int, double)>(0x007FDDB0))(_this, a2, a3, Config::desiredFrameRate);
+	return a2;
+}
+
+// ===== `RBX::HeartbeatTask` member function hooks ====
+
+RBX::HeartbeatTask__constructor_t RBX::HeartbeatTask__constructor = reinterpret_cast<RBX::HeartbeatTask__constructor_t>(0x00599B40);
+
+// unlock fps (3)
+RBX::HeartbeatTask* __fastcall hook_RBX__HeartbeatTask__constructor(RBX::HeartbeatTask* _this, void*, RBX::RunService* runService, void* a3)
+{
+	auto result = RBX::HeartbeatTask__constructor(_this, runService, a3);
+	result->fps = Config::desiredFrameRate;
+	return result;
+}
 
 // ===== `RBX::ContentProvider` member function hooks =====
 

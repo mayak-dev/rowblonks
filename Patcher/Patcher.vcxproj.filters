@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="inih">
+      <UniqueIdentifier>{52fefdae-c609-4121-83c8-d3efa3dbc284}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -36,7 +39,7 @@
     <ClInclude Include="LuaApiExtensions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rowblonks.h">
+    <ClInclude Include="Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Patches.h">
@@ -47,6 +50,12 @@
     </ClInclude>
     <ClInclude Include="OtherHooks.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inih\cpp\INIReader.h">
+      <Filter>inih</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inih\ini.h">
+      <Filter>inih</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,5 +83,17 @@
     <ClCompile Include="OtherHooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\inih\cpp\INIReader.cpp">
+      <Filter>inih</Filter>
+    </ClCompile>
+    <ClCompile Include="..\inih\ini.c">
+      <Filter>inih</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="rowblonks.ini" />
   </ItemGroup>
 </Project>

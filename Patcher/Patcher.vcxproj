@@ -57,7 +57,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Detours\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Detours\include;$(SolutionDir)inih\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -76,7 +76,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Detours\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Detours\include;$(SolutionDir)inih\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -88,6 +88,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\inih\cpp\INIReader.h" />
+    <ClInclude Include="..\inih\ini.h" />
     <ClInclude Include="LuaApiExtensions.h" />
     <ClInclude Include="LuaDefs.h" />
     <ClInclude Include="LuaHelpers.h" />
@@ -96,11 +98,20 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="RBXDefs.h" />
     <ClInclude Include="RBXHooks.h" />
-    <ClInclude Include="rowblonks.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="UrlHelper.h" />
     <ClInclude Include="VC90Defs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\inih\cpp\INIReader.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\inih\ini.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="LuaApiExtensions.cpp" />
     <ClCompile Include="LuaHelpers.cpp" />
@@ -112,6 +123,9 @@
     </ClCompile>
     <ClCompile Include="RBXHooks.cpp" />
     <ClCompile Include="UrlHelper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="rowblonks.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

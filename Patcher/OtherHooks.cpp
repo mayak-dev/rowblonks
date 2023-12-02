@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "OtherHooks.h"
+#include "Config.h"
 
 // ===== bypass script hash verification =====
 
@@ -26,4 +27,39 @@ void __cdecl hook_sub_794AF0(char a1, int a2, int a3, int a4, int a5, int a6, in
 {
 	auto url = reinterpret_cast<vc90::std::string*>(&a1);
 	(*vc90::std::string__destructor)(url);
+}
+
+// ===== unlock fps (4) =====
+
+void* ptr_6668F6 = reinterpret_cast<void*>(0x006668F6);
+void* const ptr_66692D = reinterpret_cast<void*>(0x0066692D);
+
+static float __stdcall getFlyCamAccelMultiplier(int steps)
+{
+	const float fpsRatio = 60.0f / Config::desiredFrameRate;
+
+	float multiplier = fpsRatio;
+
+	if (steps > 120.0f / fpsRatio)
+		multiplier *= 8.0f;
+	else if (steps > 60.0f / fpsRatio)
+		multiplier *= 4.0f;
+	else
+		multiplier *= 2.0f;
+
+	return multiplier;
+}
+
+// inline hook
+// change fly camera acceleration multiplier with respect to desired frame rate
+void __declspec(naked) hook_6668F6()
+{
+	__asm
+	{
+		push [esp + 0x98]
+		call getFlyCamAccelMultiplier
+		fstp [esp + 0x14]
+
+		jmp [ptr_66692D]
+	}
 }

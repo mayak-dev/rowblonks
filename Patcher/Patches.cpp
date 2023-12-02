@@ -2,10 +2,20 @@
 #include "Patches.h"
 #include "RBXHooks.h"
 #include "OtherHooks.h"
+#include "Config.h"
 
 #include <detours.h>
 
 static std::map<void*, void*> hooks = {
+    // ===== `CRobloxWnd::RenderRequestJob` member function hooks =====
+    { &CRobloxWnd__RenderRequestJob__sleepTime, hook_CRobloxWnd__RenderRequestJob__sleepTime },
+
+    // ===== `CRobloxWnd::UserInputJob` member function hooks =====
+    { &CRobloxWnd__UserInputJob__sleepTime, hook_CRobloxWnd__UserInputJob__sleepTime },
+
+    // ===== `RBX::HeartbeatTask` member function hooks ====
+    { &RBX::HeartbeatTask__constructor, hook_RBX__HeartbeatTask__constructor },
+
     // ===== `RBX::ContentProvider` member function hooks =====
     { &RBX::ContentProvider__verifyScriptSignature, hook_RBX__ContentProvider__verifyScriptSignature },
     { &RBX::ContentProvider__verifyRequestedScriptSignature, hook_RBX__ContentProvider__verifyScriptSignature },
@@ -27,6 +37,7 @@ static std::map<void*, void*> hooks = {
     { &sub_6C34D0, hook_sub_6C34D0 },
     { &sub_6C47A0, hook_sub_6C47A0 },
     { &sub_794AF0, hook_sub_794AF0 },
+    { &ptr_6668F6, hook_6668F6 },
 };
 
 #ifdef _DEBUG

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "LuaApiExtensions.h"
 #include "RBXDefs.h"
-#include "rowblonks.h"
+#include "Config.h"
 
 static const luaL_Reg artemisLib[] = {
     { "GetIdentity", Lua::Api::getIdentity },
@@ -150,7 +150,7 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
     
     // script objects can only be registered as a library if their source property is set
     // so we have to read the library file ourselves and set the property
-    std::string path = g_gamePath + "/extra/libraries/";
+    std::string path = Config::gameDirectory + "/extra/libraries/";
     path += name;
     path += ".lua";
 

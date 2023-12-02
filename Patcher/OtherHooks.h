@@ -19,3 +19,10 @@ typedef void(__cdecl* sub_794AF0_t)(char a1, int a2, int a3, int a4, int a5, int
 extern sub_794AF0_t sub_794AF0;
 
 void __cdecl hook_sub_794AF0(char a1, int a2, int a3, int a4, int a5, int a6, int a7);
+
+// ===== unlock fps (4) =====
+
+extern void* ptr_6668F6;
+
+// inline hook
+void hook_6668F6();

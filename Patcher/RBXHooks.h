@@ -2,6 +2,18 @@
 
 #include "RBXDefs.h"
 
+// ===== `CRobloxWnd::RenderRequestJob` member function hooks =====
+
+double* __fastcall hook_CRobloxWnd__RenderRequestJob__sleepTime(CRobloxWnd__RenderRequestJob* _this, void*, double* a2, int a3);
+
+// ===== `CRobloxWnd::UserInputJob` member function hooks =====
+
+double* __fastcall hook_CRobloxWnd__UserInputJob__sleepTime(CRobloxWnd__UserInputJob* _this, void*, double* a2, int a3);
+
+// ===== `RBX::HeartbeatTask` member function hooks ====
+
+RBX::HeartbeatTask* __fastcall hook_RBX__HeartbeatTask__constructor(RBX::HeartbeatTask* _this, void*, RBX::RunService* runService, void* a3);
+
 // ===== `RBX::ContentProvider` member function hooks =====
 
 // SECURITY BYPASS

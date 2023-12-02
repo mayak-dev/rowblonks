@@ -3,6 +3,28 @@
 #include "LuaDefs.h"
 #include "VC90Defs.h"
 
+// ===== `CRobloxWnd::RenderRequestJob` class =====
+
+class CRobloxWnd__RenderRequestJob
+{
+private:
+	char padding1[480];
+public:
+	bool awake;
+};
+
+// HOOK
+typedef double* (__thiscall* CRobloxWnd__RenderRequestJob__sleepTime_t)(CRobloxWnd__RenderRequestJob* _this, double* a2, int a3);
+extern CRobloxWnd__RenderRequestJob__sleepTime_t CRobloxWnd__RenderRequestJob__sleepTime;
+
+// ===== `CRobloxWnd::UserInputJob` class =====
+
+class CRobloxWnd__UserInputJob;
+
+// HOOK
+typedef double* (__thiscall* CRobloxWnd__UserInputJob__sleepTime_t)(CRobloxWnd__UserInputJob* _this, double* a2, int a3);
+extern CRobloxWnd__UserInputJob__sleepTime_t CRobloxWnd__UserInputJob__sleepTime;
+
 namespace RBX
 {
 	namespace Network
@@ -135,7 +157,7 @@ namespace RBX
 
 	class StarterScript;
 
-	const auto StarterScript__constructor = reinterpret_cast<StarterScript* (__thiscall*)(StarterScript*, vc90::std::string * source)>(0x00663C50);
+	const auto StarterScript__constructor = reinterpret_cast<StarterScript* (__thiscall*)(StarterScript*, vc90::std::string* source)>(0x00663C50);
 
 	// constructor helper
 	inline StarterScript* create_StarterScript(const char* source)
@@ -178,4 +200,22 @@ namespace RBX
 	// HOOK
 	typedef bool(__cdecl* Http__trustCheck_t)(const char* url);
 	extern Http__trustCheck_t Http__trustCheck;
+
+	// ===== `RunService` class =====
+
+	class RunService;
+
+	// ===== `HeartbeatTask` class =====
+
+	class HeartbeatTask
+	{
+	private:
+		char padding1[496];
+	public:
+		double fps;
+	};
+
+	// HOOK
+	typedef HeartbeatTask* (__thiscall* HeartbeatTask__constructor_t)(HeartbeatTask* _this, RunService* runService, void* a3);
+	extern HeartbeatTask__constructor_t HeartbeatTask__constructor;
 }
