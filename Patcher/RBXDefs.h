@@ -76,7 +76,7 @@ namespace RBX
 	private:
 		char padding1[2764];
 	public:
-		class Workspace* workspace;
+		Workspace* workspace;
 	};
 
 	const auto DataModel__find__ScriptContext = reinterpret_cast<class ScriptContext* (__thiscall*)(DataModel* _this)>(0x00468DA0);
@@ -113,20 +113,22 @@ namespace RBX
 
 	// ===== `Script` class =====
 
-	class Script;
+	const auto Script__constructor = reinterpret_cast<class Script* (__thiscall*)(Script* _this) > (0x0063D6B0);
 
-	const auto Script__constructor = reinterpret_cast<Script* (__thiscall*)(Script* _this)>(0x0063D6B0);
-
-	// constructor helper
-	inline Script* create_Script()
+	class Script
 	{
-		constexpr size_t sizeof_Script = 240;
+	public:
+		static constexpr size_t size = 240;
+		
+		// constructor helper
+		static Script* construct()
+		{
+			auto result = reinterpret_cast<Script*>((*vc90::operator_new)(size));
+			Script__constructor(result);
 
-		auto result = reinterpret_cast<Script*>((*vc90::operator_new)(sizeof_Script));
-		Script__constructor(result);
-
-		return result;
-	}
+			return result;
+		}
+	};
 
 	const auto Script__setDisabled = reinterpret_cast<void(__thiscall*)(Script* _this, bool disabled)>(0x0063D460);
 
@@ -134,45 +136,49 @@ namespace RBX
 
 	// ===== `CoreScript` class =====
 
-	class CoreScript;
+	const auto CoreScript__constructor = reinterpret_cast<class CoreScript* (__thiscall*)(CoreScript*, vc90::std::string* source)>(0x00663570);
 
-	const auto CoreScript__constructor = reinterpret_cast<CoreScript* (__thiscall*)(CoreScript*, vc90::std::string* source)>(0x00663570);
-
-	// constructor helper
-	inline CoreScript* create_CoreScript(const char* source)
+	class CoreScript
 	{
-		constexpr size_t sizeof_CoreScript = 200;
+	public:
+		static constexpr size_t size = 200;
 
-		auto newSource = vc90::std::create_string(source);
+		// constructor helper
+		static CoreScript* construct(const char* source)
+		{
+			auto newSource = vc90::std::string::construct(source);
 
-		auto result = reinterpret_cast<CoreScript*>((*vc90::operator_new)(sizeof_CoreScript));
-		CoreScript__constructor(result, newSource);
+			auto result = reinterpret_cast<CoreScript*>((*vc90::operator_new)(size));
+			CoreScript__constructor(result, newSource);
 
-		(*vc90::std::string__destructor)(newSource);
+			vc90::std::string::destruct(newSource);
 
-		return result;
-	}
+			return result;
+		}
+	};
 
 	// ===== `StarterScript` class =====
 
-	class StarterScript;
+	const auto StarterScript__constructor = reinterpret_cast<class StarterScript* (__thiscall*)(StarterScript*, vc90::std::string* source)>(0x00663C50);
 
-	const auto StarterScript__constructor = reinterpret_cast<StarterScript* (__thiscall*)(StarterScript*, vc90::std::string* source)>(0x00663C50);
-
-	// constructor helper
-	inline StarterScript* create_StarterScript(const char* source)
+	class StarterScript
 	{
-		constexpr size_t sizeof_StarterScript = 200;
+	public:
+		static constexpr size_t size = 200;
 
-		auto newSource = vc90::std::create_string(source);
+		// constructor helper
+		static StarterScript* construct(const char* source)
+		{
+			auto newSource = vc90::std::string::construct(source);
 
-		auto result = reinterpret_cast<StarterScript*>((*vc90::operator_new)(sizeof_StarterScript));
-		StarterScript__constructor(result, newSource);
+			auto result = reinterpret_cast<StarterScript*>((*vc90::operator_new)(size));
+			StarterScript__constructor(result, newSource);
 
-		(*vc90::std::string__destructor)(newSource);
+			vc90::std::string::destruct(newSource);
 
-		return result;
-	}
+			return result;
+		}
+	};
 
 	// ===== `ContentProvider` class =====
 

@@ -55,11 +55,11 @@ int Lua::Api::produceGameChat(lua_State* L)
    
     auto players = RBX::DataModel__find__Players(dataModel);
 
-    auto messageStr = vc90::std::create_string(message);
+    auto messageStr = vc90::std::string::construct(message);
 
     RBX::Players__gameChat(players, messageStr);
 
-    (*vc90::std::string__destructor)(messageStr);
+    vc90::std::string::destruct(messageStr);
 
     return 0;
 }
@@ -77,17 +77,15 @@ int Lua::Api::addLocalCoreScript(lua_State* L)
     source += name;
     source += ".lua";
 
-    auto coreScript = RBX::create_CoreScript(source.c_str());
+    auto coreScript = RBX::CoreScript::construct(source.c_str());
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::CoreScript>
     (reinterpret_cast<void* (__thiscall*)(void*, RBX::CoreScript*, bool)>(0x0061AF40))((*vc90::operator_new)(8), coreScript, false);
 
-    auto nameStr = vc90::std::create_string(name);
+    auto nameStr = vc90::std::string::construct(name);
 
     RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(coreScript), nameStr);
-
-    (*vc90::std::string__destructor)(nameStr);
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(coreScript), true);
 
@@ -97,6 +95,8 @@ int Lua::Api::addLocalCoreScript(lua_State* L)
 
     if (parent != reinterpret_cast<RBX::Instance*>(scriptContext))
         RBX::ScriptContext__addScript(scriptContext, coreScript);
+
+    vc90::std::string::destruct(nameStr);
 
     return 0;
 }
@@ -112,23 +112,23 @@ int Lua::Api::addLocalStarterScript(lua_State* L)
     source += name;
     source += ".lua";
 
-    auto starterScript = RBX::create_StarterScript(source.c_str());
+    auto starterScript = RBX::StarterScript::construct(source.c_str());
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::StarterScript>
     (reinterpret_cast<void* (__thiscall*)(void*, RBX::StarterScript*, bool)>(0x0061AE90))((*vc90::operator_new)(8), starterScript, false);
 
-    auto nameStr = vc90::std::create_string(name);
+    auto nameStr = vc90::std::string::construct(name);
 
     RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(starterScript), nameStr);
-
-    (*vc90::std::string__destructor)(nameStr);
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(starterScript), true);
 
     RBX::ScriptContext* scriptContext = Lua::getScriptContextAndDataModel(L).first;
 
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(starterScript), reinterpret_cast<RBX::Instance*>(scriptContext));
+
+    vc90::std::string::destruct(nameStr);
 
     return 0;
 }
@@ -140,7 +140,7 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
     if (strncmp(name, "Rbx", 3) == 0)
         Lua::checkPermissions(L, 2, "register a local Rbx library");
 
-    auto script = RBX::create_Script();
+    auto script = RBX::Script::construct();
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::Script>
@@ -158,8 +158,8 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
     sourceStream << sourceFile.rdbuf();
     sourceFile.close();
 
-    auto nameStr = vc90::std::create_string(name);
-    auto sourceStr = vc90::std::create_string(sourceStream.str().c_str());
+    auto nameStr = vc90::std::string::construct(name);
+    auto sourceStr = vc90::std::string::construct(sourceStream.str().c_str());
 
     RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(script), nameStr);
 
@@ -177,8 +177,8 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
     auto res = (reinterpret_cast<RBX::Script** (__thiscall*)(void*, vc90::std::string*)>(0x006145A0))(ptr, nameStr);
     *res = script;
 
-    (*vc90::std::string__destructor)(nameStr);
-    (*vc90::std::string__destructor)(sourceStr);
+    vc90::std::string::destruct(nameStr);
+    vc90::std::string::destruct(sourceStr);
 
     return 0;
 }

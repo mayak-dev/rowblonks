@@ -87,11 +87,11 @@ RBX::Http* __fastcall hook_RBX__Http__constructor(RBX::Http* _this, void*, vc90:
 
 		std::string newUrlStr = urlHelper.buildUrl();
 
-		auto newUrl = vc90::std::create_string(newUrlStr.c_str());
+		auto newUrl = vc90::std::string::construct(newUrlStr.c_str());
 
 		auto result = RBX::Http__constructor(_this, newUrl);
 
-		(*vc90::std::string__destructor)(newUrl);
+		vc90::std::string::destruct(newUrl);
 
 		return result;
 	}

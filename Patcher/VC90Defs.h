@@ -13,21 +13,29 @@ namespace vc90
 		// ===== `string` class =====
 		// in other words, a `std::basic_string<char, std::char_traits<char>, std::allocator<char>>`
 
-		class string;
-
-		const auto string__constructor = reinterpret_cast<string* (__thiscall**)(string* _this, const char*)>(0x00A404C4);
+		const auto string__constructor = reinterpret_cast<class string* (__thiscall**)(string* _this, const char*)>(0x00A404C4);
 		const auto string__destructor = reinterpret_cast<void(__thiscall**)(string* _this)>(0x00A404D0);
 
-		// constructor helper
-		inline string* create_string(const char* str)
+		class string
 		{
-			constexpr size_t sizeof_string = 28;
+		public:
+			constexpr static size_t size = 28;
 
-			auto result = reinterpret_cast<string*>((*operator_new)(sizeof_string));
-			(*string__constructor)(result, str);
+			// constructor helper
+			static string* construct(const char* str)
+			{
+				auto result = reinterpret_cast<string*>((*operator_new)(size));
+				(*string__constructor)(result, str);
 
-			return result;
-		}
+				return result;
+			}
+
+			// destructor helper
+			static void destruct(string* str)
+			{
+				(*string__destructor)(str);
+			}
+		};
 
 		const auto string__c_str = reinterpret_cast<const char* (__thiscall**)(string* _this)>(0x00A404CC);
 	}

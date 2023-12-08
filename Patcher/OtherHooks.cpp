@@ -26,7 +26,7 @@ sub_794AF0_t sub_794AF0 = reinterpret_cast<sub_794AF0_t>(0x00794AF0);
 void __cdecl hook_sub_794AF0(char a1, int a2, int a3, int a4, int a5, int a6, int a7)
 {
 	auto url = reinterpret_cast<vc90::std::string*>(&a1);
-	(*vc90::std::string__destructor)(url);
+	vc90::std::string::destruct(url);
 }
 
 // ===== unlock fps (4) =====
