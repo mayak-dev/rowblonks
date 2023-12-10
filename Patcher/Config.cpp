@@ -3,11 +3,13 @@
 
 #include <INIReader.h>
 
+std::string Config::gameDirectory;
+
 void Config::getGameDirectory(HMODULE hModule)
 {
-	Config::gameDirectory.resize(MAX_PATH);
-	GetModuleFileName(hModule, &Config::gameDirectory[0], MAX_PATH);
-	Config::gameDirectory.resize(Config::gameDirectory.rfind('\\'));
+	gameDirectory.resize(MAX_PATH);
+	GetModuleFileName(hModule, &gameDirectory[0], MAX_PATH);
+	gameDirectory.resize(gameDirectory.rfind('\\'));
 }
 
 // default values can go here
@@ -15,7 +17,7 @@ float Config::desiredFrameRate = 60.0f;
 
 void Config::read()
 {
-	INIReader ini(Config::gameDirectory + "/rowblonks.ini");
+	INIReader ini(gameDirectory + "/rowblonks.ini");
 
-	Config::desiredFrameRate = static_cast<float>(ini.GetReal("", "DesiredFrameRate", Config::desiredFrameRate));
+	desiredFrameRate = static_cast<float>(ini.GetReal("", "DesiredFrameRate", desiredFrameRate));
 }
