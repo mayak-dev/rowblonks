@@ -11,6 +11,7 @@ RBX::Instance* Lua::checkInstance(lua_State* L, int n)
     void* const describedBaseTypeDesc = reinterpret_cast<void*>(0x00C073F8);
     void* const instanceTypeDesc = reinterpret_cast<void*>(0x00C071F8);
 
+    // result = dynamic_cast<RBX::Instance*>(ptr)
     auto result = reinterpret_cast<RBX::Instance*>((*vc90::_RTDynamicCast)(ptr, 0, describedBaseTypeDesc, instanceTypeDesc, FALSE));
     return result;
 }
