@@ -173,6 +173,7 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(script), reinterpret_cast<RBX::Instance*>(scriptContext));
 
     // not fully sure what this is, but this is done to register the script object as a library
+    // this is NOT checking if a library was already registered with the given name
     auto ptr = *(reinterpret_cast<DWORD**>(scriptContext) + 129) + 8;
     auto res = (reinterpret_cast<RBX::Script** (__thiscall*)(void*, vc90::std::string*)>(0x006145A0))(ptr, nameStr);
     *res = script;
