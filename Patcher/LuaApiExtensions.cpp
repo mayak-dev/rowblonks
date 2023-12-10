@@ -137,7 +137,7 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
 {
     const char* name = luaL_checkstring(L, 1);
 
-    if (strncmp(name, "Rbx", 3) == 0)
+    if (std::strncmp(name, "Rbx", 3) == 0)
         Lua::checkPermissions(L, 2, "register a local Rbx library");
 
     auto script = RBX::Script::construct();
