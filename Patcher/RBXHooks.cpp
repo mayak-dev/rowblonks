@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "RBXHooks.h"
 #include "LuaApiExtensions.h"
+#include "LuaDefs.h"
 #include "UrlHelper.h"
 #include "Config.h"
 

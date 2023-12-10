@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "LuaHelpers.h"
+#include "LuaDefs.h"
 #include "RBXDefs.h"
 
 RBX::Instance* Lua::checkInstance(lua_State* L, int n)

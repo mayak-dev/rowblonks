@@ -1,7 +1,8 @@
 #pragma once
 
-#include "LuaDefs.h"
 #include "VC90Defs.h"
+
+struct lua_State;
 
 // ===== `CRobloxWnd::RenderRequestJob` class =====
 

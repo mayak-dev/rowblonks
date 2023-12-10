@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "LuaApiExtensions.h"
+#include "LuaDefs.h"
 #include "RBXDefs.h"
 #include "Config.h"
 
