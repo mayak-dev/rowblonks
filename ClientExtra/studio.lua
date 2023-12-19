@@ -9,4 +9,4 @@ InsertService:SetFreeModelUrl("http://www.roblox.com/Game/Tools/InsertAsset.ashx
 InsertService:SetFreeDecalUrl("http://www.roblox.com/Game/Tools/InsertAsset.ashx?type=fd&q=%s&pg=%d&rs=%d")
 
 local ScriptContext = game:GetService("ScriptContext")
-artemis.AddLocalStarterScript("StarterScript", ScriptContext)
+maya.AddLocalStarterScript("StarterScript", ScriptContext)

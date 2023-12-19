@@ -4,7 +4,7 @@
 #include "RBXDefs.h"
 #include "Config.h"
 
-static const luaL_Reg artemisLib[] = {
+static const luaL_Reg mayaLib[] = {
     { "GetIdentity", Lua::Api::getIdentity },
 #ifdef _DEBUG
     { "SpoofIdentity", Lua::Api::spoofIdentity },
@@ -21,7 +21,7 @@ static const luaL_Reg artemisLib[] = {
 
 int Lua::openApiExtensionsLibrary(lua_State* L)
 {
-    luaL_register(L, "artemis", artemisLib);
+    luaL_register(L, "maya", mayaLib);
     return 1;
 }
 
