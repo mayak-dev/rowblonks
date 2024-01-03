@@ -8,36 +8,36 @@
 
 static std::map<void*, void*> hooks = {
     // ===== `CRobloxWnd::RenderRequestJob` member function hooks =====
-    { &CRobloxWnd__RenderRequestJob__sleepTime, hook_CRobloxWnd__RenderRequestJob__sleepTime },
+    { &CRobloxWnd__RenderRequestJob__sleepTime_orig, CRobloxWnd__RenderRequestJob__sleepTime_hook },
 
     // ===== `CRobloxWnd::UserInputJob` member function hooks =====
-    { &CRobloxWnd__UserInputJob__sleepTime, hook_CRobloxWnd__UserInputJob__sleepTime },
+    { &CRobloxWnd__UserInputJob__sleepTime_orig, CRobloxWnd__UserInputJob__sleepTime_hook },
 
     // ===== `RBX::HeartbeatTask` member function hooks ====
-    { &RBX::HeartbeatTask__constructor, hook_RBX__HeartbeatTask__constructor },
+    { &RBX::HeartbeatTask__constructor_orig, RBX::HeartbeatTask__constructor_hook },
 
     // ===== `RBX::ContentProvider` member function hooks =====
-    { &RBX::ContentProvider__verifyScriptSignature, hook_RBX__ContentProvider__verifyScriptSignature },
-    { &RBX::ContentProvider__verifyRequestedScriptSignature, hook_RBX__ContentProvider__verifyScriptSignature },
+    { &RBX::ContentProvider__verifyScriptSignature_orig, RBX::ContentProvider__verifyScriptSignature_hook },
+    { &RBX::ContentProvider__verifyRequestedScriptSignature_orig, RBX::ContentProvider__verifyScriptSignature_hook },
 
     // ===== `RBX:Http` member function hooks =====
-    { &RBX::Http__constructor, hook_RBX__Http__constructor },
-    { &RBX::Http__trustCheck, hook_RBX__Http__trustCheck },
+    { &RBX::Http__constructor_orig, RBX::Http__constructor_hook },
+    { &RBX::Http__trustCheck_orig, RBX::Http__trustCheck_hook },
 
     // ===== `RBX::DataModel` member function hooks =====
-    { &RBX::DataModel__startCoreScripts, hook_RBX__DataModel__startCoreScripts },
+    { &RBX::DataModel__startCoreScripts_orig, RBX::DataModel__startCoreScripts_hook },
 
     // ===== `RBX::ScriptContext` member function hooks =====
-    { &RBX::ScriptContext__openState, hook_RBX__ScriptContext__openState },
+    { &RBX::ScriptContext__openState_orig, RBX::ScriptContext__openState_hook },
 
     // ===== `RBX::Network::Replicator::RockyItem` member function hooks =====
-    { &RBX::Network::Replicator__RockyItem__write, hook_RBX__Network__Replicator__RockyItem__write },
+    { &RBX::Network::Replicator__RockyItem__write_orig, RBX::Network__Replicator__RockyItem__write_hook },
 
     // ===== other hooks =====
-    { &sub_6C34D0, hook_sub_6C34D0 },
-    { &sub_6C47A0, hook_sub_6C47A0 },
-    { &sub_794AF0, hook_sub_794AF0 },
-    { &ptr_6668F6, hook_6668F6 },
+    { &sub_6C34D0_orig, sub_6C34D0_hook },
+    { &sub_6C47A0_orig, sub_6C47A0_hook },
+    { &sub_794AF0_orig, sub_794AF0_hook },
+    { &ptr_6668F6, inlineHook_6668F6 },
 };
 
 #ifdef _DEBUG

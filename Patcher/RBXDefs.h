@@ -14,17 +14,17 @@ public:
 	bool awake;
 };
 
-// HOOK
+// HOOKED
 typedef double* (__thiscall* CRobloxWnd__RenderRequestJob__sleepTime_t)(CRobloxWnd__RenderRequestJob* _this, double* a2, int a3);
-extern CRobloxWnd__RenderRequestJob__sleepTime_t CRobloxWnd__RenderRequestJob__sleepTime;
+extern CRobloxWnd__RenderRequestJob__sleepTime_t CRobloxWnd__RenderRequestJob__sleepTime_orig;
 
 // ===== `CRobloxWnd::UserInputJob` class =====
 
 class CRobloxWnd__UserInputJob;
 
-// HOOK
+// HOOKED
 typedef double* (__thiscall* CRobloxWnd__UserInputJob__sleepTime_t)(CRobloxWnd__UserInputJob* _this, double* a2, int a3);
-extern CRobloxWnd__UserInputJob__sleepTime_t CRobloxWnd__UserInputJob__sleepTime;
+extern CRobloxWnd__UserInputJob__sleepTime_t CRobloxWnd__UserInputJob__sleepTime_orig;
 
 namespace RBX
 {
@@ -38,9 +38,9 @@ namespace RBX
 
 		class Replicator__RockyItem;
 
-		// HOOK
+		// HOOKED
 		typedef bool(__thiscall* Replicator__RockyItem__write_t)(Replicator__RockyItem* _this, void* bitStream);
-		extern Replicator__RockyItem__write_t Replicator__RockyItem__write;
+		extern Replicator__RockyItem__write_t Replicator__RockyItem__write_orig;
 	}
 
 	// ===== `Instance` class =====
@@ -84,9 +84,9 @@ namespace RBX
 	const auto DataModel__find__Players = reinterpret_cast<class Players* (__thiscall*)(DataModel* _this)>(0x00414A30);
 	const auto DataModel__find__Network__Server = reinterpret_cast<Network::Server* (__thiscall*)(DataModel* _this)>(0x004D1150);
 
-	// HOOK
+	// HOOKED
 	typedef void(__thiscall* DataModel__startCoreScripts_t)(DataModel* _this, AdornRbxGfx* adorn);
-	extern DataModel__startCoreScripts_t DataModel__startCoreScripts;
+	extern DataModel__startCoreScripts_t DataModel__startCoreScripts_orig;
 
 	// ===== `ScriptContext` class =====
 
@@ -98,9 +98,9 @@ namespace RBX
 		lua_State* globalState;
 	};
 
-	// HOOK
+	// HOOKED
 	typedef void(__thiscall* ScriptContext__openState_t)(ScriptContext* _this);
-	extern ScriptContext__openState_t ScriptContext__openState;
+	extern ScriptContext__openState_t ScriptContext__openState_orig;
 
 	const auto ScriptContext__addScript = reinterpret_cast<void(__thiscall*)(ScriptContext* _this, void* script)>(0x006282B0);
 
@@ -186,27 +186,27 @@ namespace RBX
 	class ContentProvider;
 
 	// static method
-	// HOOK
+	// HOOKED
 	typedef void(__cdecl* ContentProvider__verifyScriptSignature_t)(vc90::std::string* source, bool required);
-	extern ContentProvider__verifyScriptSignature_t ContentProvider__verifyScriptSignature;
+	extern ContentProvider__verifyScriptSignature_t ContentProvider__verifyScriptSignature_orig;
 
 	// static method
-	// HOOK
+	// HOOKED
 	typedef void(__cdecl* ContentProvider__verifyRequestedScriptSignature_t)(vc90::std::string* source, vc90::std::string* assetId, bool required);
-	extern ContentProvider__verifyRequestedScriptSignature_t ContentProvider__verifyRequestedScriptSignature;
+	extern ContentProvider__verifyRequestedScriptSignature_t ContentProvider__verifyRequestedScriptSignature_orig;
 
 	// ===== `Http` class =====
 
 	class Http;
 
-	// HOOK
+	// HOOKED
 	typedef Http* (__thiscall* Http__constructor_t)(Http* _this, vc90::std::string* url);
-	extern Http__constructor_t Http__constructor;
+	extern Http__constructor_t Http__constructor_orig;
 
 	// static method
-	// HOOK
+	// HOOKED
 	typedef bool(__cdecl* Http__trustCheck_t)(const char* url);
-	extern Http__trustCheck_t Http__trustCheck;
+	extern Http__trustCheck_t Http__trustCheck_orig;
 
 	// ===== `RunService` class =====
 
@@ -222,7 +222,7 @@ namespace RBX
 		double fps;
 	};
 
-	// HOOK
+	// HOOKED
 	typedef HeartbeatTask* (__thiscall* HeartbeatTask__constructor_t)(HeartbeatTask* _this, RunService* runService, void* a3);
-	extern HeartbeatTask__constructor_t HeartbeatTask__constructor;
+	extern HeartbeatTask__constructor_t HeartbeatTask__constructor_orig;
 }
