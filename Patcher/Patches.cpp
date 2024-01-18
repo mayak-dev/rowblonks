@@ -109,19 +109,23 @@ void Patches::initialize()
 {
     // ===== bypass SSL certificate checks =====
     // we are writing a JMP from 0x006EAAB0 to 0x006EABF7, within RBX::Http::httpGetPostWinInet
-    writeBytes(reinterpret_cast<void*>(0x006EAAB0), "\xE9\x42\x01\x00\x00", 5, PAGE_EXECUTE_READWRITE);
+    writeBytes(reinterpret_cast<void*>(0x006EAAB0), "\xE9\x42\x01\x00\x00", 0x7, PAGE_EXECUTE_READWRITE);
 
     // SECURITY BYPASS
     // ===== high-privilege "Local url" scripts =====
     // have these scripts execute with identity 7
-    // this is replacing PUSH 1 with PUSH 7
-    fillBytes(reinterpret_cast<void*>(0x00478637), 7, 1, PAGE_EXECUTE_READWRITE);
+    // this is replacing `PUSH 1` with `PUSH 7`
+    fillBytes(reinterpret_cast<void*>(0x00478637), 0x07, 0x01, PAGE_EXECUTE_READWRITE);
 
     // SECURITY BYPASS
     // ===== always send a clean value for RBX::DataModel::sendStats =====
     // this is so that the server doesn't receive any so-called "hack flags"
     // write `XOR EDX, EDX` followed by a series of NOPs where these flags would normally be stored in EDX
-    writeBytes(reinterpret_cast<void*>(0x005105A5), "\x33\xD2\x90\x90\x90\x90\x90", 7, PAGE_EXECUTE_READWRITE);
+    writeBytes(reinterpret_cast<void*>(0x005105A5), "\x33\xD2\x90\x90\x90\x90\x90", 0x7, PAGE_EXECUTE_READWRITE);
+
+    // ===== fix freezing from dragging IDE toolbars =====
+    // removes a redundant call to GetMessageA and a comparison of its result after PeekMessageA in the window message loop
+    fillBytes(reinterpret_cast<void*>(0x008A2073), 0x90, 0x15, PAGE_EXECUTE_READWRITE);
 
     initializeHooks();
 }
