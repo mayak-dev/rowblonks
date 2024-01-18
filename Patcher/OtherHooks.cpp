@@ -71,6 +71,8 @@ void* ptr_529031 = reinterpret_cast<void*>(0x00529031);
 void* const ptr_529038 = reinterpret_cast<void*>(0x00529038); // jump to if length check passes
 void* const ptr_529101 = reinterpret_cast<void*>(0x00529101); // jump to if length check fails
 
+// inline hook
+// add a missing minimum length check for offline message packets with ID_OUT_OF_BAND_INTERNAL
 void __declspec(naked) inlineHook_529031()
 {
 	__asm
