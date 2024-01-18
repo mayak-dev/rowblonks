@@ -22,7 +22,7 @@ bool __fastcall sub_6C47A0_hook(void* _this, void*, vc90::std::string*, int)
 
 sub_794AF0_t sub_794AF0_orig = reinterpret_cast<sub_794AF0_t>(0x00794AF0);
 
-// really only takes 1 std::string by value, and is responsible for calling its destructor
+// really only takes 1 std::string by value, and is therefore responsible for calling its destructor
 void __cdecl sub_794AF0_hook(char a1, int a2, int a3, int a4, int a5, int a6, int a7)
 {
 	auto url = reinterpret_cast<vc90::std::string*>(&a1);
