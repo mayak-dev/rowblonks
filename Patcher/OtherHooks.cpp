@@ -60,6 +60,7 @@ void __declspec(naked) inlineHook_6668F6()
 		call getFlyCamAccelMultiplier
 		fstp [esp + 0x14]
 
+		// jump to original code
 		jmp [ptr_66692D]
 	}
 }
