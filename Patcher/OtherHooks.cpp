@@ -63,3 +63,28 @@ void __declspec(naked) inlineHook_6668F6()
 		jmp [ptr_66692D]
 	}
 }
+
+// ===== raknet ID_OUT_OF_BAND_INTERNAL packet crash fix =====
+
+void* ptr_529031 = reinterpret_cast<void*>(0x00529031);
+void* const ptr_529038 = reinterpret_cast<void*>(0x00529038); // jump to if length check passes
+void* const ptr_529101 = reinterpret_cast<void*>(0x00529101); // jump to if length check fails
+
+void __declspec(naked) inlineHook_529031()
+{
+	__asm
+	{
+		// at this point, packet length is in ECX
+		cmp ecx, 0x19 // sizeof(OFFLINE_MESSAGE_DATA_ID) + sizeof(MessageID) + RakNetGUID::size() == 0x19
+		jae suc
+		jmp [ptr_529101]
+
+	suc:
+		// instructions replaced by the hook
+		mov ebx, ecx
+		push 0x1601
+
+		// jump to original code
+		jmp [ptr_529038]
+	}
+}

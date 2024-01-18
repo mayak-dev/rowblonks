@@ -38,6 +38,7 @@ static std::map<void*, void*> hooks = {
     { &sub_6C47A0_orig, sub_6C47A0_hook },
     { &sub_794AF0_orig, sub_794AF0_hook },
     { &ptr_6668F6, inlineHook_6668F6 },
+    { &ptr_529031, inlineHook_529031 },
 };
 
 #ifdef _DEBUG

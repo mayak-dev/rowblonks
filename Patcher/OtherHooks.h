@@ -26,3 +26,10 @@ extern void* ptr_6668F6;
 
 // inline hook
 void inlineHook_6668F6();
+
+// ===== raknet ID_OUT_OF_BAND_INTERNAL packet crash fix =====
+
+extern void* ptr_529031;
+
+// inline hook
+void inlineHook_529031();
