@@ -230,6 +230,16 @@ namespace RBX
 	typedef HeartbeatTask* (__thiscall* HeartbeatTask__constructor_t)(HeartbeatTask* _this, RunService* runService, void* a3);
 	extern HeartbeatTask__constructor_t HeartbeatTask__constructor_orig;
 
+	// ===== `Player` class =====
+
+	class Player
+	{
+	private:
+		char padding1[156];
+	public:
+		bool neutral;
+	};
+
 	// ===== `PlayerChatLine` class =====
 
 	class PlayerChatLine

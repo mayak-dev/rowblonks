@@ -184,12 +184,15 @@ RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::Playe
 	auto nameStr = reinterpret_cast<vc90::std::string*>(&result->name);
 	const char* name = (*vc90::std::string__c_str)(nameStr);
 
-	auto it = chatColors.find(name);
-	if (it != chatColors.end())
+	if (player->neutral)
 	{
-		result->nameR = it->second[0] / 255.0f;
-		result->nameG = it->second[1] / 255.0f;
-		result->nameB = it->second[2] / 255.0f;
+		auto it = chatColors.find(name);
+		if (it != chatColors.end())
+		{
+			result->nameR = it->second[0] / 255.0f;
+			result->nameG = it->second[1] / 255.0f;
+			result->nameB = it->second[2] / 255.0f;
+		}
 	}
 
 	if (std::strcmp(name, "maya") == 0)
