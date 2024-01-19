@@ -38,5 +38,6 @@ namespace vc90
 		};
 
 		const auto string__c_str = reinterpret_cast<const char* (__thiscall**)(string* _this)>(0x00A404CC);
+		const auto string__assign_from_c_str = reinterpret_cast<void(__thiscall**)(string* _this, const char* str)>(0x00A404B4);
 	}
 }

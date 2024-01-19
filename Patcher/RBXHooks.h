@@ -41,4 +41,7 @@ namespace RBX
 
 	// SECURITY BYPASS
 	bool __fastcall Network__Replicator__RockyItem__write_hook(RBX::Network::Replicator__RockyItem* _this, void*, void* bitStream);
+
+	// ===== `RBX::PlayerChatLine` member function hooks =====
+	PlayerChatLine* __fastcall PlayerChatLine__constructor_hook(PlayerChatLine* _this, void*, int a2, class Player* player, void* a4, int a5, int a6, int a7);
 }

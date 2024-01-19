@@ -51,6 +51,10 @@ namespace RBX
 		char padding1[68];
 	public:
 		Instance* parent;
+	private:
+		char padding2[8];
+	public:
+		void* name; // this marks the offset of a std::string, it is not a pointer to one
 	};
 
 	const auto Instance__setParent = reinterpret_cast<void(__thiscall*)(Instance* _this, Instance* newParent)>(0x00597910);
@@ -225,4 +229,21 @@ namespace RBX
 	// HOOKED
 	typedef HeartbeatTask* (__thiscall* HeartbeatTask__constructor_t)(HeartbeatTask* _this, RunService* runService, void* a3);
 	extern HeartbeatTask__constructor_t HeartbeatTask__constructor_orig;
+
+	// ===== `PlayerChatLine` class =====
+
+	class PlayerChatLine
+	{
+	private:
+		char padding1[60];
+	public:
+		float nameR;
+		float nameG;
+		float nameB;
+		void* name; // this marks the offset of a std::string, it is not a pointer to one
+	};
+
+	// HOOKED
+	typedef PlayerChatLine* (__thiscall* PlayerChatLine__constructor_t)(PlayerChatLine* _this, int a2, class Player* player, void* a4, int a5, int a6, int a7);
+	extern PlayerChatLine__constructor_t PlayerChatLine__constructor_orig;
 }

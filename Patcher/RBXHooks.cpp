@@ -165,3 +165,35 @@ bool __fastcall RBX::Network__Replicator__RockyItem__write_hook(RBX::Network::Re
 {
 	return true;
 }
+
+// ===== `RBX::PlayerChatLine` member function hooks =====
+
+RBX::PlayerChatLine__constructor_t RBX::PlayerChatLine__constructor_orig = reinterpret_cast<RBX::PlayerChatLine__constructor_t>(0x007CC810);
+
+const std::map<std::string, std::vector<uint8_t>> chatColors = {
+	{	"maya",			{	0,	0,	0	} },
+	{	"800",			{	111,213,247	} },
+	{	"strange",		{	195,129,249	} },
+	{	"alex",			{	110,0,	0	} },
+};
+
+RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::PlayerChatLine* _this, void*, int a2, RBX::Player* player, void* a4, int a5, int a6, int a7)
+{
+	auto result = RBX::PlayerChatLine__constructor_orig(_this, a2, player, a4, a5, a6, a7);
+
+	auto nameStr = reinterpret_cast<vc90::std::string*>(&result->name);
+	const char* name = (*vc90::std::string__c_str)(nameStr);
+
+	auto it = chatColors.find(name);
+	if (it != chatColors.end())
+	{
+		result->nameR = it->second[0] / 255.0f;
+		result->nameG = it->second[1] / 255.0f;
+		result->nameB = it->second[2] / 255.0f;
+	}
+
+	if (std::strcmp(name, "maya") == 0)
+		(*vc90::std::string__assign_from_c_str)(nameStr, "(dev) maya");
+
+	return result;
+}

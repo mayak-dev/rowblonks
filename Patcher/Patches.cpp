@@ -33,6 +33,9 @@ static std::map<void*, void*> hooks = {
     // ===== `RBX::Network::Replicator::RockyItem` member function hooks =====
     { &RBX::Network::Replicator__RockyItem__write_orig, RBX::Network__Replicator__RockyItem__write_hook },
 
+    // ===== `RBX::PlayerChatLine` member function hooks =====
+    { &RBX::PlayerChatLine__constructor_orig, RBX::PlayerChatLine__constructor_hook },
+
     // ===== other hooks =====
     { &sub_6C34D0_orig, sub_6C34D0_hook },
     { &sub_6C47A0_orig, sub_6C47A0_hook },
