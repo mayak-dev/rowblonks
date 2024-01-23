@@ -5,19 +5,15 @@
 
 std::string Config::gameDirectory;
 
-void Config::getGameDirectory(HMODULE hModule)
+float Config::desiredFrameRate;
+
+void Config::init()
 {
 	gameDirectory.resize(MAX_PATH);
-	GetModuleFileName(hModule, &gameDirectory[0], MAX_PATH);
+	GetModuleFileName(nullptr, &gameDirectory[0], MAX_PATH);
 	gameDirectory.resize(gameDirectory.rfind('\\'));
-}
 
-// default values can go here
-float Config::desiredFrameRate = 60.0f;
-
-void Config::read()
-{
 	INIReader ini(gameDirectory + "/rowblonks.ini");
 
-	desiredFrameRate = static_cast<float>(ini.GetReal("", "DesiredFrameRate", desiredFrameRate));
+	desiredFrameRate = static_cast<float>(ini.GetReal("Rendering", "DesiredFrameRate", 60.0));
 }

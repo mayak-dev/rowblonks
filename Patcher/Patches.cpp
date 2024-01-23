@@ -65,7 +65,7 @@ static std::runtime_error patchError(const char* format, ...)
 #define patchError(x, ...) std::runtime_error("")
 #endif
 
-static void initializeHooks()
+static void initHooks()
 {
     LONG error = DetourTransactionBegin();
     if (error != NO_ERROR)
@@ -109,7 +109,7 @@ static void fillBytes(void* address, int value, size_t size, DWORD flags)
         throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, reinterpret_cast<DWORD>(address) + size);
 }
 
-void Patches::initialize()
+void Patches::init()
 {
     // ===== bypass SSL certificate checks =====
     // we are writing a JMP from 0x006EAAB0 to 0x006EABF7, within RBX::Http::httpGetPostWinInet
@@ -131,5 +131,5 @@ void Patches::initialize()
     // removes a redundant call to GetMessageA and a comparison of its result after PeekMessageA in the window message loop
     fillBytes(reinterpret_cast<void*>(0x008A2073), 0x90, 0x15, PAGE_EXECUTE_READWRITE);
 
-    initializeHooks();
+    initHooks();
 }

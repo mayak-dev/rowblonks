@@ -10,12 +10,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
     {
-        Config::getGameDirectory(hModule);
-        Config::read();
+        Config::init();
 
         try
         {
-            Patches::initialize();
+            Patches::init();
         }
         catch (const std::runtime_error& error)
         {
