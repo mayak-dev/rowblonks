@@ -65,6 +65,9 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalDependencies>$(SolutionDir)Detours\lib.X86\detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(ProjectDir)rowblonks.ini" "$(OutDir)rowblonks.ini"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -86,6 +89,9 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalDependencies>$(SolutionDir)Detours\lib.X86\detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(ProjectDir)rowblonks.ini" "$(OutDir)rowblonks.ini"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\inih\cpp\INIReader.h" />
