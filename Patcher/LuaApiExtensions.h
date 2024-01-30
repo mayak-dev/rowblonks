@@ -24,3 +24,6 @@ namespace Lua
 		int registerLocalLibrary(lua_State* L);
 	}
 }
+
+// BitOp library
+int luaopen_bit(lua_State* L);

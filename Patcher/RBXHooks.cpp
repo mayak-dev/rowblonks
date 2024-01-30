@@ -151,6 +151,7 @@ void __fastcall RBX::ScriptContext__openState_hook(RBX::ScriptContext* _this)
 			Lua::protectLibrary(_this->globalState, "Instance");
 
 			Lua::openProtectedLibrary(_this->globalState, "maya", Lua::openApiExtensionsLibrary);
+			Lua::openProtectedLibrary(_this->globalState, "bit", luaopen_bit);
 		}
 	}
 }
