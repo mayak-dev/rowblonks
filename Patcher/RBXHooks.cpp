@@ -86,13 +86,11 @@ RBX::Http* __fastcall RBX::Http__constructor_hook(RBX::Http* _this, void*, vc90:
 		urlHelper.hostname = "assetdelivery.roblox.com";
 		urlHelper.path = "v1/asset/";
 
-		std::string newUrlStr = urlHelper.buildUrl();
+		auto newUrlStr = vc90::std::string::construct(urlHelper.buildUrl().c_str());
 
-		auto newUrl = vc90::std::string::construct(newUrlStr.c_str());
+		auto result = RBX::Http__constructor_orig(_this, newUrlStr);
 
-		auto result = RBX::Http__constructor_orig(_this, newUrl);
-
-		vc90::std::string::destruct(newUrl);
+		vc90::std::string::destruct(newUrlStr);
 
 		return result;
 	}
@@ -137,6 +135,7 @@ void __fastcall RBX::ScriptContext__openState_hook(RBX::ScriptContext* _this)
 
 		if (_this->globalState)
 		{
+			// patch a script privilege escalation vulnerability
 			Lua::protectLibrary(_this->globalState, "CFrame");
 			Lua::protectLibrary(_this->globalState, "Region3");
 			Lua::protectLibrary(_this->globalState, "Vector3");
@@ -150,6 +149,7 @@ void __fastcall RBX::ScriptContext__openState_hook(RBX::ScriptContext* _this)
 			Lua::protectLibrary(_this->globalState, "Axes");
 			Lua::protectLibrary(_this->globalState, "Instance");
 
+			// open our extra libraries
 			Lua::openProtectedLibrary(_this->globalState, "maya", Lua::openApiExtensionsLibrary);
 			Lua::openProtectedLibrary(_this->globalState, "bit", luaopen_bit);
 		}
@@ -171,13 +171,14 @@ bool __fastcall RBX::Network__Replicator__RockyItem__write_hook(RBX::Network::Re
 
 RBX::PlayerChatLine__constructor_t RBX::PlayerChatLine__constructor_orig = reinterpret_cast<RBX::PlayerChatLine__constructor_t>(0x007CC810);
 
-const std::map<std::string, std::vector<uint8_t>> chatColors = {
+static const std::unordered_map<std::string, std::array<uint8_t, 3>> chatColors = {
 	{	"maya",			{	0,	0,	0	} },
 	{	"800",			{	111,213,247	} },
 	{	"strange",		{	195,129,249	} },
 	{	"alex",			{	110,0,	0	} },
 };
 
+// custom name colors in chat for friends and myself
 RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::PlayerChatLine* _this, void*, int a2, RBX::Player* player, void* a4, int a5, int a6, int a7)
 {
 	auto result = RBX::PlayerChatLine__constructor_orig(_this, a2, player, a4, a5, a6, a7);
@@ -196,6 +197,7 @@ RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::Playe
 		}
 	}
 
+	// i made it, so i get to be special
 	if (std::strcmp(name, "maya") == 0)
 		(*vc90::std::string__assign_from_c_str)(nameStr, "(dev) maya");
 

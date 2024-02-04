@@ -52,11 +52,9 @@ int Lua::Api::produceGameChat(lua_State* L)
     if (!networkServer)
         luaL_error(L, "A NetworkServer must be active to produce game chat");
 
-    const char* message = luaL_checkstring(L, 1);
+    auto messageStr = vc90::std::string::construct(luaL_checkstring(L, 1));
    
     auto players = RBX::DataModel__find__Players(dataModel);
-
-    auto messageStr = vc90::std::string::construct(message);
 
     RBX::Players__gameChat(players, messageStr);
 
@@ -90,7 +88,7 @@ int Lua::Api::addLocalCoreScript(lua_State* L)
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(coreScript), true);
 
-    auto scriptContext = Lua::getScriptContextAndDataModel(L).first;
+    RBX::ScriptContext* scriptContext = Lua::getScriptContextAndDataModel(L).first;
 
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(coreScript), parent);
 

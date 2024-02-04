@@ -6,7 +6,7 @@
 
 #include <detours.h>
 
-static std::map<void*, void*> hooks = {
+static const std::unordered_map<void*, void*> hooks = {
     // ===== `CRobloxWnd::RenderRequestJob` member function hooks =====
     { &CRobloxWnd__RenderRequestJob__sleepTime_orig, CRobloxWnd__RenderRequestJob__sleepTime_hook },
 
@@ -40,8 +40,8 @@ static std::map<void*, void*> hooks = {
     { &sub_6C34D0_orig, sub_6C34D0_hook },
     { &sub_6C47A0_orig, sub_6C47A0_hook },
     { &sub_794AF0_orig, sub_794AF0_hook },
-    { &ptr_6668F6, inlineHook_6668F6 },
-    { &ptr_529031, inlineHook_529031 },
+    { &ptrToHook_6668F6, inlineHook_6668F6 },
+    { &ptrToHook_529031, inlineHook_529031 },
 };
 
 #ifdef _DEBUG
@@ -112,7 +112,7 @@ static void fillBytes(void* address, int value, size_t size, DWORD flags)
 void Patches::init()
 {
     // ===== bypass SSL certificate checks =====
-    // we are writing a JMP from 0x006EAAB0 to 0x006EABF7, within RBX::Http::httpGetPostWinInet
+    // we are writing a relative JMP from 0x006EAAB0 to 0x006EABF7, within RBX::Http::httpGetPostWinInet
     writeBytes(reinterpret_cast<void*>(0x006EAAB0), "\xE9\x42\x01\x00\x00", 0x7, PAGE_EXECUTE_READWRITE);
 
     // SECURITY BYPASS
@@ -128,7 +128,7 @@ void Patches::init()
     writeBytes(reinterpret_cast<void*>(0x005105A5), "\x33\xD2\x90\x90\x90\x90\x90", 0x7, PAGE_EXECUTE_READWRITE);
 
     // ===== fix freezing from dragging IDE toolbars =====
-    // removes a redundant call to GetMessageA and a comparison of its result after PeekMessageA in the window message loop
+    // removes a redundant call to GetMessageA and a comparison of its result following PeekMessageA in the window message loop
     fillBytes(reinterpret_cast<void*>(0x008A2073), 0x90, 0x15, PAGE_EXECUTE_READWRITE);
 
     initHooks();

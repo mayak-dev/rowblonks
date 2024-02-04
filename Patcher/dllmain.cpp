@@ -10,10 +10,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
     {
-        Config::init();
-
         try
         {
+            Config::init();
             Patches::init();
         }
         catch (const std::runtime_error& error)

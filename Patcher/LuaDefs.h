@@ -22,6 +22,7 @@ const auto lua_pushnumber = reinterpret_cast<void(__cdecl*)(lua_State* L, lua_Nu
 const auto lua_setfield = reinterpret_cast<void(__cdecl*)(lua_State* L, int idx, const char* k)>(0x00762DF0);
 const auto lua_getfield = reinterpret_cast<void(__cdecl*)(lua_State* L, int idx, const char* k)>(0x00762BB0);
 
+const auto lua_settop = reinterpret_cast<void(__cdecl*)(lua_State* L, int idx)>(0x00762370);
 const auto lua_gettop = reinterpret_cast<int(__cdecl*)(lua_State* L)>(0x00762360);
 
 const auto luaL_checklstring = reinterpret_cast<const char* (__cdecl*)(lua_State* L, int narg, size_t* len)>(0x00764190);
@@ -36,8 +37,6 @@ const auto lua_tonumber = reinterpret_cast<lua_Number(__cdecl*)(lua_State* L, in
 const auto luaL_error = reinterpret_cast<int(__cdecl*)(lua_State* L, const char* fmt, ...)>(0x00763710);
 
 const auto luaL_register = reinterpret_cast<void(__cdecl*)(lua_State* L, const char* libname, const luaL_Reg* l)>(0x00764540);
-
-const auto lua_settop = reinterpret_cast<void(__cdecl*)(lua_State* L, int idx)>(0x00762370);
 
 const auto lua_newuserdata = reinterpret_cast<void(__cdecl*)(lua_State* L, size_t size)>(0x007633B0);
 

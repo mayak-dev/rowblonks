@@ -22,14 +22,14 @@ void __cdecl sub_794AF0_hook(char a1, int a2, int a3, int a4, int a5, int a6, in
 
 // ===== unlock fps (4) =====
 
-extern void* ptr_6668F6;
+extern void* ptrToHook_6668F6;
 
 // inline hook
 void inlineHook_6668F6();
 
 // ===== raknet ID_OUT_OF_BAND_INTERNAL packet crash fix =====
 
-extern void* ptr_529031;
+extern void* ptrToHook_529031;
 
 // inline hook
 void inlineHook_529031();

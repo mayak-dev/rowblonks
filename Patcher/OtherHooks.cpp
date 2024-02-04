@@ -31,8 +31,7 @@ void __cdecl sub_794AF0_hook(char a1, int a2, int a3, int a4, int a5, int a6, in
 
 // ===== unlock fps (4) =====
 
-void* ptr_6668F6 = reinterpret_cast<void*>(0x006668F6);
-void* const ptr_66692D = reinterpret_cast<void*>(0x0066692D);
+void* ptrToHook_6668F6 = reinterpret_cast<void*>(0x006668F6);
 
 static float __stdcall getFlyCamAccelMultiplier(int steps)
 {
@@ -60,16 +59,15 @@ void __declspec(naked) inlineHook_6668F6()
 		call getFlyCamAccelMultiplier
 		fstp [esp + 0x14]
 
-		// jump to original code
-		jmp [ptr_66692D]
+		// jump to original code, skipping the original calculation
+		mov eax, 0x0066692D
+		jmp eax
 	}
 }
 
 // ===== raknet ID_OUT_OF_BAND_INTERNAL packet crash fix =====
 
-void* ptr_529031 = reinterpret_cast<void*>(0x00529031);
-void* const ptr_529038 = reinterpret_cast<void*>(0x00529038); // jump to if length check passes
-void* const ptr_529101 = reinterpret_cast<void*>(0x00529101); // jump to if length check fails
+void* ptrToHook_529031 = reinterpret_cast<void*>(0x00529031);
 
 // inline hook
 // add a missing minimum length check for offline message packets with ID_OUT_OF_BAND_INTERNAL
@@ -80,14 +78,13 @@ void __declspec(naked) inlineHook_529031()
 		// at this point, packet length is in ECX
 		cmp ecx, 0x19 // sizeof(OFFLINE_MESSAGE_DATA_ID) + sizeof(MessageID) + RakNetGUID::size() == 0x19
 		jae suc
-		jmp [ptr_529101]
 
+		// length check failed; abort mission
+		mov eax, 0x00529101
+		jmp eax
+		
 	suc:
-		// instructions replaced by the hook
-		mov ebx, ecx
-		push 0x1601
-
-		// jump to original code
-		jmp [ptr_529038]
+		// jump to original code, continuing as normal
+		jmp [ptrToHook_529031]
 	}
 }

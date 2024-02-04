@@ -6,7 +6,7 @@ RBX::Instance* Lua::checkInstance(lua_State* L, int n)
 {
     // userdata should be a boost::shared_ptr<RBX::Reflection::DescribedBase>
     // RBX::Reflection::DescribedBase* should be at sharedPtr[0]
-    auto ptr =  *reinterpret_cast<void**>(luaL_checkudata(L, n, "Object"));
+    auto ptr = *reinterpret_cast<void**>(luaL_checkudata(L, n, "Object"));
 
     void* const describedBaseTypeDesc = reinterpret_cast<void*>(0x00C073F8);
     void* const instanceTypeDesc = reinterpret_cast<void*>(0x00C071F8);
