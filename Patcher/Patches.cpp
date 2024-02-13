@@ -131,5 +131,9 @@ void Patches::init()
     // removes a redundant call to GetMessageA and a comparison of its result following PeekMessageA in the window message loop
     fillBytes(reinterpret_cast<void*>(0x008A2073), 0x90, 0x15, PAGE_EXECUTE_READWRITE);
 
+    // ===== disable executing Lua bytecode provided by the user =====
+    // this makes it so f_parser will always call luaY_parser instead of luaU_undump
+    fillBytes(reinterpret_cast<void*>(0x0077E6BC), 0x90, 0xA, PAGE_EXECUTE_READWRITE);
+
     initHooks();
 }
