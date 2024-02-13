@@ -186,7 +186,7 @@ RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::Playe
 	auto nameStr = reinterpret_cast<vc90::std::string*>(&result->name);
 	const char* name = (*vc90::std::string__c_str)(nameStr);
 
-	if (player->neutral)
+	if (player && player->neutral)
 	{
 		auto it = chatColors.find(name);
 		if (it != chatColors.end())
