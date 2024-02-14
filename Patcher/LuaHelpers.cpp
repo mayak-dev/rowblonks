@@ -8,8 +8,8 @@ RBX::Instance* Lua::checkInstance(lua_State* L, int n)
     // RBX::Reflection::DescribedBase* should be at sharedPtr[0]
     auto ptr = *reinterpret_cast<void**>(luaL_checkudata(L, n, "Object"));
 
-    void* const describedBaseTypeDesc = reinterpret_cast<void*>(0x00C073F8);
-    void* const instanceTypeDesc = reinterpret_cast<void*>(0x00C071F8);
+    static void* const describedBaseTypeDesc = reinterpret_cast<void*>(0x00C073F8);
+    static void* const instanceTypeDesc = reinterpret_cast<void*>(0x00C071F8);
 
     // result = dynamic_cast<RBX::Instance*>(ptr)
     auto result = reinterpret_cast<RBX::Instance*>((*vc90::_RTDynamicCast)(ptr, 0, describedBaseTypeDesc, instanceTypeDesc, FALSE));
