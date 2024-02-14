@@ -49,6 +49,6 @@ namespace RBX
 
 	// ===== `RBX::NetworkSettings` member function hooks =====
 
-	float __fastcall NetworkSettings__getDataSendRate_hook(RBX::NetworkSettings* _this);
-	double __fastcall NetworkSettings__getReceiveRate_hook(RBX::NetworkSettings* _this);
+	void __fastcall NetworkSettings__setDataSendRate_hook(RBX::NetworkSettings* _this, void*, float dataSendRate);
+	void __fastcall NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* _this, void*, double receiveRate);
 }

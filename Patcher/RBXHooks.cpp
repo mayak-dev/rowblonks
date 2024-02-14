@@ -221,26 +221,36 @@ RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::Playe
 
 // ===== `RBX::NetworkSettings` member function hooks =====
 
-RBX::NetworkSettings__getDataSendRate_t RBX::NetworkSettings__getDataSendRate_orig = reinterpret_cast<RBX::NetworkSettings__getDataSendRate_t>(0x004E2EB0);
+RBX::NetworkSettings__setDataSendRate_t RBX::NetworkSettings__setDataSendRate_orig = reinterpret_cast<RBX::NetworkSettings__setDataSendRate_t>(0x004E42B0);
 
-float __fastcall RBX::NetworkSettings__getDataSendRate_hook(RBX::NetworkSettings* _this)
+// rewritten to remove value clamp
+void __fastcall RBX::NetworkSettings__setDataSendRate_hook(RBX::NetworkSettings* _this, void*, float dataSendRate)
 {
 	if (Config::desiredRenderFpsOverridesDataRates)
-		return Config::desiredFrameRate;
+		dataSendRate = Config::desiredFrameRate;
 
-	return RBX::NetworkSettings__getDataSendRate_orig(_this);
+	if (_this->dataSendRate != dataSendRate)
+	{
+		_this->dataSendRate = dataSendRate;
+
+		// fire the Changed signal
+		(reinterpret_cast<void(__thiscall*)(RBX::NetworkSettings*, void*)>(0x00411F60))(_this, reinterpret_cast<void*>(0x00CB7D78));
+	}
 }
 
-RBX::NetworkSettings__getReceiveRate_t RBX::NetworkSettings__getReceiveRate_orig = reinterpret_cast<RBX::NetworkSettings__getReceiveRate_t>(0x004E2ED0);
+RBX::NetworkSettings__setReceiveRate_t RBX::NetworkSettings__setReceiveRate_orig = reinterpret_cast<RBX::NetworkSettings__setReceiveRate_t>(0x004E4390);
 
-double __fastcall RBX::NetworkSettings__getReceiveRate_hook(RBX::NetworkSettings* _this)
+// rewritten to remove value clamp
+void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* _this, void*, double receiveRate)
 {
-	static void* const networkSettingsVftable = reinterpret_cast<void*>(0x00A7A24C);
+	if (Config::desiredRenderFpsOverridesDataRates)
+		receiveRate = Config::desiredFrameRate;
 
-	// check the vftable of the object in `this`
-	// this is a stupid hack, but it is necessary since this function is used in other places due to optimization
-	if (*reinterpret_cast<void**>(_this) == networkSettingsVftable && Config::desiredRenderFpsOverridesDataRates)
-		return Config::desiredFrameRate;
+	if (_this->receiveRate != receiveRate)
+	{
+		_this->receiveRate = receiveRate;
 
-	return RBX::NetworkSettings__getReceiveRate_orig(_this);
+		// fire the Changed signal
+		(reinterpret_cast<void(__thiscall*)(RBX::NetworkSettings*, void*)>(0x00411F60))(_this, reinterpret_cast<void*>(0x00CB7BD8));
+	}
 }

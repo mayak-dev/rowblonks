@@ -279,13 +279,23 @@ namespace RBX
 
 	// ===== `NetworkSettings` class =====
 
-	class NetworkSettings;
+	class NetworkSettings
+	{
+	private:
+		char padding1[224];
+	public:
+		float dataSendRate;
+	private:
+		char padding2[4];
+	public:
+		double receiveRate;
+	};
 
 	// HOOKED
-	typedef float(__thiscall* NetworkSettings__getDataSendRate_t)(NetworkSettings* _this);
-	extern NetworkSettings__getDataSendRate_t NetworkSettings__getDataSendRate_orig;
+	typedef void(__thiscall* NetworkSettings__setDataSendRate_t)(NetworkSettings* _this, float dataSendRate);
+	extern NetworkSettings__setDataSendRate_t NetworkSettings__setDataSendRate_orig;
 
 	// HOOKED
-	typedef double(__thiscall* NetworkSettings__getReceiveRate_t)(NetworkSettings* _this);
-	extern NetworkSettings__getReceiveRate_t NetworkSettings__getReceiveRate_orig;
+	typedef void(__thiscall* NetworkSettings__setReceiveRate_t)(NetworkSettings* _this, double receiveRate);
+	extern NetworkSettings__setReceiveRate_t NetworkSettings__setReceiveRate_orig;
 }
