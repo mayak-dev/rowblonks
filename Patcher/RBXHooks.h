@@ -43,5 +43,11 @@ namespace RBX
 	bool __fastcall Network__Replicator__RockyItem__write_hook(RBX::Network::Replicator__RockyItem* _this, void*, void* bitStream);
 
 	// ===== `RBX::PlayerChatLine` member function hooks =====
+
 	PlayerChatLine* __fastcall PlayerChatLine__constructor_hook(PlayerChatLine* _this, void*, int a2, class Player* player, void* a4, int a5, int a6, int a7);
+
+	// ===== `RBX::NetworkSettings` member function hooks =====
+
+	float __fastcall NetworkSettings__getDataSendRate_hook(RBX::NetworkSettings* _this);
+	double __fastcall NetworkSettings__getReceiveRate_hook(RBX::NetworkSettings* _this);
 }

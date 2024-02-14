@@ -36,6 +36,10 @@ static const std::unordered_map<void*, void*> hooks = {
     // ===== `RBX::PlayerChatLine` member function hooks =====
     { &RBX::PlayerChatLine__constructor_orig, RBX::PlayerChatLine__constructor_hook },
 
+    // ===== `RBX::NetworkSettings` member function hooks ====
+    { &RBX::NetworkSettings__getDataSendRate_orig, RBX::NetworkSettings__getDataSendRate_hook },
+    { &RBX::NetworkSettings__getReceiveRate_orig, RBX::NetworkSettings__getReceiveRate_hook },
+
     // ===== other hooks =====
     { &sub_6C34D0_orig, sub_6C34D0_hook },
     { &sub_6C47A0_orig, sub_6C47A0_hook },

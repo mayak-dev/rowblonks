@@ -203,3 +203,25 @@ RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::Playe
 
 	return result;
 }
+
+// ===== `RBX::NetworkSettings` member function hooks =====
+
+RBX::NetworkSettings__getDataSendRate_t RBX::NetworkSettings__getDataSendRate_orig = reinterpret_cast<RBX::NetworkSettings__getDataSendRate_t>(0x004E2EB0);
+
+float __fastcall RBX::NetworkSettings__getDataSendRate_hook(RBX::NetworkSettings* _this)
+{
+	if (Config::desiredRenderFpsOverridesDataRates)
+		return Config::desiredFrameRate;
+
+	return RBX::NetworkSettings__getDataSendRate_orig(_this);
+}
+
+RBX::NetworkSettings__getReceiveRate_t RBX::NetworkSettings__getReceiveRate_orig = reinterpret_cast<RBX::NetworkSettings__getReceiveRate_t>(0x004E2ED0);
+
+double __fastcall RBX::NetworkSettings__getReceiveRate_hook(RBX::NetworkSettings* _this)
+{
+	if (Config::desiredRenderFpsOverridesDataRates)
+		return Config::desiredFrameRate;
+
+	return RBX::NetworkSettings__getReceiveRate_orig(_this);
+}

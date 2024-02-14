@@ -256,4 +256,16 @@ namespace RBX
 	// HOOKED
 	typedef PlayerChatLine* (__thiscall* PlayerChatLine__constructor_t)(PlayerChatLine* _this, int a2, class Player* player, void* a4, int a5, int a6, int a7);
 	extern PlayerChatLine__constructor_t PlayerChatLine__constructor_orig;
+
+	// ===== `NetworkSettings` class =====
+
+	class NetworkSettings;
+
+	// HOOKED
+	typedef float(__thiscall* NetworkSettings__getDataSendRate_t)(NetworkSettings* _this);
+	extern NetworkSettings__getDataSendRate_t NetworkSettings__getDataSendRate_orig;
+
+	// HOOKED
+	typedef double(__thiscall* NetworkSettings__getReceiveRate_t)(NetworkSettings* _this);
+	extern NetworkSettings__getReceiveRate_t NetworkSettings__getReceiveRate_orig;
 }
