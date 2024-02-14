@@ -235,7 +235,11 @@ RBX::NetworkSettings__getReceiveRate_t RBX::NetworkSettings__getReceiveRate_orig
 
 double __fastcall RBX::NetworkSettings__getReceiveRate_hook(RBX::NetworkSettings* _this)
 {
-	if (Config::desiredRenderFpsOverridesDataRates)
+	static void* const networkSettingsVftable = reinterpret_cast<void*>(0x00A7A24C);
+
+	// check the vftable of the object in `this`
+	// this is a stupid hack, but it is necessary since this function is used in other places due to optimization
+	if (*reinterpret_cast<void**>(_this) == networkSettingsVftable && Config::desiredRenderFpsOverridesDataRates)
 		return Config::desiredFrameRate;
 
 	return RBX::NetworkSettings__getReceiveRate_orig(_this);
