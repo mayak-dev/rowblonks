@@ -117,7 +117,7 @@ void __fastcall RBX::DataModel__startCoreScripts_hook(RBX::DataModel* _this, voi
 	RBX::GuiBuilder__buildGui(&guiBuilder, adorn, _this, _this->workspace);
 
 	auto scriptContext = RBX::DataModel__find__ScriptContext(_this);
-	RBX::ScriptContext__executeInNewThread(scriptContext, 5, "loadfile('rbxasset://../extra/studio.lua')()", "Studio.ashx");
+	RBX::ScriptContext__executeInNewThread_orig(scriptContext, 5, "loadfile('rbxasset://../extra/studio.lua')()", "Studio.ashx");
 }
 
 // ===== `RBX::ScriptContext` member function hooks =====
@@ -154,6 +154,21 @@ void __fastcall RBX::ScriptContext__openState_hook(RBX::ScriptContext* _this)
 			Lua::openProtectedLibrary(_this->globalState, "bit", luaopen_bit);
 		}
 	}
+}
+
+RBX::ScriptContext__executeInNewThread_t RBX::ScriptContext__executeInNewThread_orig = reinterpret_cast<RBX::ScriptContext__executeInNewThread_t>(0x00629A00);
+
+// SECURITY BYPASS
+// have "Local url" scripts execute with identity 7 for high privileges
+void __fastcall RBX::ScriptContext__executeInNewThread_hook(RBX::ScriptContext* _this, void*, int identity, const char* source, const char* name)
+{
+	if (std::strcmp(name, "Local url") == 0)
+	{
+		name = "Local url (elevated)";
+		identity = 7;
+	}
+
+	RBX::ScriptContext__executeInNewThread_orig(_this, identity, source, name);
 }
 
 // ===== `RBX::Network::Replicator::RockyItem` member function hooks =====

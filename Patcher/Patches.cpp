@@ -29,6 +29,7 @@ static const std::unordered_map<void*, void*> hooks = {
 
     // ===== `RBX::ScriptContext` member function hooks =====
     { &RBX::ScriptContext__openState_orig, RBX::ScriptContext__openState_hook },
+    { &RBX::ScriptContext__executeInNewThread_orig, RBX::ScriptContext__executeInNewThread_hook },
 
     // ===== `RBX::Network::Replicator::RockyItem` member function hooks =====
     { &RBX::Network::Replicator__RockyItem__write_orig, RBX::Network__Replicator__RockyItem__write_hook },
@@ -122,12 +123,6 @@ void Patches::init()
     // ===== bypass SSL certificate checks =====
     // we are writing a relative JMP from 0x006EAAB0 to 0x006EABF7, within RBX::Http::httpGetPostWinInet
     writeBytes(reinterpret_cast<void*>(0x006EAAB0), "\xE9\x42\x01\x00\x00", 0x7, PAGE_EXECUTE_READWRITE);
-
-    // SECURITY BYPASS
-    // ===== high-privilege "Local url" scripts =====
-    // have these scripts execute with identity 7
-    // this is replacing `PUSH 1` with `PUSH 7`
-    fillBytes(reinterpret_cast<void*>(0x00478637), 0x07, 0x01, PAGE_EXECUTE_READWRITE);
 
     // SECURITY BYPASS
     // ===== always send a clean value for RBX::DataModel::sendStats =====

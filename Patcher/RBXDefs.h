@@ -126,7 +126,9 @@ namespace RBX
 
 	const auto ScriptContext__addScript = reinterpret_cast<void(__thiscall*)(ScriptContext* _this, void* script)>(0x006282B0);
 
-	const auto ScriptContext__executeInNewThread = reinterpret_cast<void(__thiscall*)(ScriptContext* _this, int identity, const char* source, const char* name)>(0x00629A00);
+	//HOOKED
+	typedef void(__thiscall* ScriptContext__executeInNewThread_t)(ScriptContext* _this, int identity, const char* source, const char* name);
+	extern ScriptContext__executeInNewThread_t ScriptContext__executeInNewThread_orig;
 
 	// ===== `Players` class =====
 

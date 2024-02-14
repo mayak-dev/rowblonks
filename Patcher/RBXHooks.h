@@ -36,6 +36,7 @@ namespace RBX
 	// ===== `RBX::ScriptContext` member function hooks =====
 
 	void __fastcall ScriptContext__openState_hook(RBX::ScriptContext* _this);
+	void __fastcall ScriptContext__executeInNewThread_hook(RBX::ScriptContext* _this, void*, int identity, const char* source, const char* name);
 
 	// ===== `RBX::Network::Replicator::RockyItem` member function hooks =====
 
@@ -44,7 +45,7 @@ namespace RBX
 
 	// ===== `RBX::PlayerChatLine` member function hooks =====
 
-	PlayerChatLine* __fastcall PlayerChatLine__constructor_hook(PlayerChatLine* _this, void*, int a2, class Player* player, void* a4, int a5, int a6, int a7);
+	PlayerChatLine* __fastcall PlayerChatLine__constructor_hook(PlayerChatLine* _this, void*, int a2, RBX::Player* player, void* a4, int a5, int a6, int a7);
 
 	// ===== `RBX::NetworkSettings` member function hooks =====
 
