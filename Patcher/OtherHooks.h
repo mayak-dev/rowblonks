@@ -33,3 +33,15 @@ extern void* ptrToHook_529031;
 
 // inline hook
 void inlineHook_529031();
+
+// ===== use "rowblonks" directories instead of "Roblox" =====
+
+typedef vc90::std::string* (__cdecl* sub_636AB0_t)(vc90::std::string* a1, bool a2, int a3, const char* a4);
+extern sub_636AB0_t sub_636AB0_orig;
+
+vc90::std::string* __cdecl sub_636AB0_hook(vc90::std::string* a1, bool a2, int a3, const char* a4);
+
+typedef BOOL (__stdcall* CreateDirectoryA_t)(LPCSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes);
+extern CreateDirectoryA_t CreateDirectoryA_orig;
+
+BOOL __stdcall CreateDirectoryA_hook(LPCSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes);

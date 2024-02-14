@@ -88,3 +88,37 @@ void __declspec(naked) inlineHook_529031()
 		jmp [ptrToHook_529031]
 	}
 }
+
+// ===== use "rowblonks" directories instead of "Roblox" =====
+
+static void fixRobloxPath(std::string& path)
+{
+	constexpr const char* robloxDir = "Roblox\\";
+
+	size_t pos = path.rfind(robloxDir);
+	if (pos != std::string::npos)
+		path.replace(pos, std::strlen(robloxDir), "rowblonks\\");
+}
+
+sub_636AB0_t sub_636AB0_orig = reinterpret_cast<sub_636AB0_t>(0x00636AB0);
+
+vc90::std::string* __cdecl sub_636AB0_hook(vc90::std::string* a1, bool a2, int a3, const char* a4)
+{
+	auto res = sub_636AB0_orig(a1, a2, a3, a4);
+
+	std::string path = (*vc90::std::string__c_str)(res);
+	fixRobloxPath(path);
+
+	(*vc90::std::string__assign_from_c_str)(res, path.c_str());
+	return res;
+}
+
+CreateDirectoryA_t CreateDirectoryA_orig = CreateDirectoryA;
+
+BOOL __stdcall CreateDirectoryA_hook(LPCSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes)
+{
+	std::string path = lpPathName;
+	fixRobloxPath(path);
+
+	return CreateDirectoryA_orig(path.c_str(), lpSecurityAttributes);
+}

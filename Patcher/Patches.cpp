@@ -42,6 +42,8 @@ static const std::unordered_map<void*, void*> hooks = {
     { &sub_794AF0_orig, sub_794AF0_hook },
     { &ptrToHook_6668F6, inlineHook_6668F6 },
     { &ptrToHook_529031, inlineHook_529031 },
+    { &sub_636AB0_orig, sub_636AB0_hook },
+    { &CreateDirectoryA_orig, CreateDirectoryA_hook }
 };
 
 #ifdef _DEBUG
