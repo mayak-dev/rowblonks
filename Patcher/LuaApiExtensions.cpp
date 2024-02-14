@@ -16,6 +16,8 @@ static const luaL_Reg mayaLib[] = {
     { "AddLocalStarterScript", Lua::Api::addLocalStarterScript },
     { "RegisterLocalLibrary", Lua::Api::registerLocalLibrary },
 
+    { "ShowOutput", Lua::Api::showOutput },
+
     { nullptr, nullptr },
 };
 
@@ -179,6 +181,17 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
 
     vc90::std::string::destruct(nameStr);
     vc90::std::string::destruct(sourceStr);
+
+    return 0;
+}
+
+// ===== functionality to show the output window =====
+
+int Lua::Api::showOutput(lua_State* L)
+{
+    Lua::checkPermissions(L, 3, "show the Output window");
+
+    CMainFrame__ShowOutput(g_CRobloxApp->m_pActiveWnd);
 
     return 0;
 }

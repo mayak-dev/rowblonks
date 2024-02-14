@@ -4,6 +4,24 @@
 
 struct lua_State;
 
+// ===== `CMainFrame` class =====
+
+class CMainFrame;
+
+const auto CMainFrame__ShowOutput = reinterpret_cast<void(__thiscall*)(CMainFrame* _this)>(0x00431480);
+
+// ===== `CRobloxApp` class =====
+
+class CRobloxApp
+{
+private:
+	char padding[32];
+public:
+	CMainFrame* m_pActiveWnd;
+};
+
+static CRobloxApp* const g_CRobloxApp = reinterpret_cast<CRobloxApp*>(0x00CB3820);
+
 // ===== `CRobloxWnd::RenderRequestJob` class =====
 
 class CRobloxWnd__RenderRequestJob

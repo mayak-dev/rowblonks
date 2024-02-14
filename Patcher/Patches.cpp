@@ -103,7 +103,7 @@ static void writeBytes(void* address, const char* data, size_t size, DWORD flags
         throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, reinterpret_cast<DWORD>(address) + size);
 }
 
-static void fillBytes(void* address, int value, size_t size, DWORD flags)
+static void fillBytes(void* address, uint8_t value, size_t size, DWORD flags)
 {
     DWORD oldFlags;
     if (!VirtualProtect(address, size, flags, &oldFlags))
@@ -117,6 +117,8 @@ static void fillBytes(void* address, int value, size_t size, DWORD flags)
 
 void Patches::init()
 {
+    constexpr uint8_t NOP = 0x90;
+
     // ===== bypass SSL certificate checks =====
     // we are writing a relative JMP from 0x006EAAB0 to 0x006EABF7, within RBX::Http::httpGetPostWinInet
     writeBytes(reinterpret_cast<void*>(0x006EAAB0), "\xE9\x42\x01\x00\x00", 0x7, PAGE_EXECUTE_READWRITE);
@@ -135,11 +137,11 @@ void Patches::init()
 
     // ===== fix freezing from dragging IDE toolbars =====
     // removes a redundant call to GetMessageA and a comparison of its result following PeekMessageA in the window message loop
-    fillBytes(reinterpret_cast<void*>(0x008A2073), 0x90, 0x15, PAGE_EXECUTE_READWRITE);
+    fillBytes(reinterpret_cast<void*>(0x008A2073), NOP, 0x15, PAGE_EXECUTE_READWRITE);
 
     // ===== disable executing Lua bytecode provided by the user =====
     // this makes it so f_parser will always call luaY_parser instead of luaU_undump
-    fillBytes(reinterpret_cast<void*>(0x0077E6BC), 0x90, 0xA, PAGE_EXECUTE_READWRITE);
+    fillBytes(reinterpret_cast<void*>(0x0077E6BC), NOP, 0xA, PAGE_EXECUTE_READWRITE);
 
     initHooks();
 }

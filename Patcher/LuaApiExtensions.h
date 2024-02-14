@@ -22,6 +22,10 @@ namespace Lua
 		int addLocalCoreScript(lua_State* L);
 		int addLocalStarterScript(lua_State* L);
 		int registerLocalLibrary(lua_State* L);
+
+		// ===== functionality to show the output window =====
+
+		int showOutput(lua_State* L);
 	}
 }
 
