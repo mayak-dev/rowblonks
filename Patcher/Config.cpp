@@ -6,7 +6,11 @@
 std::string Config::gameDirectory;
 
 float Config::desiredFrameRate;
-bool Config::desiredRenderFpsOverridesDataRates;
+
+bool Config::desiredFpsOverridesNetworkDataRates;
+
+bool Config::use30FpsLuaDefaultWaitTime;
+bool Config::allowScriptIdentitySpoofing;
 
 void Config::init()
 {
@@ -16,6 +20,10 @@ void Config::init()
 
 	INIReader ini(gameDirectory + "/rowblonks.ini");
 
-	desiredFrameRate = static_cast<float>(ini.GetReal("Rendering", "DesiredFrameRate", 60.0));
-	desiredRenderFpsOverridesDataRates = ini.GetBoolean("Network", "DesiredRenderFpsOverridesDataRates", true);
+	desiredFrameRate = static_cast<float>(ini.GetReal("Game", "DesiredFrameRate", 60.0));
+
+	desiredFpsOverridesNetworkDataRates = ini.GetBoolean("Network", "DesiredFpsOverridesNetworkDataRates", true);
+
+	use30FpsLuaDefaultWaitTime = ini.GetBoolean("Lua", "Use30FpsLuaDefaultWaitTime", true);
+	allowScriptIdentitySpoofing = ini.GetBoolean("Lua", "AllowScriptIdentitySpoofing", false);
 }

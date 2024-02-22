@@ -154,6 +154,18 @@ void __fastcall RBX::ScriptContext__openState_hook(RBX::ScriptContext* _this)
 			Lua::openProtectedLibrary(_this->globalState, "bit", luaopen_bit);
 		}
 	}
+
+	// "DefaultWaitTime" is a BoundProp<double,1> so let's just set it here instead of doing anything annoying
+	if (Config::use30FpsLuaDefaultWaitTime)
+	{
+		auto luaSettings = RBX::LuaSettings::singleton();
+		if (luaSettings->defaultWaitTime != 1.0 / 30.0)
+		{
+			luaSettings->defaultWaitTime = 1.0 / 30.0;
+
+			RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(luaSettings), reinterpret_cast<void*>(0x00CCDA00));
+		}
+	}
 }
 
 RBX::ScriptContext__executeInNewThread_t RBX::ScriptContext__executeInNewThread_orig = reinterpret_cast<RBX::ScriptContext__executeInNewThread_t>(0x00629A00);
@@ -226,15 +238,14 @@ RBX::NetworkSettings__setDataSendRate_t RBX::NetworkSettings__setDataSendRate_or
 // rewritten to remove value clamp
 void __fastcall RBX::NetworkSettings__setDataSendRate_hook(RBX::NetworkSettings* _this, void*, float dataSendRate)
 {
-	if (Config::desiredRenderFpsOverridesDataRates)
+	if (Config::desiredFpsOverridesNetworkDataRates)
 		dataSendRate = Config::desiredFrameRate;
 
 	if (_this->dataSendRate != dataSendRate)
 	{
 		_this->dataSendRate = dataSendRate;
 
-		// fire the Changed signal
-		(reinterpret_cast<void(__thiscall*)(RBX::NetworkSettings*, void*)>(0x00411F60))(_this, reinterpret_cast<void*>(0x00CB7D78));
+		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), reinterpret_cast<void*>(0x00CB7D78));
 	}
 }
 
@@ -243,14 +254,13 @@ RBX::NetworkSettings__setReceiveRate_t RBX::NetworkSettings__setReceiveRate_orig
 // rewritten to remove value clamp
 void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* _this, void*, double receiveRate)
 {
-	if (Config::desiredRenderFpsOverridesDataRates)
+	if (Config::desiredFpsOverridesNetworkDataRates)
 		receiveRate = Config::desiredFrameRate;
 
 	if (_this->receiveRate != receiveRate)
 	{
 		_this->receiveRate = receiveRate;
 
-		// fire the Changed signal
-		(reinterpret_cast<void(__thiscall*)(RBX::NetworkSettings*, void*)>(0x00411F60))(_this, reinterpret_cast<void*>(0x00CB7BD8));
+		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), reinterpret_cast<void*>(0x00CB7BD8));
 	}
 }

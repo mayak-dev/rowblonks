@@ -6,9 +6,7 @@
 
 static const luaL_Reg mayaLib[] = {
     { "GetIdentity", Lua::Api::getIdentity },
-#ifdef _DEBUG
     { "SpoofIdentity", Lua::Api::spoofIdentity },
-#endif
 
     { "ProduceGameChat", Lua::Api::produceGameChat },
 
@@ -39,6 +37,9 @@ int Lua::Api::getIdentity(lua_State* L)
 // requires script to yield and resume to take effect
 int Lua::Api::spoofIdentity(lua_State* L)
 {
+    if (!Config::allowScriptIdentitySpoofing)
+        luaL_error(L, "Script identity spoofing is disabled");
+
     int identity = luaL_checkint(L, 1);
     RobloxExtraSpace::get(L)->identity = identity;
     return 0;

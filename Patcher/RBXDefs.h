@@ -81,6 +81,8 @@ namespace RBX
 
 	const auto Instance__setRobloxLocked = reinterpret_cast<void(__thiscall*)(Instance* _this, bool robloxLocked)>(0x005982F0);
 
+	const auto Instance__raisePropertyChanged = reinterpret_cast<void(__thiscall*)(Instance* _this, void* propDescriptor)>(0x00411F60);
+
 	// ===== `GuiBuilder` class =====
 
 	class GuiBuilder
@@ -298,4 +300,20 @@ namespace RBX
 	// HOOKED
 	typedef void(__thiscall* NetworkSettings__setReceiveRate_t)(NetworkSettings* _this, double receiveRate);
 	extern NetworkSettings__setReceiveRate_t NetworkSettings__setReceiveRate_orig;
+
+	// ===== `LuaSettings` class =====
+
+	class LuaSettings
+	{
+	private:
+		char padding1[160];
+	public:
+		double defaultWaitTime;
+
+		// singleton helper
+		static LuaSettings* singleton()
+		{
+			return *reinterpret_cast<LuaSettings**>(0x00CCBF7C);
+		}
+	};
 }

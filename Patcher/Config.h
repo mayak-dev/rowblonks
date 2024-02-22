@@ -5,7 +5,11 @@ namespace Config
 	extern std::string gameDirectory;
 
 	extern float desiredFrameRate;
-	extern bool desiredRenderFpsOverridesDataRates;
+
+	extern bool desiredFpsOverridesNetworkDataRates;
+
+	extern bool use30FpsLuaDefaultWaitTime;
+	extern bool allowScriptIdentitySpoofing;
 
 	void init();
 }
