@@ -21,8 +21,53 @@ static const luaL_Reg mayaLib[] = {
 
 int Lua::openApiExtensionsLibrary(lua_State* L)
 {
+    // make `warn` a global function for compatibility
+    lua_pushcfunction(L, Lua::Api::warn);
+    lua_setglobal(L, "warn");
+
+    // register other API extensions
     luaL_register(L, "maya", mayaLib);
     return 1;
+}
+
+// ===== functionality to output warnings =====
+
+int Lua::Api::warn(lua_State* L)
+{
+    std::string result;
+
+    // replicate the same behavior as the `print` function, which comes from the Lua source
+
+    int n = lua_gettop(L);  /* number of arguments */
+
+    lua_getglobal(L, "tostring");
+    
+    for (int i = 1; i <= n; i++) {
+        lua_pushvalue(L, -1);  /* function to be called */
+        lua_pushvalue(L, i);   /* value to print */
+        lua_call(L, 1, 1);
+
+        const char* s = lua_tostring(L, -1);  /* get result */
+        if (!s)
+            return luaL_error(L, "'tostring' must return a string to 'warn'");
+        
+        if (i > 1)
+            result += ' ';
+        result += s;
+
+        lua_pop(L, 1);  /* pop result */
+    }
+
+    // now that the string is built, output the warning
+
+    auto resultStr = vc90::std::string::construct(result.c_str());
+
+    auto standardOut = RBX::StandardOut::singleton();
+    RBX::StandardOut__print(standardOut, RBX::MESSAGE_WARNING, resultStr);
+
+    vc90::std::string::destruct(resultStr);
+
+    return 0;
 }
 
 // ===== functionality related to script identities =====
@@ -87,14 +132,11 @@ int Lua::Api::addLocalCoreScript(lua_State* L)
 
     auto nameStr = vc90::std::string::construct(name);
 
-    RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(coreScript), nameStr);
-
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(coreScript), true);
-
-    RBX::ScriptContext* scriptContext = Lua::getScriptContextAndDataModel(L).first;
-
+    RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(coreScript), nameStr);
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(coreScript), parent);
 
+    RBX::ScriptContext* scriptContext = Lua::getScriptContextAndDataModel(L).first;
     if (parent != reinterpret_cast<RBX::Instance*>(scriptContext))
         RBX::ScriptContext__addScript(scriptContext, coreScript);
 
@@ -122,12 +164,10 @@ int Lua::Api::addLocalStarterScript(lua_State* L)
 
     auto nameStr = vc90::std::string::construct(name);
 
+    RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(starterScript), true);
     RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(starterScript), nameStr);
 
-    RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(starterScript), true);
-
     RBX::ScriptContext* scriptContext = Lua::getScriptContextAndDataModel(L).first;
-
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(starterScript), reinterpret_cast<RBX::Instance*>(scriptContext));
 
     vc90::std::string::destruct(nameStr);
@@ -163,15 +203,12 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
     auto nameStr = vc90::std::string::construct(name);
     auto sourceStr = vc90::std::string::construct(sourceStream.str().c_str());
 
+    RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(script), true);
     RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(script), nameStr);
-
     RBX::Script__setDisabled(script, true);
     RBX::Script__setSource(script, sourceStr);
 
-    RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(script), true);
-
     RBX::ScriptContext* scriptContext = Lua::getScriptContextAndDataModel(L).first;
-    
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(script), reinterpret_cast<RBX::Instance*>(scriptContext));
 
     // not fully sure what this is (probably adding to a map?), but this is done to register the script object as a library

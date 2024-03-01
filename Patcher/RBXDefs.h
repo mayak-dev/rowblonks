@@ -325,4 +325,27 @@ namespace RBX
 	// HOOKED
 	typedef bool(__thiscall* VideoControl__isVideoRecording_t)(VideoControl* _this);
 	extern VideoControl__isVideoRecording_t VideoControl__isVideoRecording_orig;
+
+	// ==== `StandardOut` class =====
+
+	class StandardOut
+	{
+	public:
+
+		// singleton helper
+		static StandardOut* singleton()
+		{
+			return *reinterpret_cast<StandardOut**>(0x00CBDF3C);
+		}
+	};
+
+	enum MessageType
+	{
+		MESSAGE_OUTPUT,
+		MESSAGE_INFO,
+		MESSAGE_WARNING,
+		MESSAGE_ERROR
+	};
+
+	const auto StandardOut__print = reinterpret_cast<void(__thiscall*)(StandardOut* _this, MessageType messageType, vc90::std::string* message)>(0x005B17E0);
 }

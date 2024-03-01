@@ -18,6 +18,7 @@ const auto lua_pushinteger = reinterpret_cast<void(__cdecl*)(lua_State* L, int n
 const auto lua_pushstring = reinterpret_cast<void(__cdecl*)(lua_State* L, const char* s)>(0x007629A0);
 const auto lua_pushlstring = reinterpret_cast<void(__cdecl*)(lua_State* L, const char* s, size_t len)>(0x00762960);
 const auto lua_pushnumber = reinterpret_cast<void(__cdecl*)(lua_State* L, lua_Number n)>(0x00762920);
+const auto lua_pushvalue = reinterpret_cast<void(__cdecl*)(lua_State* L, int idx)>(0x00762520);
 
 const auto lua_setfield = reinterpret_cast<void(__cdecl*)(lua_State* L, int idx, const char* k)>(0x00762DF0);
 const auto lua_getfield = reinterpret_cast<void(__cdecl*)(lua_State* L, int idx, const char* k)>(0x00762BB0);
@@ -33,6 +34,7 @@ const auto luaL_checknumber = reinterpret_cast<lua_Number(__cdecl*)(lua_State* L
 const auto lua_isnumber = reinterpret_cast<int(__cdecl*)(lua_State* L, int idx)>(0x007625C0);
 
 const auto lua_tonumber = reinterpret_cast<lua_Number(__cdecl*)(lua_State* L, int idx)>(0x007626B0);
+const auto lua_tolstring = reinterpret_cast<const char* (__cdecl*)(lua_State* L, int idx, size_t* len)>(0x00762760);
 
 const auto luaL_error = reinterpret_cast<int(__cdecl*)(lua_State* L, const char* fmt, ...)>(0x00763710);
 
@@ -45,6 +47,8 @@ const auto lua_setmetatable = reinterpret_cast<int(__cdecl*)(lua_State* L, int o
 const auto lua_createtable = reinterpret_cast<void(__cdecl*)(lua_State* L, int narray, int nrec)>(0x00762C90);
 
 const auto lua_type = reinterpret_cast<int(__cdecl*)(lua_State* L, int idx)>(0x00762550);
+
+const auto lua_call = reinterpret_cast<void(__cdecl*)(lua_State* L, int nargs, int nresults)>(0x00763080);
 
 #define LUA_REGISTRYINDEX	(-10000)
 #define LUA_ENVIRONINDEX	(-10001)
@@ -74,6 +78,8 @@ const auto lua_type = reinterpret_cast<int(__cdecl*)(lua_State* L, int idx)>(0x0
 #define lua_newtable(L)         lua_createtable(L, 0, 0)
 
 #define lua_isnone(L,n)         (lua_type(L, (n)) == LUA_TNONE)
+
+#define lua_tostring(L,i)       lua_tolstring(L, (i), NULL)
 
 namespace RBX
 {

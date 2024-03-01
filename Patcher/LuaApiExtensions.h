@@ -8,6 +8,10 @@ namespace Lua
 
 	namespace Api
 	{
+		// ===== functionality to output warnings =====
+
+		int warn(lua_State* L);
+
 		// ===== functionality related to script identities =====
 
 		int getIdentity(lua_State* L);
