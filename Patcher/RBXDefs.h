@@ -9,6 +9,7 @@ struct lua_State;
 class CMainFrame;
 
 const auto CMainFrame__ShowOutput = reinterpret_cast<void(__thiscall*)(CMainFrame* _this)>(0x00431480);
+const auto CMainFrame__ShowTaskScheduler = reinterpret_cast<void(__thiscall*)(CMainFrame* _this)>(0x00430AA0);
 
 // ===== `CRobloxApp` class =====
 

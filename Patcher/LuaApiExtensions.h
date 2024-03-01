@@ -23,9 +23,9 @@ namespace Lua
 		int addLocalStarterScript(lua_State* L);
 		int registerLocalLibrary(lua_State* L);
 
-		// ===== functionality to show the output window =====
+		// ===== functionality to show an IDE window =====
 
-		int showOutput(lua_State* L);
+		int showIdeWindow(lua_State* L);
 	}
 }
 

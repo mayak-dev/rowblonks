@@ -14,7 +14,7 @@ static const luaL_Reg mayaLib[] = {
     { "AddLocalStarterScript", Lua::Api::addLocalStarterScript },
     { "RegisterLocalLibrary", Lua::Api::registerLocalLibrary },
 
-    { "ShowOutput", Lua::Api::showOutput },
+    { "ShowIDEWindow", Lua::Api::showIdeWindow },
 
     { nullptr, nullptr },
 };
@@ -186,13 +186,22 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
     return 0;
 }
 
-// ===== functionality to show the output window =====
+// ===== functionality to show an IDE window =====
 
-int Lua::Api::showOutput(lua_State* L)
+int Lua::Api::showIdeWindow(lua_State* L)
 {
-    Lua::checkPermissions(L, 3, "show the Output window");
+    Lua::checkPermissions(L, 3, "show an IDE window");
 
-    CMainFrame__ShowOutput(g_CRobloxApp->m_pActiveWnd);
+    std::string name = luaL_checkstring(L, 1);
+
+    auto mainFrame = g_CRobloxApp->m_pActiveWnd;
+
+    if (name == "Output")
+        CMainFrame__ShowOutput(mainFrame);
+    else if (name == "Task Scheduler")
+        CMainFrame__ShowTaskScheduler(mainFrame);
+    else
+        luaL_error(L, "Invalid IDE window name");
 
     return 0;
 }
