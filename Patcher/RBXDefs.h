@@ -317,4 +317,12 @@ namespace RBX
 			return *reinterpret_cast<LuaSettings**>(0x00CCBF7C);
 		}
 	};
+
+	// ===== `VideoControl` class =====
+
+	class VideoControl;
+
+	// HOOKED
+	typedef bool(__thiscall* VideoControl__isVideoRecording_t)(VideoControl* _this);
+	extern VideoControl__isVideoRecording_t VideoControl__isVideoRecording_orig;
 }

@@ -41,6 +41,9 @@ static const std::unordered_map<void*, void*> hooks = {
     { &RBX::NetworkSettings__setDataSendRate_orig, RBX::NetworkSettings__setDataSendRate_hook },
     { &RBX::NetworkSettings__setReceiveRate_orig, RBX::NetworkSettings__setReceiveRate_hook },
 
+    // ===== `RBX::VideoControl` member function hooks =====
+    { &RBX::VideoControl__isVideoRecording_orig, RBX::VideoControl__isVideoRecording_hook },
+
     // ===== other hooks =====
     { &sub_6C34D0_orig, sub_6C34D0_hook },
     { &sub_6C47A0_orig, sub_6C47A0_hook },

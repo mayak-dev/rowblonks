@@ -264,3 +264,16 @@ void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* 
 		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), reinterpret_cast<void*>(0x00CB7BD8));
 	}
 }
+
+// ===== `RBX::VideoControl` member function hooks =====
+
+RBX::VideoControl__isVideoRecording_t RBX::VideoControl__isVideoRecording_orig = reinterpret_cast<RBX::VideoControl__isVideoRecording_t>(0x0049B030);
+
+bool __fastcall RBX::VideoControl__isVideoRecording_hook(RBX::VideoControl* _this)
+{
+	// fix null pointer dereference in NoGraphics mode
+	if (!_this)
+		return false;
+
+	return RBX::VideoControl__isVideoRecording_orig(_this);
+}
