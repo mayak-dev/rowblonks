@@ -45,3 +45,10 @@ typedef BOOL (__stdcall* CreateDirectoryA_t)(LPCSTR lpPathName, LPSECURITY_ATTRI
 extern CreateDirectoryA_t CreateDirectoryA_orig;
 
 BOOL __stdcall CreateDirectoryA_hook(LPCSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes);
+
+// ===== fix TextXmlParser hanging while seeking attributes in invalid documents =====
+
+extern void* ptrToHook_613019;
+
+// inline hook
+void inlineHook_613019();

@@ -122,3 +122,26 @@ BOOL __stdcall CreateDirectoryA_hook(LPCSTR lpPathName, LPSECURITY_ATTRIBUTES lp
 
 	return CreateDirectoryA_orig(path.c_str(), lpSecurityAttributes);
 }
+
+// ===== fix TextXmlParser hanging while seeking attributes in invalid documents =====
+
+void* ptrToHook_613019 = reinterpret_cast<void*>(0x00613019);
+
+// inline hook
+void __declspec(naked) inlineHook_613019()
+{
+	__asm
+	{
+		// at this point, the current character is in AL
+		cmp al, '<'
+		jne suc
+
+		// current character is '<'; abort mission
+		mov eax, 0x00613039
+		jmp eax
+
+	suc:
+		// jump to original code, continuing as normal
+		jmp [ptrToHook_613019]
+	}
+}
