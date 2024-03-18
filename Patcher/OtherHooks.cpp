@@ -6,14 +6,14 @@
 
 sub_6C34D0_t sub_6C34D0_orig = reinterpret_cast<sub_6C34D0_t>(0x006C34D0);
 
-bool __fastcall sub_6C34D0_hook(void* _this, void*, vc90::std::string* scriptHash, vc90::std::string*, bool)
+bool __fastcall sub_6C34D0_hook(void* _this, void*, const std::string& scriptHash, const std::string&, bool)
 {
 	return true;
 }
 
 sub_6C47A0_t sub_6C47A0_orig = reinterpret_cast<sub_6C47A0_t>(0x006C47A0);
 
-bool __fastcall sub_6C47A0_hook(void* _this, void*, vc90::std::string*, int)
+bool __fastcall sub_6C47A0_hook(void* _this, void*, const std::string&, int)
 {
 	return true;
 }
@@ -102,14 +102,19 @@ static void fixRobloxPath(std::string& path)
 
 sub_636AB0_t sub_636AB0_orig = reinterpret_cast<sub_636AB0_t>(0x00636AB0);
 
-vc90::std::string* __cdecl sub_636AB0_hook(vc90::std::string* a1, bool a2, int a3, const char* a4)
+std::string& __cdecl sub_636AB0_hook(std::string& a1, bool a2, int a3, const char* a4)
 {
-	auto res = sub_636AB0_orig(a1, a2, a3, a4);
+	std::string& res = sub_636AB0_orig(a1, a2, a3, a4);
+	fixRobloxPath(res);
+	return res;
+}
 
-	std::string path = (*vc90::std::string__c_str)(res);
-	fixRobloxPath(path);
+sub_636F90_t sub_636F90_orig = reinterpret_cast<sub_636F90_t>(0x00636F90);
 
-	(*vc90::std::string__assign_from_c_str)(res, path.c_str());
+std::string& __cdecl sub_636F90_hook(std::string& a1, bool a2)
+{
+	std::string& res = sub_636F90_orig(a1, a2);
+	fixRobloxPath(res);
 	return res;
 }
 
@@ -119,7 +124,6 @@ BOOL __stdcall CreateDirectoryA_hook(LPCSTR lpPathName, LPSECURITY_ATTRIBUTES lp
 {
 	std::string path = lpPathName;
 	fixRobloxPath(path);
-
 	return CreateDirectoryA_orig(path.c_str(), lpSecurityAttributes);
 }
 
@@ -129,8 +133,7 @@ void* ptrToHook_613019 = reinterpret_cast<void*>(0x00613019);
 
 static void __stdcall xmlParseAttributesOnSyntaxError()
 {
-	auto error = vc90::std::runtime_error::construct("TextXmlParser::parseAttributes - invalid syntax for assigning attributes");
-	vc90::std::runtime_error::doThrow(error);
+	throw std::runtime_error("TextXmlParser::parseAttributes - invalid syntax for assigning attributes");
 }
 
 // inline hook

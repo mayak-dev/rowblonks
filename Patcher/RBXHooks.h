@@ -19,14 +19,14 @@ namespace RBX
 	// ===== `RBX::ContentProvider` member function hooks =====
 
 	// SECURITY BYPASS
-	void __cdecl ContentProvider__verifyScriptSignature_hook(vc90::std::string* source, bool required);
+	void __cdecl ContentProvider__verifyScriptSignature_hook(const std::string& source, bool required);
 
 	// SECURITY BYPASS
-	void __cdecl ContentProvider__verifyRequestedScriptSignature_hook(vc90::std::string* source, vc90::std::string* assetId, bool required);
+	void __cdecl ContentProvider__verifyRequestedScriptSignature_hook(const std::string& source, const std::string& assetId, bool required);
 
 	// ===== `RBX:Http` member function hooks =====
 
-	RBX::Http* __fastcall Http__constructor_hook(RBX::Http* _this, void*, vc90::std::string* url);
+	RBX::Http* __fastcall Http__constructor_hook(RBX::Http* _this, void*, const std::string& url);
 	bool __cdecl Http__trustCheck_hook(const char* url);
 
 	// ===== `RBX::DataModel` member function hooks =====
