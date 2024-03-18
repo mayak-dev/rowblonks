@@ -34,23 +34,6 @@ extern void* ptrToHook_529031;
 // inline hook
 void inlineHook_529031();
 
-// ===== use "rowblonks" directories instead of "Roblox" =====
-
-typedef std::string& (__cdecl* sub_636AB0_t)(std::string& a1, bool a2, int a3, const char* a4);
-extern sub_636AB0_t sub_636AB0_orig;
-
-std::string& __cdecl sub_636AB0_hook(std::string& a1, bool a2, int a3, const char* a4);
-
-typedef std::string& (__cdecl* sub_636F90_t)(std::string& a1, bool a2);
-extern sub_636F90_t sub_636F90_orig;
-
-std::string& __cdecl sub_636F90_hook(std::string& a1, bool a2);
-
-typedef BOOL (__stdcall* CreateDirectoryA_t)(LPCSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes);
-extern CreateDirectoryA_t CreateDirectoryA_orig;
-
-BOOL __stdcall CreateDirectoryA_hook(LPCSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes);
-
 // ===== fix TextXmlParser hanging while attempting to parse attributes =====
 
 extern void* ptrToHook_613019;

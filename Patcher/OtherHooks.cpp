@@ -89,44 +89,6 @@ void __declspec(naked) inlineHook_529031()
 	}
 }
 
-// ===== use "rowblonks" directories instead of "Roblox" =====
-
-static void fixRobloxPath(std::string& path)
-{
-	constexpr const char* robloxDir = "Roblox\\";
-
-	size_t pos = path.rfind(robloxDir);
-	if (pos != std::string::npos)
-		path.replace(pos, std::strlen(robloxDir), "rowblonks\\");
-}
-
-sub_636AB0_t sub_636AB0_orig = reinterpret_cast<sub_636AB0_t>(0x00636AB0);
-
-std::string& __cdecl sub_636AB0_hook(std::string& a1, bool a2, int a3, const char* a4)
-{
-	std::string& res = sub_636AB0_orig(a1, a2, a3, a4);
-	fixRobloxPath(res);
-	return res;
-}
-
-sub_636F90_t sub_636F90_orig = reinterpret_cast<sub_636F90_t>(0x00636F90);
-
-std::string& __cdecl sub_636F90_hook(std::string& a1, bool a2)
-{
-	std::string& res = sub_636F90_orig(a1, a2);
-	fixRobloxPath(res);
-	return res;
-}
-
-CreateDirectoryA_t CreateDirectoryA_orig = CreateDirectoryA;
-
-BOOL __stdcall CreateDirectoryA_hook(LPCSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes)
-{
-	std::string path = lpPathName;
-	fixRobloxPath(path);
-	return CreateDirectoryA_orig(path.c_str(), lpSecurityAttributes);
-}
-
 // ===== fix TextXmlParser hanging while attempting to parse attributes =====
 
 void* ptrToHook_613019 = reinterpret_cast<void*>(0x00613019);
