@@ -46,7 +46,7 @@ extern CreateDirectoryA_t CreateDirectoryA_orig;
 
 BOOL __stdcall CreateDirectoryA_hook(LPCSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes);
 
-// ===== fix TextXmlParser hanging while seeking attributes in invalid documents =====
+// ===== fix TextXmlParser hanging while attempting to parse attributes =====
 
 extern void* ptrToHook_613019;
 
