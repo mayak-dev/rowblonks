@@ -49,7 +49,7 @@ RBX::ContentProvider__verifyScriptSignature_t RBX::ContentProvider__verifyScript
 
 // SECURITY BYPASS
 // never require script signatures (1)
-void __cdecl RBX::ContentProvider__verifyScriptSignature_hook(const std::string& source, bool required)
+void __cdecl RBX::ContentProvider__verifyScriptSignature_hook(vc90::std::string* source, bool required)
 {
 	RBX::ContentProvider__verifyScriptSignature_orig(source, false);
 }
@@ -58,7 +58,7 @@ RBX::ContentProvider__verifyRequestedScriptSignature_t RBX::ContentProvider__ver
 
 // SECURITY BYPASS
 // never require script signatures (2)
-void __cdecl RBX::ContentProvider__verifyRequestedScriptSignature_hook(const std::string& source, const std::string& assetId, bool required)
+void __cdecl RBX::ContentProvider__verifyRequestedScriptSignature_hook(vc90::std::string* source, vc90::std::string* assetId, bool required)
 {
 	RBX::ContentProvider__verifyRequestedScriptSignature_orig(source, assetId, false);
 }
@@ -68,9 +68,11 @@ void __cdecl RBX::ContentProvider__verifyRequestedScriptSignature_hook(const std
 RBX::Http__constructor_t RBX::Http__constructor_orig = reinterpret_cast<RBX::Http__constructor_t>(0x00420090);
 
 // reconstruct asset urls to use the assetdelivery api
-RBX::Http* __fastcall RBX::Http__constructor_hook(RBX::Http* _this, void*, const std::string& url)
+RBX::Http* __fastcall RBX::Http__constructor_hook(RBX::Http* _this, void*, vc90::std::string* url)
 {
-	UrlHelper urlHelper(url);
+	const char* urlCStr = (*vc90::std::string__c_str)(url);
+
+	UrlHelper urlHelper(urlCStr);
 
 	std::string& hostname = urlHelper.hostname;
 	std::string& path = urlHelper.path;
@@ -84,7 +86,13 @@ RBX::Http* __fastcall RBX::Http__constructor_hook(RBX::Http* _this, void*, const
 		urlHelper.hostname = "assetdelivery.roblox.com";
 		urlHelper.path = "v1/asset/";
 
-		return RBX::Http__constructor_orig(_this, urlHelper.buildUrl());
+		auto newUrlStr = vc90::std::string::construct(urlHelper.buildUrl().c_str());
+
+		auto result = RBX::Http__constructor_orig(_this, newUrlStr);
+
+		vc90::std::string::destruct(newUrlStr);
+
+		return result;
 	}
 
 	return RBX::Http__constructor_orig(_this, url);
@@ -202,9 +210,12 @@ RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::Playe
 {
 	auto result = RBX::PlayerChatLine__constructor_orig(_this, a2, player, a4, a5, a6, a7);
 
+	auto nameStr = reinterpret_cast<vc90::std::string*>(&result->name);
+	const char* name = (*vc90::std::string__c_str)(nameStr);
+
 	if (player && player->neutral)
 	{
-		auto it = chatColors.find(result->name);
+		auto it = chatColors.find(name);
 		if (it != chatColors.end())
 		{
 			result->nameR = it->second[0] / 255.0f;
@@ -214,8 +225,8 @@ RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::Playe
 	}
 
 	// i made it, so i get to be special
-	if (result->name == "maya")
-		result->name = "(dev) maya";
+	if (std::strcmp(name, "maya") == 0)
+		(*vc90::std::string__assign_from_c_str)(nameStr, "(dev) maya");
 
 	return result;
 }

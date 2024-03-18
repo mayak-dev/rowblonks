@@ -78,7 +78,7 @@ namespace RBX
 
 	const auto Instance__setParent = reinterpret_cast<void(__thiscall*)(Instance* _this, Instance* newParent)>(0x00597910);
 
-	const auto Instance__setName = reinterpret_cast<void(__thiscall*)(Instance* _this, const std::string& name)>(0x00598250);
+	const auto Instance__setName = reinterpret_cast<void(__thiscall*)(Instance* _this, vc90::std::string* name)>(0x00598250);
 
 	const auto Instance__setRobloxLocked = reinterpret_cast<void(__thiscall*)(Instance* _this, bool robloxLocked)>(0x005982F0);
 
@@ -137,11 +137,11 @@ namespace RBX
 
 	class Players;
 
-	const auto Players__gameChat = reinterpret_cast<void(__thiscall*)(Players* _this, const std::string& message)>(0x004CAE90);
+	const auto Players__gameChat = reinterpret_cast<void(__thiscall*)(Players* _this, vc90::std::string* message)>(0x004CAE90);
 
 	// ===== `Script` class =====
 
-	const auto Script__constructor = reinterpret_cast<class Script* (__thiscall*)(Script* _this)>(0x0063D6B0);
+	const auto Script__constructor = reinterpret_cast<class Script* (__thiscall*)(Script* _this) > (0x0063D6B0);
 
 	class Script
 	{
@@ -151,7 +151,7 @@ namespace RBX
 		// constructor helper
 		static Script* construct()
 		{
-			auto result = reinterpret_cast<Script*>(new char[size]);
+			auto result = reinterpret_cast<Script*>((*vc90::operator_new)(size));
 			Script__constructor(result);
 
 			return result;
@@ -160,11 +160,11 @@ namespace RBX
 
 	const auto Script__setDisabled = reinterpret_cast<void(__thiscall*)(Script* _this, bool disabled)>(0x0063D460);
 
-	const auto Script__setSource = reinterpret_cast<void(__thiscall*)(Script* _this, const std::string& source)>(0x0063D330);
+	const auto Script__setSource = reinterpret_cast<void(__thiscall*)(Script* _this, vc90::std::string* source)>(0x0063D330);
 
 	// ===== `CoreScript` class =====
 
-	const auto CoreScript__constructor = reinterpret_cast<class CoreScript* (__thiscall*)(CoreScript*, const std::string& source)>(0x00663570);
+	const auto CoreScript__constructor = reinterpret_cast<class CoreScript* (__thiscall*)(CoreScript*, vc90::std::string* source)>(0x00663570);
 
 	class CoreScript
 	{
@@ -172,17 +172,22 @@ namespace RBX
 		static constexpr size_t size = 200;
 
 		// constructor helper
-		static CoreScript* construct(const std::string& source)
+		static CoreScript* construct(const char* source)
 		{
-			auto result = reinterpret_cast<CoreScript*>(new char[size]);
-			CoreScript__constructor(result, source);
+			auto newSource = vc90::std::string::construct(source);
+
+			auto result = reinterpret_cast<CoreScript*>((*vc90::operator_new)(size));
+			CoreScript__constructor(result, newSource);
+
+			vc90::std::string::destruct(newSource);
+
 			return result;
 		}
 	};
 
 	// ===== `StarterScript` class =====
 
-	const auto StarterScript__constructor = reinterpret_cast<class StarterScript* (__thiscall*)(StarterScript*, const std::string& source)>(0x00663C50);
+	const auto StarterScript__constructor = reinterpret_cast<class StarterScript* (__thiscall*)(StarterScript*, vc90::std::string* source)>(0x00663C50);
 
 	class StarterScript
 	{
@@ -190,10 +195,14 @@ namespace RBX
 		static constexpr size_t size = 200;
 
 		// constructor helper
-		static StarterScript* construct(const std::string& source)
+		static StarterScript* construct(const char* source)
 		{
-			auto result = reinterpret_cast<StarterScript*>(new char[size]);
-			StarterScript__constructor(result, source);
+			auto newSource = vc90::std::string::construct(source);
+
+			auto result = reinterpret_cast<StarterScript*>((*vc90::operator_new)(size));
+			StarterScript__constructor(result, newSource);
+
+			vc90::std::string::destruct(newSource);
 
 			return result;
 		}
@@ -205,12 +214,12 @@ namespace RBX
 
 	// static method
 	// HOOKED
-	typedef void(__cdecl* ContentProvider__verifyScriptSignature_t)(const std::string& source, bool required);
+	typedef void(__cdecl* ContentProvider__verifyScriptSignature_t)(vc90::std::string* source, bool required);
 	extern ContentProvider__verifyScriptSignature_t ContentProvider__verifyScriptSignature_orig;
 
 	// static method
 	// HOOKED
-	typedef void(__cdecl* ContentProvider__verifyRequestedScriptSignature_t)(const std::string& source, const std::string& assetId, bool required);
+	typedef void(__cdecl* ContentProvider__verifyRequestedScriptSignature_t)(vc90::std::string* source, vc90::std::string* assetId, bool required);
 	extern ContentProvider__verifyRequestedScriptSignature_t ContentProvider__verifyRequestedScriptSignature_orig;
 
 	// ===== `Http` class =====
@@ -218,7 +227,7 @@ namespace RBX
 	class Http;
 
 	// HOOKED
-	typedef Http* (__thiscall* Http__constructor_t)(Http* _this, const std::string& url);
+	typedef Http* (__thiscall* Http__constructor_t)(Http* _this, vc90::std::string* url);
 	extern Http__constructor_t Http__constructor_orig;
 
 	// static method
@@ -264,7 +273,7 @@ namespace RBX
 		float nameR;
 		float nameG;
 		float nameB;
-		std::string name;
+		void* name; // this marks the offset of a std::string, it is not a pointer to one
 	};
 
 	// HOOKED
@@ -338,5 +347,5 @@ namespace RBX
 		MESSAGE_ERROR
 	};
 
-	const auto StandardOut__print = reinterpret_cast<void(__thiscall*)(StandardOut* _this, MessageType messageType, const std::string& message)>(0x005B17E0);
+	const auto StandardOut__print = reinterpret_cast<void(__thiscall*)(StandardOut* _this, MessageType messageType, vc90::std::string* message)>(0x005B17E0);
 }
