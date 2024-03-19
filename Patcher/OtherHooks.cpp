@@ -6,14 +6,14 @@
 
 sub_6C34D0_t sub_6C34D0_orig = reinterpret_cast<sub_6C34D0_t>(0x006C34D0);
 
-bool __fastcall sub_6C34D0_hook(void* _this, void*, vc90::std::string* scriptHash, vc90::std::string*, bool)
+bool __fastcall sub_6C34D0_hook(void* _this, void*, const std::string& scriptHash, const std::string&, bool)
 {
 	return true;
 }
 
 sub_6C47A0_t sub_6C47A0_orig = reinterpret_cast<sub_6C47A0_t>(0x006C47A0);
 
-bool __fastcall sub_6C47A0_hook(void* _this, void*, vc90::std::string*, int)
+bool __fastcall sub_6C47A0_hook(void* _this, void*, const std::string&, int)
 {
 	return true;
 }
