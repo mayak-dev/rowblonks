@@ -8,5 +8,4 @@ InsertService:SetAssetVersionUrl("https://assetdelivery.roblox.com/v1/asset/?ass
 InsertService:SetFreeModelUrl("http://www.roblox.com/Game/Tools/InsertAsset.ashx?type=fm&q=%s&pg=%d&rs=%d")
 InsertService:SetFreeDecalUrl("http://www.roblox.com/Game/Tools/InsertAsset.ashx?type=fd&q=%s&pg=%d&rs=%d")
 
-local ScriptContext = game:GetService("ScriptContext")
-maya.AddLocalStarterScript("StarterScript", ScriptContext)
+maya.AddLocalStarterScript("StarterScript")

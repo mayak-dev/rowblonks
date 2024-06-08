@@ -136,7 +136,6 @@ int Lua::Api::addLocalStarterScript(lua_State* L)
     Lua::checkPermissions(L, 2, "add a local StarterScript");
 
     std::string name = luaL_checkstring(L, 1);
-    auto parent = Lua::checkInstance(L, 2);
 
     std::string source = "rbxasset://../extra/corescripts/" + name + ".lua";
 
