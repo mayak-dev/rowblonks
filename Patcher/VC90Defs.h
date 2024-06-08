@@ -28,9 +28,11 @@ namespace vc90
 			}
 		};
 
+		const auto string__assign = reinterpret_cast<void(__thiscall**)(string* _this, const char* str)>(0x00A404B4);
+
 		// ===== `runtime_error` class =====
 
-		const auto runtime_error__constructor = reinterpret_cast<class runtime_error* (__thiscall*)(runtime_error * _this, const ::std::string& message)>(0x0040A950);
+		const auto runtime_error__constructor = reinterpret_cast<class runtime_error* (__thiscall*)(runtime_error* _this, const ::std::string& message)>(0x0040A950);
 
 		class runtime_error
 		{

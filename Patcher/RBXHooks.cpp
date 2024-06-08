@@ -215,7 +215,7 @@ RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::Playe
 
 	// i made it, so i get to be special
 	if (result->name == "maya")
-		result->name = "(dev) maya";
+		(*vc90::std::string__assign)(reinterpret_cast<vc90::std::string*>(&result->name), "(dev) maya");
 
 	return result;
 }
