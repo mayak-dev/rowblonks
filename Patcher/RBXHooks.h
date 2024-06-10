@@ -12,9 +12,13 @@ double* __fastcall CRobloxWnd__UserInputJob__sleepTime_hook(CRobloxWnd__UserInpu
 
 namespace RBX
 {
-	// ===== `RBX::HeartbeatTask` member function hooks ====
+	// ===== `RBX::HeartbeatTask` member function hooks =====
 
 	RBX::HeartbeatTask* __fastcall HeartbeatTask__constructor_hook(RBX::HeartbeatTask* _this, void*, RBX::RunService* runService, void* a3);
+
+	// ===== `RBX::PhysicsJob` member function hooks =====
+
+	RBX::PhysicsJob* __fastcall PhysicsJob__constructor_hook(RBX::PhysicsJob* _this, void*, RBX::DataModel* dataModel, void* a3);
 
 	// ===== `RBX::ContentProvider` member function hooks =====
 
@@ -32,6 +36,7 @@ namespace RBX
 	// ===== `RBX::DataModel` member function hooks =====
 
 	void __fastcall DataModel__startCoreScripts_hook(RBX::DataModel* _this, void*, RBX::AdornRbxGfx* adorn);
+	void __fastcall DataModel__physicsStep_hook(RBX::DataModel* _this, void*, float a2, double a3, double a4);
 
 	// ===== `RBX::ScriptContext` member function hooks =====
 

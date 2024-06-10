@@ -5,6 +5,7 @@ namespace Config
 	extern std::string gameDirectory;
 
 	extern float desiredFrameRate;
+	extern bool physicsFpsUnlocked;
 
 	extern bool desiredFpsOverridesNetworkDataRates;
 
@@ -12,4 +13,6 @@ namespace Config
 	extern bool allowScriptIdentitySpoofing;
 
 	void init();
+
+	extern bool initialized;
 }

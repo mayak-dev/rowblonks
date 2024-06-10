@@ -16,6 +16,9 @@ static const std::unordered_map<void*, void*> hooks = {
     // ===== `RBX::HeartbeatTask` member function hooks ====
     { &RBX::HeartbeatTask__constructor_orig, RBX::HeartbeatTask__constructor_hook },
 
+    // ===== `RBX::PhysicsJob` member function hooks =====
+	{ &RBX::PhysicsJob__constructor_orig, RBX::PhysicsJob__constructor_hook },
+
     // ===== `RBX::ContentProvider` member function hooks =====
     { &RBX::ContentProvider__verifyScriptSignature_orig, RBX::ContentProvider__verifyScriptSignature_hook },
     { &RBX::ContentProvider__verifyRequestedScriptSignature_orig, RBX::ContentProvider__verifyScriptSignature_hook },
@@ -26,6 +29,7 @@ static const std::unordered_map<void*, void*> hooks = {
 
     // ===== `RBX::DataModel` member function hooks =====
     { &RBX::DataModel__startCoreScripts_orig, RBX::DataModel__startCoreScripts_hook },
+    { &RBX::DataModel__physicsStep_orig, RBX::DataModel__physicsStep_hook },
 
     // ===== `RBX::ScriptContext` member function hooks =====
     { &RBX::ScriptContext__openState_orig, RBX::ScriptContext__openState_hook },
@@ -104,6 +108,12 @@ static void writeBytes(void* address, const char* data, size_t size, DWORD flags
 
     if (!VirtualProtect(address, size, oldFlags, &oldFlags))
         throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, reinterpret_cast<DWORD>(address) + size);
+}
+
+template<typename T>
+static void writeValue(void* address, T value, DWORD flags)
+{
+    writeBytes(address, reinterpret_cast<const char*>(&value), sizeof(T), flags);
 }
 
 static void fillBytes(void* address, uint8_t value, size_t size, DWORD flags)

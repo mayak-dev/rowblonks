@@ -20,7 +20,7 @@ extern sub_794AF0_t sub_794AF0_orig;
 
 void __cdecl sub_794AF0_hook(char a1, int a2, int a3, int a4, int a5, int a6, int a7);
 
-// ===== unlock fps (4) =====
+// ===== unlock fps =====
 
 extern void* ptrToHook_6668F6;
 

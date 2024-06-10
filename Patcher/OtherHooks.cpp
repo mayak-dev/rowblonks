@@ -29,7 +29,7 @@ void __cdecl sub_794AF0_hook(char a1, int a2, int a3, int a4, int a5, int a6, in
 	vc90::std::string::destruct(url);
 }
 
-// ===== unlock fps (4) =====
+// ===== unlock fps =====
 
 void* ptrToHook_6668F6 = reinterpret_cast<void*>(0x006668F6);
 

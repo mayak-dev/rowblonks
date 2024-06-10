@@ -9,7 +9,7 @@
 
 CRobloxWnd__RenderRequestJob__sleepTime_t CRobloxWnd__RenderRequestJob__sleepTime_orig = reinterpret_cast<CRobloxWnd__RenderRequestJob__sleepTime_t>(0x004881F0);
 
-// unlock fps (1)
+// unlock fps
 double* __fastcall CRobloxWnd__RenderRequestJob__sleepTime_hook(CRobloxWnd__RenderRequestJob* _this, void*, double* a2, int a3)
 {
 	if (_this->awake)
@@ -24,7 +24,7 @@ double* __fastcall CRobloxWnd__RenderRequestJob__sleepTime_hook(CRobloxWnd__Rend
 
 CRobloxWnd__UserInputJob__sleepTime_t CRobloxWnd__UserInputJob__sleepTime_orig = reinterpret_cast<CRobloxWnd__UserInputJob__sleepTime_t>(0x00486B30);
 
-// unlock fps (2)
+// unlock fps
 double* __fastcall CRobloxWnd__UserInputJob__sleepTime_hook(CRobloxWnd__UserInputJob* _this, void*, double* a2, int a3)
 {
 	(reinterpret_cast<void(__thiscall*)(CRobloxWnd__UserInputJob*, double*, int, double)>(0x007FDDB0))(_this, a2, a3, Config::desiredFrameRate);
@@ -35,11 +35,24 @@ double* __fastcall CRobloxWnd__UserInputJob__sleepTime_hook(CRobloxWnd__UserInpu
 
 RBX::HeartbeatTask__constructor_t RBX::HeartbeatTask__constructor_orig = reinterpret_cast<RBX::HeartbeatTask__constructor_t>(0x00599B40);
 
-// unlock fps (3)
+// unlock fps
 RBX::HeartbeatTask* __fastcall RBX::HeartbeatTask__constructor_hook(RBX::HeartbeatTask* _this, void*, RBX::RunService* runService, void* a3)
 {
 	auto result = RBX::HeartbeatTask__constructor_orig(_this, runService, a3);
 	result->fps = Config::desiredFrameRate;
+	return result;
+}
+
+// ===== `RBX::PhysicsJob` member function hooks =====
+
+RBX::PhysicsJob__constructor_t RBX::PhysicsJob__constructor_orig = reinterpret_cast<RBX::PhysicsJob__constructor_t>(0x00599180);
+
+// unlock fps
+RBX::PhysicsJob* __fastcall RBX::PhysicsJob__constructor_hook(RBX::PhysicsJob* _this, void*, RBX::DataModel* dataModel, void* a3)
+{
+	auto result = RBX::PhysicsJob__constructor_orig(_this, dataModel, a3);
+	if (Config::physicsFpsUnlocked)
+		result->fps = Config::desiredFrameRate;
 	return result;
 }
 
@@ -110,6 +123,17 @@ void __fastcall RBX::DataModel__startCoreScripts_hook(RBX::DataModel* _this, voi
 
 	auto scriptContext = RBX::DataModel__find__ScriptContext(_this);
 	RBX::ScriptContext__executeInNewThread_orig(scriptContext, 5, "loadfile('rbxasset://../extra/studio.lua')()", "Studio.ashx");
+}
+
+RBX::DataModel__physicsStep_t RBX::DataModel__physicsStep_orig = reinterpret_cast<RBX::DataModel__physicsStep_t>(0x005F8A10);
+
+// unlock fps
+void __fastcall RBX::DataModel__physicsStep_hook(RBX::DataModel* _this, void*, float a2, double a3, double a4)
+{
+	if (Config::physicsFpsUnlocked)
+		a2 = 1.0f / Config::desiredFrameRate;
+
+	RBX::DataModel__physicsStep_orig(_this, a2, a3, a4);
 }
 
 // ===== `RBX::ScriptContext` member function hooks =====

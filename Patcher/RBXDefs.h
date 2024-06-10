@@ -113,6 +113,10 @@ namespace RBX
 	typedef void(__thiscall* DataModel__startCoreScripts_t)(DataModel* _this, AdornRbxGfx* adorn);
 	extern DataModel__startCoreScripts_t DataModel__startCoreScripts_orig;
 
+	// HOOKED
+	typedef void(__thiscall* DataModel__physicsStep_t)(DataModel* _this, float a2, double a3, double a4);
+	extern DataModel__physicsStep_t DataModel__physicsStep_orig;
+
 	// ===== `ScriptContext` class =====
 
 	class ScriptContext
@@ -243,6 +247,20 @@ namespace RBX
 	// HOOKED
 	typedef HeartbeatTask* (__thiscall* HeartbeatTask__constructor_t)(HeartbeatTask* _this, RunService* runService, void* a3);
 	extern HeartbeatTask__constructor_t HeartbeatTask__constructor_orig;
+
+	// ===== `PhysicsJob` class =====
+
+	class PhysicsJob
+	{
+	private:
+		char padding1[480];
+	public:
+		double fps;
+	};
+
+	// HOOKED
+	typedef PhysicsJob* (__thiscall* PhysicsJob__constructor_t)(PhysicsJob* _this, DataModel* dataModel, void* a3);
+	extern PhysicsJob__constructor_t PhysicsJob__constructor_orig;
 
 	// ===== `Player` class =====
 
