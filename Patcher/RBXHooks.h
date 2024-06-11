@@ -61,4 +61,8 @@ namespace RBX
 	// ===== `RBX::VideoControl` member function hooks =====
 
 	bool __fastcall VideoControl__isVideoRecording_hook(RBX::VideoControl* _this);
+
+	// ===== `RBX::RunService` member function hooks =====
+
+	void __fastcall RunService__step_hook(RBX::RunService* _this, void*, double a2);
 }

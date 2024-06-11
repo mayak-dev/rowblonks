@@ -49,6 +49,9 @@ static const std::unordered_map<void*, void*> hooks = {
     // ===== `RBX::VideoControl` member function hooks =====
     { &RBX::VideoControl__isVideoRecording_orig, RBX::VideoControl__isVideoRecording_hook },
 
+    // ===== `RBX::RunService` member function hooks =====
+    { &RBX::RunService__step_orig, RBX::RunService__step_hook },
+
     // ===== other hooks =====
     { &sub_6C34D0_orig, sub_6C34D0_hook },
     { &sub_6C47A0_orig, sub_6C47A0_hook },

@@ -303,3 +303,32 @@ bool __fastcall RBX::VideoControl__isVideoRecording_hook(RBX::VideoControl* _thi
 	// fix null pointer dereference in NoGraphics mode
 	return _this && RBX::VideoControl__isVideoRecording_orig(_this);
 }
+
+// ===== `RBX::RunService` member function hooks =====
+
+RBX::RunService__step_t RBX::RunService__step_orig = reinterpret_cast<RBX::RunService__step_t>(0x0059BED0);
+
+// unlock fps
+void __fastcall RBX::RunService__step_hook(RBX::RunService* _this, void*, double delta)
+{
+	double time = delta + _this->unk1;
+	_this->unk1 = time;
+
+	double a[2];
+	a[0] = time;
+
+	a[1] = 1.0 / 30.0;
+	if (Config::physicsFpsUnlocked)
+		a[1] = 1.0 / Config::desiredFrameRate;
+
+	(reinterpret_cast<void(__thiscall*)(void*, double*)>(0x0059B850))(&_this->heartbeatSignal, a);
+
+	// this is a hack so that the Stepped event gets fired about 30 times per second
+	// some places were relying on this event to update the velocity of parts, causing them to
+	// accelerate faster than they should
+	if (time - _this->unk2 >= 1.0 / 30.0)
+	{
+		_this->unk2 = time;
+		(reinterpret_cast<void(__thiscall*)(void*, double, double)>(0x0059BAC0))(&_this->steppedSignal, time, 1.0 / 30.0);
+	}
+}

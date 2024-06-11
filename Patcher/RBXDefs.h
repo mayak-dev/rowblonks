@@ -232,7 +232,29 @@ namespace RBX
 
 	// ===== `RunService` class =====
 
-	class RunService;
+	class RunService
+	{
+	private:
+		char padding1[168];
+	public:
+		double unk1;
+	private:
+		char padding2[8];
+	public:
+		double unk2;
+	private:
+		char padding3[8];
+	public:
+		void* heartbeatSignal; // this marks the offset, not a pointer to the signal
+	private:
+		char padding4[8];
+	public:
+		void* steppedSignal; // this marks the offset, not a pointer to the signal
+	};
+
+	// HOOKED
+	typedef void(__thiscall* RunService__step_t)(RunService* _this, double a2);
+	extern RunService__step_t RunService__step_orig;
 
 	// ===== `HeartbeatTask` class =====
 
