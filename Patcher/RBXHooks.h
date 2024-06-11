@@ -56,6 +56,7 @@ namespace RBX
 
 	void __fastcall NetworkSettings__setDataSendRate_hook(RBX::NetworkSettings* _this, void*, float dataSendRate);
 	void __fastcall NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* _this, void*, double receiveRate);
+	void __fastcall NetworkSettings__setPhysicsSendRate_hook(RBX::NetworkSettings* _this, void*, float physicsSendRate);
 
 	// ===== `RBX::VideoControl` member function hooks =====
 

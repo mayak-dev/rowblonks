@@ -29,7 +29,7 @@ void __cdecl sub_794AF0_hook(char a1, int a2, int a3, int a4, int a5, int a6, in
 	vc90::std::string::destruct(url);
 }
 
-// ===== unlock fps =====
+// ===== unlock fps (flycam) =====
 
 void* ptrToHook_6668F6 = reinterpret_cast<void*>(0x006668F6);
 
@@ -116,4 +116,38 @@ void __declspec(naked) inlineHook_613019()
 		// jump to original code, continuing as normal
 		jmp [ptrToHook_613019]
 	}
+}
+
+// ===== unlock fps (humanoid physics) =====
+
+sub_79F6A0_t sub_79F6A0_orig = reinterpret_cast<sub_79F6A0_t>(0x0079F6A0);
+
+double sub_79F6A0_hook()
+{
+	if (Config::physicsFpsUnlocked)
+		return 1.0 / Config::desiredFrameRate;
+	
+	return 1.0 / 30.0;
+}
+
+// ===== unlock fps (other physics timing) =====
+
+sub_79F680_t sub_79F680_orig = reinterpret_cast<sub_79F680_t>(0x0079F680);
+
+int sub_79F680_hook()
+{
+	if (Config::physicsFpsUnlocked)
+		return 4 * Config::desiredFrameRate;
+
+	return 240;
+}
+
+sub_79F6B0_t sub_79F6B0_orig = reinterpret_cast<sub_79F6B0_t>(0x0079F6B0);
+
+double sub_79F6B0_hook()
+{
+	if (Config::physicsFpsUnlocked)
+		return 1.0 / (4.0 * Config::desiredFrameRate);
+
+	return 1.0 / 240.0;
 }

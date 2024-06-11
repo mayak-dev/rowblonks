@@ -20,7 +20,7 @@ extern sub_794AF0_t sub_794AF0_orig;
 
 void __cdecl sub_794AF0_hook(char a1, int a2, int a3, int a4, int a5, int a6, int a7);
 
-// ===== unlock fps =====
+// ===== unlock fps (flycam) =====
 
 extern void* ptrToHook_6668F6;
 
@@ -40,3 +40,22 @@ extern void* ptrToHook_613019;
 
 // inline hook
 void inlineHook_613019();
+
+// ===== unlock fps (humanoid physics) =====
+
+typedef double(__cdecl* sub_79F6A0_t)();
+extern sub_79F6A0_t sub_79F6A0_orig;
+
+double sub_79F6A0_hook();
+
+// ===== unlock fps (other physics timing) =====
+
+typedef int(__cdecl* sub_79F680_t)();
+extern sub_79F680_t sub_79F680_orig;
+
+int sub_79F680_hook();
+
+typedef double(__cdecl* sub_79F6B0_t)();
+extern sub_79F6B0_t sub_79F6B0_orig;
+
+double sub_79F6B0_hook();

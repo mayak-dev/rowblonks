@@ -297,9 +297,7 @@ namespace RBX
 		char padding1[224];
 	public:
 		float dataSendRate;
-	private:
-		char padding2[4];
-	public:
+		float physicsSendRate;
 		double receiveRate;
 	};
 
@@ -310,6 +308,10 @@ namespace RBX
 	// HOOKED
 	typedef void(__thiscall* NetworkSettings__setReceiveRate_t)(NetworkSettings* _this, double receiveRate);
 	extern NetworkSettings__setReceiveRate_t NetworkSettings__setReceiveRate_orig;
+
+	// HOOKED
+	typedef void(__thiscall* NetworkSettings__setPhysicsSendRate_t)(NetworkSettings* _this, float physicsSendRate);
+	extern NetworkSettings__setPhysicsSendRate_t NetworkSettings__setPhysicsSendRate_orig;
 
 	// ===== `LuaSettings` class =====
 

@@ -44,6 +44,7 @@ static const std::unordered_map<void*, void*> hooks = {
     // ===== `RBX::NetworkSettings` member function hooks ====
     { &RBX::NetworkSettings__setDataSendRate_orig, RBX::NetworkSettings__setDataSendRate_hook },
     { &RBX::NetworkSettings__setReceiveRate_orig, RBX::NetworkSettings__setReceiveRate_hook },
+    { &RBX::NetworkSettings__setPhysicsSendRate_orig, RBX::NetworkSettings__setPhysicsSendRate_hook },
 
     // ===== `RBX::VideoControl` member function hooks =====
     { &RBX::VideoControl__isVideoRecording_orig, RBX::VideoControl__isVideoRecording_hook },
@@ -55,6 +56,9 @@ static const std::unordered_map<void*, void*> hooks = {
     { &ptrToHook_6668F6, inlineHook_6668F6 },
     { &ptrToHook_529031, inlineHook_529031 },
     { &ptrToHook_613019, inlineHook_613019 },
+    { &sub_79F6A0_orig, sub_79F6A0_hook },
+    { &sub_79F680_orig, sub_79F680_hook },
+    { &sub_79F6B0_orig, sub_79F6B0_hook }
 };
 
 #ifdef _DEBUG
@@ -130,6 +134,8 @@ static void fillBytes(void* address, uint8_t value, size_t size, DWORD flags)
 
 void Patches::init()
 {
+    assert(Config::initialized);
+
     constexpr uint8_t NOP = 0x90;
 
     // ===== bypass SSL certificate checks =====
@@ -149,6 +155,12 @@ void Patches::init()
     // ===== disable executing Lua bytecode provided by the user =====
     // this makes it so f_parser will always call luaY_parser instead of luaU_undump
     fillBytes(reinterpret_cast<void*>(0x0077E6BC), NOP, 0xA, PAGE_EXECUTE_READWRITE);
+
+    // ===== unlock fps (other physics timing) =====
+    // the getter for this constant was optimized out in some places, so we have to overwrite the value directly
+    // it is used for calculating how forces are applied over each iteration
+    if (Config::physicsFpsUnlocked)
+        writeValue(reinterpret_cast<float*>(0x00A9B6A4), 1.0f / (19.0f * 4.0f * Config::desiredFrameRate), PAGE_READWRITE);
 
     initHooks();
 }

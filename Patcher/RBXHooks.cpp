@@ -278,6 +278,22 @@ void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* 
 	}
 }
 
+RBX::NetworkSettings__setPhysicsSendRate_t RBX::NetworkSettings__setPhysicsSendRate_orig = reinterpret_cast<RBX::NetworkSettings__setPhysicsSendRate_t>(0x004E4320);
+
+// rewritten to remove value clamp
+void __fastcall RBX::NetworkSettings__setPhysicsSendRate_hook(RBX::NetworkSettings* _this, void*, float physicsSendRate)
+{
+	if (Config::desiredFpsOverridesNetworkDataRates && Config::physicsFpsUnlocked)
+		physicsSendRate = Config::desiredFrameRate;
+
+	if (_this->physicsSendRate != physicsSendRate)
+	{
+		_this->physicsSendRate = physicsSendRate;
+
+		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), reinterpret_cast<void*>(0x00CB7CAC));
+	}
+}
+
 // ===== `RBX::VideoControl` member function hooks =====
 
 RBX::VideoControl__isVideoRecording_t RBX::VideoControl__isVideoRecording_orig = reinterpret_cast<RBX::VideoControl__isVideoRecording_t>(0x0049B030);
