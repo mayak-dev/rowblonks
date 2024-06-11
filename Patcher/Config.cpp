@@ -24,7 +24,7 @@ void Config::init()
 	INIReader ini(gameDirectory + "/rowblonks.ini");
 
 	desiredFrameRate = static_cast<float>(ini.GetReal("Game", "DesiredFrameRate", 60.0));
-	physicsFpsUnlocked = static_cast<float>(ini.GetBoolean("Game", "PhysicsFpsUnlocked", false));
+	physicsFpsUnlocked = ini.GetBoolean("Game", "PhysicsFpsUnlocked", false);
 
 	desiredFpsOverridesNetworkDataRates = ini.GetBoolean("Network", "DesiredFpsOverridesNetworkDataRates", true);
 
