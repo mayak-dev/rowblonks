@@ -332,3 +332,27 @@ void __fastcall RBX::RunService__step_hook(RBX::RunService* _this, void*, double
 		(reinterpret_cast<void(__thiscall*)(void*, double, double)>(0x0059BAC0))(&_this->steppedSignal, time, 1.0 / 30.0);
 	}
 }
+
+// ===== `RBX::RotateConnector` member function hooks =====
+
+RBX::RotateConnector__setRotationalGoal_t RBX::RotateConnector__setRotationalGoal_orig = reinterpret_cast<RBX::RotateConnector__setRotationalGoal_t>(0x0079B310);
+
+// unlock fps
+void __fastcall RBX::RotateConnector__setRotationalGoal_hook(RBX::RotateConnector* _this, void*, float goal)
+{
+	RBX::RotateConnector__setRotationalGoal_orig(_this, goal);
+
+	if (Config::physicsFpsUnlocked)
+		_this->increment *= 30.0f / Config::desiredFrameRate;
+}
+
+RBX::RotateConnector__setVelocityGoal_t RBX::RotateConnector__setVelocityGoal_orig = reinterpret_cast<RBX::RotateConnector__setVelocityGoal_t>(0x0079B390);
+
+// unlock fps
+void __fastcall RBX::RotateConnector__setVelocityGoal_hook(RBX::RotateConnector* _this, void*, float goal)
+{
+	RBX::RotateConnector__setVelocityGoal_orig(_this, goal);
+
+	if (Config::physicsFpsUnlocked)
+		_this->increment *= 30.0f / Config::desiredFrameRate;
+}

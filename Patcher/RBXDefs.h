@@ -381,4 +381,22 @@ namespace RBX
 	};
 
 	const auto StandardOut__print = reinterpret_cast<void(__thiscall*)(StandardOut* _this, MessageType messageType, const std::string& message)>(0x005B17E0);
+
+	// ===== `RotateConnector` class =====
+
+	class RotateConnector
+	{
+	private:
+		char padding[124];
+	public:
+		float increment;
+	};
+
+	// HOOKED
+	typedef void(__thiscall* RotateConnector__setRotationalGoal_t)(RotateConnector* _this, float goal);
+	extern RotateConnector__setRotationalGoal_t RotateConnector__setRotationalGoal_orig;
+
+	// HOOKED
+	typedef void(__thiscall* RotateConnector__setVelocityGoal_t)(RotateConnector* _this, float goal);
+	extern RotateConnector__setVelocityGoal_t RotateConnector__setVelocityGoal_orig;
 }

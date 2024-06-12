@@ -52,6 +52,10 @@ static const std::unordered_map<void*, void*> hooks = {
     // ===== `RBX::RunService` member function hooks =====
     { &RBX::RunService__step_orig, RBX::RunService__step_hook },
 
+    // ===== `RBX::RotateConnector` member function hooks =====
+    { &RBX::RotateConnector__setRotationalGoal_orig, RBX::RotateConnector__setRotationalGoal_hook },
+    { &RBX::RotateConnector__setVelocityGoal_orig, RBX::RotateConnector__setVelocityGoal_hook },
+
     // ===== other hooks =====
     { &sub_6C34D0_orig, sub_6C34D0_hook },
     { &sub_6C47A0_orig, sub_6C47A0_hook },

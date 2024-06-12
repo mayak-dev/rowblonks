@@ -65,4 +65,9 @@ namespace RBX
 	// ===== `RBX::RunService` member function hooks =====
 
 	void __fastcall RunService__step_hook(RBX::RunService* _this, void*, double a2);
+
+	// ===== `RBX::RotateConnector` member function hooks =====
+
+	void __fastcall RotateConnector__setRotationalGoal_hook(RBX::RotateConnector* _this, void*, float goal);
+	void __fastcall RotateConnector__setVelocityGoal_hook(RBX::RotateConnector* _this, void*, float goal);
 }
