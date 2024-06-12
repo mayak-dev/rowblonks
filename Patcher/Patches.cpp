@@ -65,7 +65,9 @@ static const std::unordered_map<void*, void*> hooks = {
     { &ptrToHook_613019, inlineHook_613019 },
     { &sub_79F6A0_orig, sub_79F6A0_hook },
     { &sub_79F680_orig, sub_79F680_hook },
-    { &sub_79F6B0_orig, sub_79F6B0_hook }
+    { &sub_79F6B0_orig, sub_79F6B0_hook },
+    { &ptrToHook_7A3221, inlineHook_7A3221 },
+    { &ptrToHook_7A39E1, inlineHook_7A39E1 },
 };
 
 #ifdef _DEBUG
@@ -163,9 +165,9 @@ void Patches::init()
     // this makes it so f_parser will always call luaY_parser instead of luaU_undump
     fillBytes(reinterpret_cast<void*>(0x0077E6BC), NOP, 0xA, PAGE_EXECUTE_READWRITE);
 
-    // ===== unlock fps (other physics timing) =====
+    // ===== unlock fps (kernel timing) =====
     // the getter for this constant was optimized out in some places, so we have to overwrite the value directly
-    // it is used for calculating how forces are applied over each iteration
+    // it is used for calculating how forces are applied over each kernel iteration
     if (Config::physicsFpsUnlocked)
         writeValue(reinterpret_cast<float*>(0x00A9B6A4), 1.0f / (19.0f * 4.0f * Config::desiredFrameRate), PAGE_READWRITE);
 

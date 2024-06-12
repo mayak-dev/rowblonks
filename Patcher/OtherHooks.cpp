@@ -130,7 +130,7 @@ double sub_79F6A0_hook()
 	return 1.0 / 30.0;
 }
 
-// ===== unlock fps (other physics timing) =====
+// ===== unlock fps (world timing) =====
 
 sub_79F680_t sub_79F680_orig = reinterpret_cast<sub_79F680_t>(0x0079F680);
 
@@ -150,4 +150,42 @@ double sub_79F6B0_hook()
 		return 1.0 / (4.0 * Config::desiredFrameRate);
 
 	return 1.0 / 240.0;
+}
+
+// ===== unlock fps (motor[6d] physics) =====
+
+static float __stdcall getAdjustedMaxVelocity(float velocity)
+{
+	if (Config::physicsFpsUnlocked)
+		return velocity * (30.0f / Config::desiredFrameRate);
+
+	return velocity;
+}
+
+void* ptrToHook_7A3221 = reinterpret_cast<void*>(0x007A3221);
+
+void __declspec(naked) inlineHook_7A3221()
+{
+	__asm
+	{
+		sub esp, 4
+		fstp [esp]
+		call getAdjustedMaxVelocity
+
+		jmp [ptrToHook_7A3221]
+	}
+}
+
+void* ptrToHook_7A39E1 = reinterpret_cast<void*>(0x007A39E1);
+
+void __declspec(naked) inlineHook_7A39E1()
+{
+	__asm
+	{
+		sub esp, 4
+		fstp [esp]
+		call getAdjustedMaxVelocity
+
+		jmp [ptrToHook_7A39E1]
+	}
 }

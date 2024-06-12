@@ -48,7 +48,7 @@ extern sub_79F6A0_t sub_79F6A0_orig;
 
 double sub_79F6A0_hook();
 
-// ===== unlock fps (other physics timing) =====
+// ===== unlock fps (world timing) =====
 
 typedef int(__cdecl* sub_79F680_t)();
 extern sub_79F680_t sub_79F680_orig;
@@ -59,3 +59,13 @@ typedef double(__cdecl* sub_79F6B0_t)();
 extern sub_79F6B0_t sub_79F6B0_orig;
 
 double sub_79F6B0_hook();
+
+// ===== unlock fps (motor[6d] physics) =====
+
+extern void* ptrToHook_7A3221;
+
+void inlineHook_7A3221();
+
+extern void* ptrToHook_7A39E1;
+
+void inlineHook_7A39E1();
