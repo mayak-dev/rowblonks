@@ -47,7 +47,7 @@ std::string UrlHelper::buildUrl()
 {
 	std::string url;
 
-	if (protocol.empty() || hostname.empty())
+	if (!isUrl())
 		return url;
 
 	url += protocol + protocolEnd + hostname;
@@ -63,4 +63,22 @@ std::string UrlHelper::buildUrl()
 	}
 
 	return url;
+}
+
+bool UrlHelper::isUrl()
+{
+	return !protocol.empty() && !hostname.empty();
+}
+
+bool UrlHelper::isAssetUrl()
+{
+	if (!isUrl())
+		return false;
+
+	std::string lowerPath = path;
+	std::transform(lowerPath.begin(), lowerPath.end(), lowerPath.begin(), std::tolower);
+
+	return ((hostname == "roblox.com" || hostname == "www.roblox.com" || hostname == "assetgame.roblox.com")
+		&& (lowerPath == "asset" || lowerPath == "asset/"))
+		|| (hostname == "assetdelivery.roblox.com" && (lowerPath == "v1/asset" || lowerPath == "v1/asset/"));
 }

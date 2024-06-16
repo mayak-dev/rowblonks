@@ -28,9 +28,12 @@ namespace RBX
 	// SECURITY BYPASS
 	void __cdecl ContentProvider__verifyRequestedScriptSignature_hook(const std::string& source, const std::string& assetId, bool required);
 
+	// ===== `RBX::ContentId` member function hooks =====
+
+	void __fastcall ContentId__convertLegacyContent_hook(RBX::ContentId* _this);
+
 	// ===== `RBX:Http` member function hooks =====
 
-	RBX::Http* __fastcall Http__constructor_hook(RBX::Http* _this, void*, const std::string& url);
 	bool __cdecl Http__trustCheck_hook(const char* url);
 
 	// ===== `RBX::DataModel` member function hooks =====

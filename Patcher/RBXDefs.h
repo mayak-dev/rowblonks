@@ -217,13 +217,21 @@ namespace RBX
 	typedef void(__cdecl* ContentProvider__verifyRequestedScriptSignature_t)(const std::string& source, const std::string& assetId, bool required);
 	extern ContentProvider__verifyRequestedScriptSignature_t ContentProvider__verifyRequestedScriptSignature_orig;
 
+	// ===== `ContentId` class =====
+
+	class ContentId
+	{
+	public:
+		std::string id;
+	};
+
+	// HOOKED
+	typedef void(__thiscall* ContentId__convertLegacyContent_t)(ContentId* _this);
+	extern ContentId__convertLegacyContent_t ContentId__convertLegacyContent_orig;
+
 	// ===== `Http` class =====
 
 	class Http;
-
-	// HOOKED
-	typedef Http* (__thiscall* Http__constructor_t)(Http* _this, const std::string& url);
-	extern Http__constructor_t Http__constructor_orig;
 
 	// static method
 	// HOOKED

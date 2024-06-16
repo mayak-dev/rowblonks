@@ -76,32 +76,57 @@ void __cdecl RBX::ContentProvider__verifyRequestedScriptSignature_hook(const std
 	RBX::ContentProvider__verifyRequestedScriptSignature_orig(source, assetId, false);
 }
 
-// ===== `RBX:Http` member function hooks =====
+// ===== `RBX::ContentId` member function hooks =====
 
-RBX::Http__constructor_t RBX::Http__constructor_orig = reinterpret_cast<RBX::Http__constructor_t>(0x00420090);
+RBX::ContentId__convertLegacyContent_t RBX::ContentId__convertLegacyContent_orig = reinterpret_cast<RBX::ContentId__convertLegacyContent_t>(0x00653B20);
 
-// reconstruct asset urls to use the assetdelivery api
-RBX::Http* __fastcall RBX::Http__constructor_hook(RBX::Http* _this, void*, const std::string& url)
+static const std::unordered_map<int, std::string> linkedWeaponScripts = {
+	// LinkedSword
+	//{ 1014475, "test.lua" }, // SwordScript
+	{ 1014476, "test.lua" }, // Local Gui
+};
+
+// this is executed after ContentId::convertAssetId in ContentProvider::privateLoadContent,
+// as well as in other places, making it a good spot to modify the ContentId
+void __fastcall RBX::ContentId__convertLegacyContent_hook(RBX::ContentId* _this)
 {
-	UrlHelper urlHelper(url);
+	ContentId__convertLegacyContent_orig(_this);
 
-	std::string& hostname = urlHelper.hostname;
-	std::string& path = urlHelper.path;
+	UrlHelper urlHelper(_this->id);
 
-	std::transform(path.begin(), path.end(), path.begin(), std::tolower);
-
-	if ((hostname == "roblox.com" || hostname == "www.roblox.com" || hostname == "assetgame.roblox.com") &&
-		(path == "asset" || path == "asset/"))
+	if (urlHelper.isAssetUrl())
 	{
+		const std::string& query = urlHelper.query;
+
+		static const std::string idParam = "id=";
+		size_t idParamPos = query.find(idParam);
+		if (idParamPos != std::string::npos)
+		{
+			size_t idPos = idParamPos + idParam.size();
+			size_t idEndPos = query.find('&', idPos);
+			if (idEndPos == std::string::npos)
+				idEndPos = query.size();
+
+			int assetId = std::stoi(query.substr(idPos, idEndPos - idPos));
+
+			auto it = linkedWeaponScripts.find(assetId);
+			if (it != linkedWeaponScripts.end())
+			{
+				std::string newId = "rbxasset://../extra/linkedweapons/" + it->second;
+				(*vc90::std::string__assign)(reinterpret_cast<vc90::std::string*>(&_this->id), newId.c_str());
+				return;
+			}
+		}
+
 		urlHelper.protocol = "https";
 		urlHelper.hostname = "assetdelivery.roblox.com";
 		urlHelper.path = "v1/asset/";
 
-		return RBX::Http__constructor_orig(_this, urlHelper.buildUrl());
+		(*vc90::std::string__assign)(reinterpret_cast<vc90::std::string*>(&_this->id), urlHelper.buildUrl().c_str());
 	}
-
-	return RBX::Http__constructor_orig(_this, url);
 }
+
+// ===== `RBX::Http` member function hooks =====
 
 RBX::Http__trustCheck_t RBX::Http__trustCheck_orig = reinterpret_cast<RBX::Http__trustCheck_t>(0x005B6300);
 

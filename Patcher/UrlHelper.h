@@ -10,4 +10,7 @@ public:
 
 	void parseUrl(const std::string& url);
 	std::string buildUrl();
+
+	bool isUrl();
+	bool isAssetUrl();
 };

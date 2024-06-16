@@ -23,8 +23,10 @@ static const std::unordered_map<void*, void*> hooks = {
     { &RBX::ContentProvider__verifyScriptSignature_orig, RBX::ContentProvider__verifyScriptSignature_hook },
     { &RBX::ContentProvider__verifyRequestedScriptSignature_orig, RBX::ContentProvider__verifyScriptSignature_hook },
 
+    // ===== `RBX::ContentId` member function hooks =====
+    { &RBX::ContentId__convertLegacyContent_orig, RBX::ContentId__convertLegacyContent_hook },
+
     // ===== `RBX:Http` member function hooks =====
-    { &RBX::Http__constructor_orig, RBX::Http__constructor_hook },
     { &RBX::Http__trustCheck_orig, RBX::Http__trustCheck_hook },
 
     // ===== `RBX::DataModel` member function hooks =====
