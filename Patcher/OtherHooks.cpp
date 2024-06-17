@@ -137,7 +137,7 @@ sub_79F680_t sub_79F680_orig = reinterpret_cast<sub_79F680_t>(0x0079F680);
 int sub_79F680_hook()
 {
 	if (Config::physicsFpsUnlocked)
-		return 4 * Config::desiredFrameRate;
+		return static_cast<int>(4 * Config::desiredFrameRate);
 
 	return 240;
 }
