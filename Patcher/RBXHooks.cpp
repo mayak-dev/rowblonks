@@ -80,12 +80,7 @@ void __cdecl RBX::ContentProvider__verifyRequestedScriptSignature_hook(const std
 
 RBX::ContentId__convertLegacyContent_t RBX::ContentId__convertLegacyContent_orig = reinterpret_cast<RBX::ContentId__convertLegacyContent_t>(0x00653B20);
 
-static const std::unordered_map<int, std::string> linkedWeaponScripts = {
-	// LinkedSword
-	//{ 1014475, "test.lua" }, // SwordScript
-	{ 1014476, "test.lua" }, // Local Gui
-};
-
+// asset redirection
 // this is executed after ContentId::convertAssetId in ContentProvider::privateLoadContent,
 // as well as in other places, making it a good spot to modify the ContentId
 void __fastcall RBX::ContentId__convertLegacyContent_hook(RBX::ContentId* _this)
@@ -96,7 +91,8 @@ void __fastcall RBX::ContentId__convertLegacyContent_hook(RBX::ContentId* _this)
 
 	if (urlHelper.isAssetUrl())
 	{
-		const std::string& query = urlHelper.query;
+		std::string query = urlHelper.query;
+		std::transform(query.begin(), query.end(), query.begin(), std::tolower);
 
 		static const std::string idParam = "id=";
 		size_t idParamPos = query.find(idParam);
@@ -107,12 +103,10 @@ void __fastcall RBX::ContentId__convertLegacyContent_hook(RBX::ContentId* _this)
 			if (idEndPos == std::string::npos)
 				idEndPos = query.size();
 
-			int assetId = std::stoi(query.substr(idPos, idEndPos - idPos));
-
-			auto it = linkedWeaponScripts.find(assetId);
-			if (it != linkedWeaponScripts.end())
+			std::string assetId = query.substr(idPos, idEndPos - idPos);
+			if (std::find(Config::assetOverrides.begin(), Config::assetOverrides.end(), assetId) != Config::assetOverrides.end())
 			{
-				std::string newId = "rbxasset://../extra/linkedweapons/" + it->second;
+				std::string newId = "rbxasset://../extra/assetoverrides/" + assetId;
 				(*vc90::std::string__assign)(reinterpret_cast<vc90::std::string*>(&_this->id), newId.c_str());
 				return;
 			}

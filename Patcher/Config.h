@@ -12,6 +12,8 @@ namespace Config
 	extern bool use30FpsLuaDefaultWaitTime;
 	extern bool allowScriptIdentitySpoofing;
 
+	extern std::vector<std::string> assetOverrides;
+
 	void init();
 
 	extern bool initialized;

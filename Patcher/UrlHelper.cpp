@@ -25,7 +25,7 @@ static bool seekComponent(const std::string& url, size_t& position, const std::s
 	return true;
 }
 
-const std::string protocolEnd = "://";
+static const std::string protocolEnd = "://";
 
 void UrlHelper::parseUrl(const std::string& url)
 {
