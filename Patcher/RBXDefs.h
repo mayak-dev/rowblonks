@@ -210,12 +210,12 @@ namespace RBX
 
 	// static method
 	// HOOKED
-	typedef void(__cdecl* ContentProvider__verifyScriptSignature_t)(const std::string& source, bool required);
+	typedef const char* (__cdecl* ContentProvider__verifyScriptSignature_t)(const char* source, bool required);
 	extern ContentProvider__verifyScriptSignature_t ContentProvider__verifyScriptSignature_orig;
 
 	// static method
 	// HOOKED
-	typedef void(__cdecl* ContentProvider__verifyRequestedScriptSignature_t)(const std::string& source, const std::string& assetId, bool required);
+	typedef const char* (__cdecl* ContentProvider__verifyRequestedScriptSignature_t)(const char* source, const std::string& assetId, bool required);
 	extern ContentProvider__verifyRequestedScriptSignature_t ContentProvider__verifyRequestedScriptSignature_orig;
 
 	// ===== `ContentId` class =====

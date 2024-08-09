@@ -23,10 +23,10 @@ namespace RBX
 	// ===== `RBX::ContentProvider` member function hooks =====
 
 	// SECURITY BYPASS
-	void __cdecl ContentProvider__verifyScriptSignature_hook(const std::string& source, bool required);
+	const char* __cdecl ContentProvider__verifyScriptSignature_hook(const char* source, bool required);
 
 	// SECURITY BYPASS
-	void __cdecl ContentProvider__verifyRequestedScriptSignature_hook(const std::string& source, const std::string& assetId, bool required);
+	const char* __cdecl ContentProvider__verifyRequestedScriptSignature_hook(const char* source, const std::string& assetId, bool required);
 
 	// ===== `RBX::ContentId` member function hooks =====
 

@@ -63,18 +63,27 @@ RBX::ContentProvider__verifyScriptSignature_t RBX::ContentProvider__verifyScript
 
 // SECURITY BYPASS
 // never require script signatures (1)
-void __cdecl RBX::ContentProvider__verifyScriptSignature_hook(const std::string& source, bool required)
+const char* __cdecl RBX::ContentProvider__verifyScriptSignature_hook(const char* source, bool required)
 {
-	RBX::ContentProvider__verifyScriptSignature_orig(source, false);
+	std::string copy = source;
+
+	if (copy.size() == 0 || copy[0] != '%')
+		return source;
+
+	size_t endPos = copy.find('%', 1);
+	if (endPos == std::string::npos)
+		return source;
+
+	return &copy[endPos + 1];
 }
 
 RBX::ContentProvider__verifyRequestedScriptSignature_t RBX::ContentProvider__verifyRequestedScriptSignature_orig = reinterpret_cast<RBX::ContentProvider__verifyRequestedScriptSignature_t>(Patches::resolveNewVa(0x00654B90));
 
 // SECURITY BYPASS
 // never require script signatures (2)
-void __cdecl RBX::ContentProvider__verifyRequestedScriptSignature_hook(const std::string& source, const std::string& assetId, bool required)
+const char* __cdecl RBX::ContentProvider__verifyRequestedScriptSignature_hook(const char* source, const std::string& assetId, bool required)
 {
-	RBX::ContentProvider__verifyRequestedScriptSignature_orig(source, assetId, false);
+	return RBX::ContentProvider__verifyRequestedScriptSignature_orig(source, assetId, false);
 }
 
 // ===== `RBX::ContentId` member function hooks =====
