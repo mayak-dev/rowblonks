@@ -3,6 +3,7 @@
 #include "LuaDefs.h"
 #include "RBXDefs.h"
 #include "Config.h"
+#include "Patches.h"
 
 static const luaL_Reg mayaLib[] = {
     { "GetIdentity", Lua::Api::getIdentity },
@@ -118,7 +119,8 @@ int Lua::Api::addLocalCoreScript(lua_State* L)
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::CoreScript>
-    (reinterpret_cast<void* (__thiscall*)(void*, RBX::CoreScript*, bool)>(0x0061AF40))((*vc90::operator_new)(8), coreScript, false);
+    static const auto sub_61AF40 = reinterpret_cast<void* (__thiscall*)(void*, RBX::CoreScript*, bool)>(Patches::resolveNewVa(0x0061AF40));
+    sub_61AF40((*vc90::operator_new)(8), coreScript, false);
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(coreScript), true);
     RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(coreScript), name);
@@ -143,7 +145,8 @@ int Lua::Api::addLocalStarterScript(lua_State* L)
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::StarterScript>
-    (reinterpret_cast<void* (__thiscall*)(void*, RBX::StarterScript*, bool)>(0x0061AE90))((*vc90::operator_new)(8), starterScript, false);
+    static const auto sub_61AE90 = reinterpret_cast<void* (__thiscall*)(void*, RBX::StarterScript*, bool)>(Patches::resolveNewVa(0x0061AE90));
+    sub_61AE90((*vc90::operator_new)(8), starterScript, false);
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(starterScript), true);
     RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(starterScript), name);
@@ -165,7 +168,8 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::Script>
-    (reinterpret_cast<void* (__thiscall*)(void*, RBX::Script*, bool)>(0x00428EE0))((*vc90::operator_new)(8), script, false);
+    static const auto sub_428EE0 = reinterpret_cast<void* (__thiscall*)(void*, RBX::Script*, bool)>(Patches::resolveNewVa(0x00428EE0));
+    sub_428EE0((*vc90::operator_new)(8), script, false);
 
     std::stringstream sourceStream;
     
@@ -187,8 +191,8 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
 
     // not fully sure what this is (probably adding to a map?), but this is done to register the script object as a library
     // this is NOT checking if a library was already registered with the given name
-    auto ptr = *(reinterpret_cast<DWORD**>(scriptContext) + 129) + 8;
-    auto res = (reinterpret_cast<RBX::Script** (__thiscall*)(void*, const std::string&)>(0x006145A0))(ptr, name);
+    static const auto sub_6145A0 = reinterpret_cast<RBX::Script** (__thiscall*)(void*, const std::string&)>(Patches::resolveNewVa(0x006145A0));
+    auto res = sub_6145A0(*(reinterpret_cast<uint32_t**>(scriptContext) + 129) + 8, name);
     *res = script;
 
     return 0;

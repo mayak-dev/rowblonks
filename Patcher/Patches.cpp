@@ -143,6 +143,14 @@ static void fillBytes(void* address, uint8_t value, size_t size, DWORD flags)
         throw patchError("VirtualProtect failed to change protection flags for 0x%p - 0x%p (2)", address, reinterpret_cast<DWORD>(address) + size);
 }
 
+inline uint32_t Patches::resolveNewVa(uint32_t old)
+{
+    constexpr uint32_t imageBase = 0x00400000;
+    static const uint32_t newImageBase = reinterpret_cast<uint32_t>(GetModuleHandle(nullptr));
+
+    return old - imageBase + newImageBase;
+}
+
 void Patches::init()
 {
     assert(Config::initialized);
@@ -151,27 +159,27 @@ void Patches::init()
 
     // ===== bypass SSL certificate checks =====
     // we are writing a relative JMP from 0x006EAAB0 to 0x006EABF7, within RBX::Http::httpGetPostWinInet
-    writeBytes(reinterpret_cast<void*>(0x006EAAB0), "\xE9\x42\x01\x00\x00", 0x7, PAGE_EXECUTE_READWRITE);
+    writeBytes(reinterpret_cast<void*>(resolveNewVa(0x006EAAB0)), "\xE9\x42\x01\x00\x00", 0x7, PAGE_EXECUTE_READWRITE);
 
     // SECURITY BYPASS
     // ===== always send a clean value for RBX::DataModel::sendStats =====
     // this is so that the server doesn't receive any so-called "hack flags"
     // write `XOR EDX, EDX` followed by a series of NOPs where these flags would normally be stored in EDX
-    writeBytes(reinterpret_cast<void*>(0x005105A5), "\x33\xD2\x90\x90\x90\x90\x90", 0x7, PAGE_EXECUTE_READWRITE);
+    writeBytes(reinterpret_cast<void*>(resolveNewVa(0x005105A5)), "\x33\xD2\x90\x90\x90\x90\x90", 0x7, PAGE_EXECUTE_READWRITE);
 
     // ===== fix freezing from dragging IDE toolbars =====
     // removes a redundant call to GetMessageA and a comparison of its result following PeekMessageA in the window message loop
-    fillBytes(reinterpret_cast<void*>(0x008A2073), NOP, 0x15, PAGE_EXECUTE_READWRITE);
+    fillBytes(reinterpret_cast<void*>(resolveNewVa(0x008A2073)), NOP, 0x15, PAGE_EXECUTE_READWRITE);
 
     // ===== disable executing Lua bytecode provided by the user =====
     // this makes it so f_parser will always call luaY_parser instead of luaU_undump
-    fillBytes(reinterpret_cast<void*>(0x0077E6BC), NOP, 0xA, PAGE_EXECUTE_READWRITE);
+    fillBytes(reinterpret_cast<void*>(resolveNewVa(0x0077E6BC)), NOP, 0xA, PAGE_EXECUTE_READWRITE);
 
     // ===== unlock fps (kernel timing) =====
     // the getter for this constant was optimized out in some places, so we have to overwrite the value directly
     // it is used for calculating how forces are applied over each kernel iteration
     if (Config::physicsFpsUnlocked)
-        writeValue(reinterpret_cast<float*>(0x00A9B6A4), 1.0f / (19.0f * 4.0f * Config::desiredFrameRate), PAGE_READWRITE);
+        writeValue(reinterpret_cast<float*>(resolveNewVa(0x00A9B6A4)), 1.0f / (19.0f * 4.0f * Config::desiredFrameRate), PAGE_READWRITE);
 
     initHooks();
 }

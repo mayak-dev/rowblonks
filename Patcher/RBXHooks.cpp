@@ -4,16 +4,17 @@
 #include "LuaDefs.h"
 #include "UrlHelper.h"
 #include "Config.h"
+#include "Patches.h"
 
 // ===== `CRobloxWnd::RenderRequestJob` member function hooks =====
 
-CRobloxWnd__RenderRequestJob__sleepTime_t CRobloxWnd__RenderRequestJob__sleepTime_orig = reinterpret_cast<CRobloxWnd__RenderRequestJob__sleepTime_t>(0x004881F0);
+CRobloxWnd__RenderRequestJob__sleepTime_t CRobloxWnd__RenderRequestJob__sleepTime_orig = reinterpret_cast<CRobloxWnd__RenderRequestJob__sleepTime_t>(Patches::resolveNewVa(0x004881F0));
 
 // unlock fps
 double* __fastcall CRobloxWnd__RenderRequestJob__sleepTime_hook(CRobloxWnd__RenderRequestJob* _this, void*, double* a2, int a3)
 {
 	if (_this->awake)
-		(reinterpret_cast<void(__thiscall*)(CRobloxWnd__RenderRequestJob*, double*, int, double)>(0x007FDDB0))(_this, a2, a3, Config::desiredFrameRate);
+		RBX::DataModelJob__sleepTime(reinterpret_cast<RBX::DataModelJob*>(_this), a2, a3, Config::desiredFrameRate);
 	else
 		*a2 = std::numeric_limits<double>::max();
 
@@ -22,18 +23,18 @@ double* __fastcall CRobloxWnd__RenderRequestJob__sleepTime_hook(CRobloxWnd__Rend
 
 // ===== `CRobloxWnd::UserInputJob` member function hooks =====
 
-CRobloxWnd__UserInputJob__sleepTime_t CRobloxWnd__UserInputJob__sleepTime_orig = reinterpret_cast<CRobloxWnd__UserInputJob__sleepTime_t>(0x00486B30);
+CRobloxWnd__UserInputJob__sleepTime_t CRobloxWnd__UserInputJob__sleepTime_orig = reinterpret_cast<CRobloxWnd__UserInputJob__sleepTime_t>(Patches::resolveNewVa(0x00486B30));
 
 // unlock fps
 double* __fastcall CRobloxWnd__UserInputJob__sleepTime_hook(CRobloxWnd__UserInputJob* _this, void*, double* a2, int a3)
 {
-	(reinterpret_cast<void(__thiscall*)(CRobloxWnd__UserInputJob*, double*, int, double)>(0x007FDDB0))(_this, a2, a3, Config::desiredFrameRate);
+	RBX::DataModelJob__sleepTime(reinterpret_cast<RBX::DataModelJob*>(_this), a2, a3, Config::desiredFrameRate);
 	return a2;
 }
 
 // ===== `RBX::HeartbeatTask` member function hooks ====
 
-RBX::HeartbeatTask__constructor_t RBX::HeartbeatTask__constructor_orig = reinterpret_cast<RBX::HeartbeatTask__constructor_t>(0x00599B40);
+RBX::HeartbeatTask__constructor_t RBX::HeartbeatTask__constructor_orig = reinterpret_cast<RBX::HeartbeatTask__constructor_t>(Patches::resolveNewVa(0x00599B40));
 
 // unlock fps
 RBX::HeartbeatTask* __fastcall RBX::HeartbeatTask__constructor_hook(RBX::HeartbeatTask* _this, void*, RBX::RunService* runService, void* a3)
@@ -45,7 +46,7 @@ RBX::HeartbeatTask* __fastcall RBX::HeartbeatTask__constructor_hook(RBX::Heartbe
 
 // ===== `RBX::PhysicsJob` member function hooks =====
 
-RBX::PhysicsJob__constructor_t RBX::PhysicsJob__constructor_orig = reinterpret_cast<RBX::PhysicsJob__constructor_t>(0x00599180);
+RBX::PhysicsJob__constructor_t RBX::PhysicsJob__constructor_orig = reinterpret_cast<RBX::PhysicsJob__constructor_t>(Patches::resolveNewVa(0x00599180));
 
 // unlock fps
 RBX::PhysicsJob* __fastcall RBX::PhysicsJob__constructor_hook(RBX::PhysicsJob* _this, void*, RBX::DataModel* dataModel, void* a3)
@@ -58,7 +59,7 @@ RBX::PhysicsJob* __fastcall RBX::PhysicsJob__constructor_hook(RBX::PhysicsJob* _
 
 // ===== `RBX::ContentProvider` member function hooks =====
 
-RBX::ContentProvider__verifyScriptSignature_t RBX::ContentProvider__verifyScriptSignature_orig = reinterpret_cast<RBX::ContentProvider__verifyScriptSignature_t>(0x00654380);
+RBX::ContentProvider__verifyScriptSignature_t RBX::ContentProvider__verifyScriptSignature_orig = reinterpret_cast<RBX::ContentProvider__verifyScriptSignature_t>(Patches::resolveNewVa(0x00654380));
 
 // SECURITY BYPASS
 // never require script signatures (1)
@@ -67,7 +68,7 @@ void __cdecl RBX::ContentProvider__verifyScriptSignature_hook(const std::string&
 	RBX::ContentProvider__verifyScriptSignature_orig(source, false);
 }
 
-RBX::ContentProvider__verifyRequestedScriptSignature_t RBX::ContentProvider__verifyRequestedScriptSignature_orig = reinterpret_cast<RBX::ContentProvider__verifyRequestedScriptSignature_t>(0x00654B90);
+RBX::ContentProvider__verifyRequestedScriptSignature_t RBX::ContentProvider__verifyRequestedScriptSignature_orig = reinterpret_cast<RBX::ContentProvider__verifyRequestedScriptSignature_t>(Patches::resolveNewVa(0x00654B90));
 
 // SECURITY BYPASS
 // never require script signatures (2)
@@ -78,7 +79,7 @@ void __cdecl RBX::ContentProvider__verifyRequestedScriptSignature_hook(const std
 
 // ===== `RBX::ContentId` member function hooks =====
 
-RBX::ContentId__convertLegacyContent_t RBX::ContentId__convertLegacyContent_orig = reinterpret_cast<RBX::ContentId__convertLegacyContent_t>(0x00653B20);
+RBX::ContentId__convertLegacyContent_t RBX::ContentId__convertLegacyContent_orig = reinterpret_cast<RBX::ContentId__convertLegacyContent_t>(Patches::resolveNewVa(0x00653B20));
 
 // asset redirection
 // this is executed after ContentId::convertAssetId in ContentProvider::privateLoadContent,
@@ -122,7 +123,7 @@ void __fastcall RBX::ContentId__convertLegacyContent_hook(RBX::ContentId* _this)
 
 // ===== `RBX::Http` member function hooks =====
 
-RBX::Http__trustCheck_t RBX::Http__trustCheck_orig = reinterpret_cast<RBX::Http__trustCheck_t>(0x005B6300);
+RBX::Http__trustCheck_t RBX::Http__trustCheck_orig = reinterpret_cast<RBX::Http__trustCheck_t>(Patches::resolveNewVa(0x005B6300));
 
 // allow content from any url
 bool __cdecl RBX::Http__trustCheck_hook(const char* url)
@@ -132,7 +133,7 @@ bool __cdecl RBX::Http__trustCheck_hook(const char* url)
 
 // ===== `RBX::DataModel` member function hooks =====
 
-RBX::DataModel__startCoreScripts_t RBX::DataModel__startCoreScripts_orig = reinterpret_cast<RBX::DataModel__startCoreScripts_t>(0x005F67A0);
+RBX::DataModel__startCoreScripts_t RBX::DataModel__startCoreScripts_orig = reinterpret_cast<RBX::DataModel__startCoreScripts_t>(Patches::resolveNewVa(0x005F67A0));
 
 // execute a local Studio.ashx
 void __fastcall RBX::DataModel__startCoreScripts_hook(RBX::DataModel* _this, void*, RBX::AdornRbxGfx* adorn)
@@ -144,7 +145,7 @@ void __fastcall RBX::DataModel__startCoreScripts_hook(RBX::DataModel* _this, voi
 	RBX::ScriptContext__executeInNewThread_orig(scriptContext, 5, "loadfile('rbxasset://../extra/studio.lua')()", "Studio.ashx");
 }
 
-RBX::DataModel__physicsStep_t RBX::DataModel__physicsStep_orig = reinterpret_cast<RBX::DataModel__physicsStep_t>(0x005F8A10);
+RBX::DataModel__physicsStep_t RBX::DataModel__physicsStep_orig = reinterpret_cast<RBX::DataModel__physicsStep_t>(Patches::resolveNewVa(0x005F8A10));
 
 // unlock fps
 void __fastcall RBX::DataModel__physicsStep_hook(RBX::DataModel* _this, void*, float a2, double a3, double a4)
@@ -157,7 +158,7 @@ void __fastcall RBX::DataModel__physicsStep_hook(RBX::DataModel* _this, void*, f
 
 // ===== `RBX::ScriptContext` member function hooks =====
 
-RBX::ScriptContext__openState_t RBX::ScriptContext__openState_orig = reinterpret_cast<RBX::ScriptContext__openState_t>(0x00625BF0);
+RBX::ScriptContext__openState_t RBX::ScriptContext__openState_orig = reinterpret_cast<RBX::ScriptContext__openState_t>(Patches::resolveNewVa(0x00625BF0));
 
 // add extensions to the Lua api
 void __fastcall RBX::ScriptContext__openState_hook(RBX::ScriptContext* _this)
@@ -198,12 +199,12 @@ void __fastcall RBX::ScriptContext__openState_hook(RBX::ScriptContext* _this)
 		{
 			luaSettings->defaultWaitTime = 1.0 / 30.0;
 
-			RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(luaSettings), reinterpret_cast<void*>(0x00CCDA00));
+			RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(luaSettings), reinterpret_cast<void*>(Patches::resolveNewVa(0x00CCDA00)));
 		}
 	}
 }
 
-RBX::ScriptContext__executeInNewThread_t RBX::ScriptContext__executeInNewThread_orig = reinterpret_cast<RBX::ScriptContext__executeInNewThread_t>(0x00629A00);
+RBX::ScriptContext__executeInNewThread_t RBX::ScriptContext__executeInNewThread_orig = reinterpret_cast<RBX::ScriptContext__executeInNewThread_t>(Patches::resolveNewVa(0x00629A00));
 
 // SECURITY BYPASS
 // have "Local url" scripts execute with identity 7 for high privileges
@@ -220,7 +221,7 @@ void __fastcall RBX::ScriptContext__executeInNewThread_hook(RBX::ScriptContext* 
 
 // ===== `RBX::Network::Replicator::RockyItem` member function hooks =====
 
-RBX::Network::Replicator__RockyItem__write_t RBX::Network::Replicator__RockyItem__write_orig = reinterpret_cast<RBX::Network::Replicator__RockyItem__write_t>(0x004F98A0);
+RBX::Network::Replicator__RockyItem__write_t RBX::Network::Replicator__RockyItem__write_orig = reinterpret_cast<RBX::Network::Replicator__RockyItem__write_t>(Patches::resolveNewVa(0x004F98A0));
 
 // SECURITY BYPASS
 // never send rocky items to the server
@@ -231,7 +232,7 @@ bool __fastcall RBX::Network__Replicator__RockyItem__write_hook(RBX::Network::Re
 
 // ===== `RBX::PlayerChatLine` member function hooks =====
 
-RBX::PlayerChatLine__constructor_t RBX::PlayerChatLine__constructor_orig = reinterpret_cast<RBX::PlayerChatLine__constructor_t>(0x007CC810);
+RBX::PlayerChatLine__constructor_t RBX::PlayerChatLine__constructor_orig = reinterpret_cast<RBX::PlayerChatLine__constructor_t>(Patches::resolveNewVa(0x007CC810));
 
 static const std::unordered_map<std::string, std::array<uint8_t, 3>> chatColors = {
 	{	"maya",			{	0,	0,	0	} },
@@ -265,7 +266,7 @@ RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::Playe
 
 // ===== `RBX::NetworkSettings` member function hooks =====
 
-RBX::NetworkSettings__setDataSendRate_t RBX::NetworkSettings__setDataSendRate_orig = reinterpret_cast<RBX::NetworkSettings__setDataSendRate_t>(0x004E42B0);
+RBX::NetworkSettings__setDataSendRate_t RBX::NetworkSettings__setDataSendRate_orig = reinterpret_cast<RBX::NetworkSettings__setDataSendRate_t>(Patches::resolveNewVa(0x004E42B0));
 
 // rewritten to remove value clamp
 void __fastcall RBX::NetworkSettings__setDataSendRate_hook(RBX::NetworkSettings* _this, void*, float dataSendRate)
@@ -277,11 +278,12 @@ void __fastcall RBX::NetworkSettings__setDataSendRate_hook(RBX::NetworkSettings*
 	{
 		_this->dataSendRate = dataSendRate;
 
-		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), reinterpret_cast<void*>(0x00CB7D78));
+		static const auto ptr_CB7D78 = reinterpret_cast<void*>(Patches::resolveNewVa(0x00CB7D78));
+		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), ptr_CB7D78);
 	}
 }
 
-RBX::NetworkSettings__setReceiveRate_t RBX::NetworkSettings__setReceiveRate_orig = reinterpret_cast<RBX::NetworkSettings__setReceiveRate_t>(0x004E4390);
+RBX::NetworkSettings__setReceiveRate_t RBX::NetworkSettings__setReceiveRate_orig = reinterpret_cast<RBX::NetworkSettings__setReceiveRate_t>(Patches::resolveNewVa(0x004E4390));
 
 // rewritten to remove value clamp
 void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* _this, void*, double receiveRate)
@@ -293,11 +295,12 @@ void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* 
 	{
 		_this->receiveRate = receiveRate;
 
-		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), reinterpret_cast<void*>(0x00CB7BD8));
+		static const auto ptr_CB7BD8 = reinterpret_cast<void*>(Patches::resolveNewVa(0x00CB7BD8));
+		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), ptr_CB7BD8);
 	}
 }
 
-RBX::NetworkSettings__setPhysicsSendRate_t RBX::NetworkSettings__setPhysicsSendRate_orig = reinterpret_cast<RBX::NetworkSettings__setPhysicsSendRate_t>(0x004E4320);
+RBX::NetworkSettings__setPhysicsSendRate_t RBX::NetworkSettings__setPhysicsSendRate_orig = reinterpret_cast<RBX::NetworkSettings__setPhysicsSendRate_t>(Patches::resolveNewVa(0x004E4320));
 
 // rewritten to remove value clamp
 void __fastcall RBX::NetworkSettings__setPhysicsSendRate_hook(RBX::NetworkSettings* _this, void*, float physicsSendRate)
@@ -309,13 +312,14 @@ void __fastcall RBX::NetworkSettings__setPhysicsSendRate_hook(RBX::NetworkSettin
 	{
 		_this->physicsSendRate = physicsSendRate;
 
-		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), reinterpret_cast<void*>(0x00CB7CAC));
+		static const auto ptr_CB7CAC = reinterpret_cast<void*>(Patches::resolveNewVa(0x00CB7CAC));
+		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), ptr_CB7CAC);
 	}
 }
 
 // ===== `RBX::VideoControl` member function hooks =====
 
-RBX::VideoControl__isVideoRecording_t RBX::VideoControl__isVideoRecording_orig = reinterpret_cast<RBX::VideoControl__isVideoRecording_t>(0x0049B030);
+RBX::VideoControl__isVideoRecording_t RBX::VideoControl__isVideoRecording_orig = reinterpret_cast<RBX::VideoControl__isVideoRecording_t>(Patches::resolveNewVa(0x0049B030));
 
 bool __fastcall RBX::VideoControl__isVideoRecording_hook(RBX::VideoControl* _this)
 {
@@ -325,36 +329,39 @@ bool __fastcall RBX::VideoControl__isVideoRecording_hook(RBX::VideoControl* _thi
 
 // ===== `RBX::RunService` member function hooks =====
 
-RBX::RunService__step_t RBX::RunService__step_orig = reinterpret_cast<RBX::RunService__step_t>(0x0059BED0);
+RBX::RunService__step_t RBX::RunService__step_orig = reinterpret_cast<RBX::RunService__step_t>(Patches::resolveNewVa(0x0059BED0));
 
 // unlock fps
 void __fastcall RBX::RunService__step_hook(RBX::RunService* _this, void*, double delta)
 {
-	double time = delta + _this->unk1;
-	_this->unk1 = time;
+	double elapsedTime = delta + _this->elapsedTime;
+	_this->elapsedTime = elapsedTime;
 
 	double a[2];
-	a[0] = time;
+	a[0] = elapsedTime;
 
 	a[1] = 1.0 / 30.0;
 	if (Config::physicsFpsUnlocked)
 		a[1] = 1.0 / Config::desiredFrameRate;
 
-	(reinterpret_cast<void(__thiscall*)(void*, double*)>(0x0059B850))(&_this->heartbeatSignal, a);
+	static const auto sub_59B850 = reinterpret_cast<void(__thiscall*)(void*, double*)>(Patches::resolveNewVa(0x0059B850));
+	sub_59B850(&_this->heartbeatSignal, a);
 
 	// this is a hack so that the Stepped event gets fired about 30 times per second
 	// some places were relying on this event to update the velocity of parts, causing them to
 	// accelerate faster than they should
-	if (time - _this->unk2 >= 1.0 / 30.0)
+	if (elapsedTime - _this->elapsedTimeAtLastStep >= 1.0 / 30.0)
 	{
-		_this->unk2 = time;
-		(reinterpret_cast<void(__thiscall*)(void*, double, double)>(0x0059BAC0))(&_this->steppedSignal, time, 1.0 / 30.0);
+		_this->elapsedTimeAtLastStep = elapsedTime;
+
+		static const auto sub_59BAC0 = reinterpret_cast<void(__thiscall*)(void*, double, double)>(Patches::resolveNewVa(0x0059BAC0));
+		sub_59BAC0(&_this->steppedSignal, elapsedTime, 1.0 / 30.0);
 	}
 }
 
 // ===== `RBX::RotateConnector` member function hooks =====
 
-RBX::RotateConnector__setRotationalGoal_t RBX::RotateConnector__setRotationalGoal_orig = reinterpret_cast<RBX::RotateConnector__setRotationalGoal_t>(0x0079B310);
+RBX::RotateConnector__setRotationalGoal_t RBX::RotateConnector__setRotationalGoal_orig = reinterpret_cast<RBX::RotateConnector__setRotationalGoal_t>(Patches::resolveNewVa(0x0079B310));
 
 // unlock fps
 void __fastcall RBX::RotateConnector__setRotationalGoal_hook(RBX::RotateConnector* _this, void*, float goal)
@@ -365,7 +372,7 @@ void __fastcall RBX::RotateConnector__setRotationalGoal_hook(RBX::RotateConnecto
 		_this->increment *= 60.0f / Config::desiredFrameRate;
 }
 
-RBX::RotateConnector__setVelocityGoal_t RBX::RotateConnector__setVelocityGoal_orig = reinterpret_cast<RBX::RotateConnector__setVelocityGoal_t>(0x0079B390);
+RBX::RotateConnector__setVelocityGoal_t RBX::RotateConnector__setVelocityGoal_orig = reinterpret_cast<RBX::RotateConnector__setVelocityGoal_t>(Patches::resolveNewVa(0x0079B390));
 
 // unlock fps
 void __fastcall RBX::RotateConnector__setVelocityGoal_hook(RBX::RotateConnector* _this, void*, float goal)

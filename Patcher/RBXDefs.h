@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VC90Defs.h"
+#include "Patches.h"
 
 struct lua_State;
 
@@ -8,8 +9,8 @@ struct lua_State;
 
 class CMainFrame;
 
-const auto CMainFrame__ShowOutput = reinterpret_cast<void(__thiscall*)(CMainFrame* _this)>(0x00431480);
-const auto CMainFrame__ShowTaskScheduler = reinterpret_cast<void(__thiscall*)(CMainFrame* _this)>(0x00430AA0);
+const auto CMainFrame__ShowOutput = reinterpret_cast<void(__thiscall*)(CMainFrame* _this)>(Patches::resolveNewVa(0x00431480));
+const auto CMainFrame__ShowTaskScheduler = reinterpret_cast<void(__thiscall*)(CMainFrame* _this)>(Patches::resolveNewVa(0x00430AA0));
 
 // ===== `CRobloxApp` class =====
 
@@ -21,7 +22,7 @@ public:
 	CMainFrame* m_pActiveWnd;
 };
 
-static CRobloxApp* const g_CRobloxApp = reinterpret_cast<CRobloxApp*>(0x00CB3820);
+static CRobloxApp* const g_CRobloxApp = reinterpret_cast<CRobloxApp*>(Patches::resolveNewVa(0x00CB3820));
 
 // ===== `CRobloxWnd::RenderRequestJob` class =====
 
@@ -76,13 +77,13 @@ namespace RBX
 		void* name; // this marks the offset of a std::string, it is not a pointer to one
 	};
 
-	const auto Instance__setParent = reinterpret_cast<void(__thiscall*)(Instance* _this, Instance* newParent)>(0x00597910);
+	const auto Instance__setParent = reinterpret_cast<void(__thiscall*)(Instance* _this, Instance* newParent)>(Patches::resolveNewVa(0x00597910));
 
-	const auto Instance__setName = reinterpret_cast<void(__thiscall*)(Instance* _this, const std::string& name)>(0x00598250);
+	const auto Instance__setName = reinterpret_cast<void(__thiscall*)(Instance* _this, const std::string& name)>(Patches::resolveNewVa(0x00598250));
 
-	const auto Instance__setRobloxLocked = reinterpret_cast<void(__thiscall*)(Instance* _this, bool robloxLocked)>(0x005982F0);
+	const auto Instance__setRobloxLocked = reinterpret_cast<void(__thiscall*)(Instance* _this, bool robloxLocked)>(Patches::resolveNewVa(0x005982F0));
 
-	const auto Instance__raisePropertyChanged = reinterpret_cast<void(__thiscall*)(Instance* _this, void* propDescriptor)>(0x00411F60);
+	const auto Instance__raisePropertyChanged = reinterpret_cast<void(__thiscall*)(Instance* _this, void* propDescriptor)>(Patches::resolveNewVa(0x00411F60));
 
 	// ===== `GuiBuilder` class =====
 
@@ -93,7 +94,7 @@ namespace RBX
 		class Workspace* workspace;
 	};
 
-	const auto GuiBuilder__buildGui = reinterpret_cast<void(__thiscall*)(GuiBuilder* _this, class AdornRbxGfx* adorn, DataModel* dataModel, Workspace* workspace)>(0x007584F0);
+	const auto GuiBuilder__buildGui = reinterpret_cast<void(__thiscall*)(GuiBuilder* _this, class AdornRbxGfx* adorn, DataModel* dataModel, Workspace* workspace)>(Patches::resolveNewVa(0x007584F0));
 
 	// ===== `DataModel` class =====
 
@@ -105,9 +106,9 @@ namespace RBX
 		Workspace* workspace;
 	};
 
-	const auto DataModel__find__ScriptContext = reinterpret_cast<class ScriptContext* (__thiscall*)(DataModel* _this)>(0x00468DA0);
-	const auto DataModel__find__Players = reinterpret_cast<class Players* (__thiscall*)(DataModel* _this)>(0x00414A30);
-	const auto DataModel__find__Network__Server = reinterpret_cast<Network::Server* (__thiscall*)(DataModel* _this)>(0x004D1150);
+	const auto DataModel__find__ScriptContext = reinterpret_cast<class ScriptContext* (__thiscall*)(DataModel* _this)>(Patches::resolveNewVa(0x00468DA0));
+	const auto DataModel__find__Players = reinterpret_cast<class Players* (__thiscall*)(DataModel* _this)>(Patches::resolveNewVa(0x00414A30));
+	const auto DataModel__find__Network__Server = reinterpret_cast<Network::Server* (__thiscall*)(DataModel* _this)>(Patches::resolveNewVa(0x004D1150));
 
 	// HOOKED
 	typedef void(__thiscall* DataModel__startCoreScripts_t)(DataModel* _this, AdornRbxGfx* adorn);
@@ -131,7 +132,7 @@ namespace RBX
 	typedef void(__thiscall* ScriptContext__openState_t)(ScriptContext* _this);
 	extern ScriptContext__openState_t ScriptContext__openState_orig;
 
-	const auto ScriptContext__addScript = reinterpret_cast<void(__thiscall*)(ScriptContext* _this, void* script)>(0x006282B0);
+	const auto ScriptContext__addScript = reinterpret_cast<void(__thiscall*)(ScriptContext* _this, void* script)>(Patches::resolveNewVa(0x006282B0));
 
 	//HOOKED
 	typedef void(__thiscall* ScriptContext__executeInNewThread_t)(ScriptContext* _this, int identity, const char* source, const char* name);
@@ -141,11 +142,11 @@ namespace RBX
 
 	class Players;
 
-	const auto Players__gameChat = reinterpret_cast<void(__thiscall*)(Players* _this, const std::string& message)>(0x004CAE90);
+	const auto Players__gameChat = reinterpret_cast<void(__thiscall*)(Players* _this, const std::string& message)>(Patches::resolveNewVa(0x004CAE90));
 
 	// ===== `Script` class =====
 
-	const auto Script__constructor = reinterpret_cast<class Script* (__thiscall*)(Script* _this)>(0x0063D6B0);
+	const auto Script__constructor = reinterpret_cast<class Script* (__thiscall*)(Script* _this)>(Patches::resolveNewVa(0x0063D6B0));
 
 	class Script
 	{
@@ -162,13 +163,13 @@ namespace RBX
 		}
 	};
 
-	const auto Script__setDisabled = reinterpret_cast<void(__thiscall*)(Script* _this, bool disabled)>(0x0063D460);
+	const auto Script__setDisabled = reinterpret_cast<void(__thiscall*)(Script* _this, bool disabled)>(Patches::resolveNewVa(0x0063D460));
 
-	const auto Script__setSource = reinterpret_cast<void(__thiscall*)(Script* _this, const std::string& source)>(0x0063D330);
+	const auto Script__setSource = reinterpret_cast<void(__thiscall*)(Script* _this, const std::string& source)>(Patches::resolveNewVa(0x0063D330));
 
 	// ===== `CoreScript` class =====
 
-	const auto CoreScript__constructor = reinterpret_cast<class CoreScript* (__thiscall*)(CoreScript*, const std::string& source)>(0x00663570);
+	const auto CoreScript__constructor = reinterpret_cast<class CoreScript* (__thiscall*)(CoreScript*, const std::string& source)>(Patches::resolveNewVa(0x00663570));
 
 	class CoreScript
 	{
@@ -186,7 +187,7 @@ namespace RBX
 
 	// ===== `StarterScript` class =====
 
-	const auto StarterScript__constructor = reinterpret_cast<class StarterScript* (__thiscall*)(StarterScript*, const std::string& source)>(0x00663C50);
+	const auto StarterScript__constructor = reinterpret_cast<class StarterScript* (__thiscall*)(StarterScript*, const std::string& source)>(Patches::resolveNewVa(0x00663C50));
 
 	class StarterScript
 	{
@@ -245,11 +246,11 @@ namespace RBX
 	private:
 		char padding1[168];
 	public:
-		double unk1;
+		double elapsedTime;
 	private:
 		char padding2[8];
 	public:
-		double unk2;
+		double elapsedTimeAtLastStep;
 	private:
 		char padding3[8];
 	public:
@@ -277,6 +278,12 @@ namespace RBX
 	// HOOKED
 	typedef HeartbeatTask* (__thiscall* HeartbeatTask__constructor_t)(HeartbeatTask* _this, RunService* runService, void* a3);
 	extern HeartbeatTask__constructor_t HeartbeatTask__constructor_orig;
+
+	// ===== `DataModelJob` class =====
+
+	class DataModelJob;
+
+	const auto DataModelJob__sleepTime = reinterpret_cast<void(__thiscall*)(DataModelJob*, double*, int, double)>(Patches::resolveNewVa(0x007FDDB0));
 
 	// ===== `PhysicsJob` class =====
 
@@ -355,7 +362,7 @@ namespace RBX
 		// singleton helper
 		static LuaSettings* singleton()
 		{
-			return *reinterpret_cast<LuaSettings**>(0x00CCBF7C);
+			return *reinterpret_cast<LuaSettings**>(Patches::resolveNewVa(0x00CCBF7C));
 		}
 	};
 
@@ -376,7 +383,7 @@ namespace RBX
 		// singleton helper
 		static StandardOut* singleton()
 		{
-			return *reinterpret_cast<StandardOut**>(0x00CBDF3C);
+			return *reinterpret_cast<StandardOut**>(Patches::resolveNewVa(0x00CBDF3C));
 		}
 	};
 
@@ -388,7 +395,7 @@ namespace RBX
 		MESSAGE_ERROR
 	};
 
-	const auto StandardOut__print = reinterpret_cast<void(__thiscall*)(StandardOut* _this, MessageType messageType, const std::string& message)>(0x005B17E0);
+	const auto StandardOut__print = reinterpret_cast<void(__thiscall*)(StandardOut* _this, MessageType messageType, const std::string& message)>(Patches::resolveNewVa(0x005B17E0));
 
 	// ===== `RotateConnector` class =====
 
