@@ -15,7 +15,7 @@ static bool seekComponent(const std::string& url, size_t& position, const std::s
 	size_t endPos = url.find(endStr, position);
 	if (endPos == std::string::npos)
 	{
-		result = url.substr(position);
+		result = &url[position];
 		return false;
 	}
 
@@ -40,7 +40,7 @@ void UrlHelper::parseUrl(const std::string& url)
 	if (!seekComponent(url, position, "?", path))
 		return;
 
-	query = url.substr(position);
+	query = &url[position];
 }
 
 std::string UrlHelper::buildUrl()
