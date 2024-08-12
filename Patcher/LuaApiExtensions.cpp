@@ -106,6 +106,8 @@ int Lua::Api::produceGameChat(lua_State* L)
 
 // ===== functionality for local corescripts and libraries =====
 
+static const auto sub_61AF40 = reinterpret_cast<void* (__thiscall*)(void*, RBX::CoreScript*, bool)>(Patches::resolveNewVa(0x0061AF40));
+
 int Lua::Api::addLocalCoreScript(lua_State* L)
 {
     Lua::checkPermissions(L, 2, "add a local CoreScript");
@@ -119,7 +121,6 @@ int Lua::Api::addLocalCoreScript(lua_State* L)
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::CoreScript>
-    static const auto sub_61AF40 = reinterpret_cast<void* (__thiscall*)(void*, RBX::CoreScript*, bool)>(Patches::resolveNewVa(0x0061AF40));
     sub_61AF40((*vc90::operator_new)(8), coreScript, false);
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(coreScript), true);
@@ -133,6 +134,8 @@ int Lua::Api::addLocalCoreScript(lua_State* L)
     return 0;
 }
 
+static const auto sub_61AE90 = reinterpret_cast<void* (__thiscall*)(void*, RBX::StarterScript*, bool)>(Patches::resolveNewVa(0x0061AE90));
+
 int Lua::Api::addLocalStarterScript(lua_State* L)
 {
     Lua::checkPermissions(L, 2, "add a local StarterScript");
@@ -145,7 +148,6 @@ int Lua::Api::addLocalStarterScript(lua_State* L)
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::StarterScript>
-    static const auto sub_61AE90 = reinterpret_cast<void* (__thiscall*)(void*, RBX::StarterScript*, bool)>(Patches::resolveNewVa(0x0061AE90));
     sub_61AE90((*vc90::operator_new)(8), starterScript, false);
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(starterScript), true);
@@ -156,6 +158,9 @@ int Lua::Api::addLocalStarterScript(lua_State* L)
 
     return 0;
 }
+
+static const auto sub_428EE0 = reinterpret_cast<void* (__thiscall*)(void*, RBX::Script*, bool)>(Patches::resolveNewVa(0x00428EE0));
+static const auto sub_6145A0 = reinterpret_cast<RBX::Script** (__thiscall*)(void*, const std::string&)>(Patches::resolveNewVa(0x006145A0));
 
 int Lua::Api::registerLocalLibrary(lua_State* L)
 {
@@ -168,7 +173,6 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
 
     // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::Script>
-    static const auto sub_428EE0 = reinterpret_cast<void* (__thiscall*)(void*, RBX::Script*, bool)>(Patches::resolveNewVa(0x00428EE0));
     sub_428EE0((*vc90::operator_new)(8), script, false);
 
     std::stringstream sourceStream;
@@ -191,7 +195,6 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
 
     // not fully sure what this is (probably adding to a map?), but this is done to register the script object as a library
     // this is NOT checking if a library was already registered with the given name
-    static const auto sub_6145A0 = reinterpret_cast<RBX::Script** (__thiscall*)(void*, const std::string&)>(Patches::resolveNewVa(0x006145A0));
     auto res = sub_6145A0(*(reinterpret_cast<uint32_t**>(scriptContext) + 129) + 8, name);
     *res = script;
 

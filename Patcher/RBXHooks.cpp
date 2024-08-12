@@ -169,6 +169,8 @@ void __fastcall RBX::DataModel__physicsStep_hook(RBX::DataModel* _this, void*, f
 
 RBX::ScriptContext__openState_t RBX::ScriptContext__openState_orig = reinterpret_cast<RBX::ScriptContext__openState_t>(Patches::resolveNewVa(0x00625BF0));
 
+static const auto ptr_CCDA00 = reinterpret_cast<void*>(Patches::resolveNewVa(0x00CCDA00));
+
 // add extensions to the Lua api
 void __fastcall RBX::ScriptContext__openState_hook(RBX::ScriptContext* _this)
 {
@@ -208,7 +210,7 @@ void __fastcall RBX::ScriptContext__openState_hook(RBX::ScriptContext* _this)
 		{
 			luaSettings->defaultWaitTime = 1.0 / 30.0;
 
-			RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(luaSettings), reinterpret_cast<void*>(Patches::resolveNewVa(0x00CCDA00)));
+			RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(luaSettings), ptr_CCDA00);
 		}
 	}
 }
@@ -277,6 +279,8 @@ RBX::PlayerChatLine* __fastcall RBX::PlayerChatLine__constructor_hook(RBX::Playe
 
 RBX::NetworkSettings__setDataSendRate_t RBX::NetworkSettings__setDataSendRate_orig = reinterpret_cast<RBX::NetworkSettings__setDataSendRate_t>(Patches::resolveNewVa(0x004E42B0));
 
+static const auto ptr_CB7D78 = reinterpret_cast<void*>(Patches::resolveNewVa(0x00CB7D78));
+
 // rewritten to remove value clamp
 void __fastcall RBX::NetworkSettings__setDataSendRate_hook(RBX::NetworkSettings* _this, void*, float dataSendRate)
 {
@@ -286,13 +290,14 @@ void __fastcall RBX::NetworkSettings__setDataSendRate_hook(RBX::NetworkSettings*
 	if (_this->dataSendRate != dataSendRate)
 	{
 		_this->dataSendRate = dataSendRate;
-
-		static const auto ptr_CB7D78 = reinterpret_cast<void*>(Patches::resolveNewVa(0x00CB7D78));
+		
 		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), ptr_CB7D78);
 	}
 }
 
 RBX::NetworkSettings__setReceiveRate_t RBX::NetworkSettings__setReceiveRate_orig = reinterpret_cast<RBX::NetworkSettings__setReceiveRate_t>(Patches::resolveNewVa(0x004E4390));
+
+static const auto ptr_CB7BD8 = reinterpret_cast<void*>(Patches::resolveNewVa(0x00CB7BD8));
 
 // rewritten to remove value clamp
 void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* _this, void*, double receiveRate)
@@ -304,12 +309,13 @@ void __fastcall RBX::NetworkSettings__setReceiveRate_hook(RBX::NetworkSettings* 
 	{
 		_this->receiveRate = receiveRate;
 
-		static const auto ptr_CB7BD8 = reinterpret_cast<void*>(Patches::resolveNewVa(0x00CB7BD8));
 		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), ptr_CB7BD8);
 	}
 }
 
 RBX::NetworkSettings__setPhysicsSendRate_t RBX::NetworkSettings__setPhysicsSendRate_orig = reinterpret_cast<RBX::NetworkSettings__setPhysicsSendRate_t>(Patches::resolveNewVa(0x004E4320));
+
+static const auto ptr_CB7CAC = reinterpret_cast<void*>(Patches::resolveNewVa(0x00CB7CAC));
 
 // rewritten to remove value clamp
 void __fastcall RBX::NetworkSettings__setPhysicsSendRate_hook(RBX::NetworkSettings* _this, void*, float physicsSendRate)
@@ -321,7 +327,6 @@ void __fastcall RBX::NetworkSettings__setPhysicsSendRate_hook(RBX::NetworkSettin
 	{
 		_this->physicsSendRate = physicsSendRate;
 
-		static const auto ptr_CB7CAC = reinterpret_cast<void*>(Patches::resolveNewVa(0x00CB7CAC));
 		RBX::Instance__raisePropertyChanged(reinterpret_cast<RBX::Instance*>(_this), ptr_CB7CAC);
 	}
 }
@@ -340,6 +345,9 @@ bool __fastcall RBX::VideoControl__isVideoRecording_hook(RBX::VideoControl* _thi
 
 RBX::RunService__step_t RBX::RunService__step_orig = reinterpret_cast<RBX::RunService__step_t>(Patches::resolveNewVa(0x0059BED0));
 
+static const auto sub_59B850 = reinterpret_cast<void(__thiscall*)(void*, double*)>(Patches::resolveNewVa(0x0059B850));
+static const auto sub_59BAC0 = reinterpret_cast<void(__thiscall*)(void*, double, double)>(Patches::resolveNewVa(0x0059BAC0));
+
 // unlock fps
 void __fastcall RBX::RunService__step_hook(RBX::RunService* _this, void*, double delta)
 {
@@ -352,8 +360,7 @@ void __fastcall RBX::RunService__step_hook(RBX::RunService* _this, void*, double
 	a[1] = 1.0 / 30.0;
 	if (Config::physicsFpsUnlocked)
 		a[1] = 1.0 / Config::desiredFrameRate;
-
-	static const auto sub_59B850 = reinterpret_cast<void(__thiscall*)(void*, double*)>(Patches::resolveNewVa(0x0059B850));
+	
 	sub_59B850(&_this->heartbeatSignal, a);
 
 	// this is a hack so that the Stepped event gets fired about 30 times per second
@@ -363,7 +370,6 @@ void __fastcall RBX::RunService__step_hook(RBX::RunService* _this, void*, double
 	{
 		_this->elapsedTimeAtLastStep = elapsedTime;
 
-		static const auto sub_59BAC0 = reinterpret_cast<void(__thiscall*)(void*, double, double)>(Patches::resolveNewVa(0x0059BAC0));
 		sub_59BAC0(&_this->steppedSignal, elapsedTime, 1.0 / 30.0);
 	}
 }
