@@ -72,26 +72,26 @@ static const std::unordered_map<void*, void*> hooks = {
     { &ptrToHook_7A39E1, inlineHook_7A39E1 },
 };
 
-#ifdef _DEBUG
 static std::runtime_error patchError(const char* format, ...)
 {
+#ifdef _DEBUG
     va_list args;
     va_start(args, format);
 
-    int size = vsnprintf(nullptr, 0, format, args) + 1;
+    int size = vsnprintf(nullptr, 0, format, args);
 
     std::string buffer;
     buffer.resize(size);
 
-    vsnprintf(&buffer[0], size, format, args);
+    vsnprintf(&buffer[0], size + 1, format, args);
 
     va_end(args);
 
     return std::runtime_error(buffer);
-}
-#else
-#define patchError(x, ...) std::runtime_error("")
 #endif
+
+    return std::runtime_error("");
+}
 
 static void initHooks()
 {
