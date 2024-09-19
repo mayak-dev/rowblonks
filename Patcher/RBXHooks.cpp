@@ -397,3 +397,17 @@ void __fastcall RBX::RotateConnector__setVelocityGoal_hook(RBX::RotateConnector*
 	if (Config::physicsFpsUnlocked)
 		_this->increment *= 60.0f / Config::desiredFrameRate;
 }
+
+// ==== `RBX::Camera` member function hooks =====
+
+RBX::Camera__constructor_t RBX::Camera__constructor_orig = reinterpret_cast<RBX::Camera__constructor_t>(Patches::resolveNewVa(0x00665CF0));
+
+RBX::Camera* __fastcall RBX::Camera__constructor_hook(RBX::Camera* _this)
+{
+	auto result = RBX::Camera__constructor_orig(_this);
+	
+	float fovRad = Config::cameraFov * M_PI / 180.0f;
+	RBX::RbxCamera__setFieldOfView(reinterpret_cast<RBX::RbxCamera*>(&result->rbxCamera), fovRad);
+	
+	return result;
+}

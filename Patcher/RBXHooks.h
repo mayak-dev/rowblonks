@@ -73,4 +73,8 @@ namespace RBX
 
 	void __fastcall RotateConnector__setRotationalGoal_hook(RBX::RotateConnector* _this, void*, float goal);
 	void __fastcall RotateConnector__setVelocityGoal_hook(RBX::RotateConnector* _this, void*, float goal);
+
+	// ==== `RBX::Camera` member function hooks =====
+
+	RBX::Camera* __fastcall Camera__constructor_hook(RBX::Camera* _this);
 }

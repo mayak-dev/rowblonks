@@ -26,7 +26,7 @@ static const std::unordered_map<void*, void*> hooks = {
     // ===== `RBX::ContentId` member function hooks =====
     { &RBX::ContentId__convertLegacyContent_orig, RBX::ContentId__convertLegacyContent_hook },
 
-    // ===== `RBX:Http` member function hooks =====
+    // ===== `RBX::Http` member function hooks =====
     { &RBX::Http__trustCheck_orig, RBX::Http__trustCheck_hook },
 
     // ===== `RBX::DataModel` member function hooks =====
@@ -57,6 +57,9 @@ static const std::unordered_map<void*, void*> hooks = {
     // ===== `RBX::RotateConnector` member function hooks =====
     { &RBX::RotateConnector__setRotationalGoal_orig, RBX::RotateConnector__setRotationalGoal_hook },
     { &RBX::RotateConnector__setVelocityGoal_orig, RBX::RotateConnector__setVelocityGoal_hook },
+
+	// ===== `RBX::Camera member function hooks =====
+    { &RBX::Camera__constructor_orig, RBX::Camera__constructor_hook },
 
     // ===== other hooks =====
     { &sub_6C34D0_orig, sub_6C34D0_hook },

@@ -7,6 +7,7 @@ std::string Config::gameDirectory;
 
 float Config::desiredFrameRate;
 bool Config::physicsFpsUnlocked;
+float Config::cameraFov;
 
 bool Config::desiredFpsOverridesNetworkDataRates;
 
@@ -34,7 +35,8 @@ void Config::init()
 	INIReader ini(gameDirectory + "/rowblonks.ini");
 
 	desiredFrameRate = static_cast<float>(ini.GetReal("Game", "DesiredFrameRate", 60.0));
-	physicsFpsUnlocked = ini.GetBoolean("Game", "PhysicsFpsUnlocked", false);
+	physicsFpsUnlocked = ini.GetBoolean("Game", "PhysicsFpsUnlocked", true);
+	cameraFov = static_cast<float>(ini.GetReal("Game", "CameraFov", 70.0));
 
 	std::string assetOverrideList = ini.GetString("Game", "AssetOverrides", "");
 	if (!assetOverrideList.empty())

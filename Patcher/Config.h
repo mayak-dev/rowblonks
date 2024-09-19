@@ -6,6 +6,7 @@ namespace Config
 
 	extern float desiredFrameRate;
 	extern bool physicsFpsUnlocked;
+	extern float cameraFov;
 
 	extern bool desiredFpsOverridesNetworkDataRates;
 

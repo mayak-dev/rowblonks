@@ -414,4 +414,24 @@ namespace RBX
 	// HOOKED
 	typedef void(__thiscall* RotateConnector__setVelocityGoal_t)(RotateConnector* _this, float goal);
 	extern RotateConnector__setVelocityGoal_t RotateConnector__setVelocityGoal_orig;
+
+	// ===== `RbxCamera` class =====
+
+	class RbxCamera;
+
+	const auto RbxCamera__setFieldOfView = reinterpret_cast<void(__thiscall*)(RbxCamera* _this, float fovRad)>(Patches::resolveNewVa(0x009C3ED0));
+
+	// ===== `Camera` class =====
+
+	class Camera
+	{
+	private:
+		char padding1[152];
+	public:
+		void* rbxCamera; // this marks the offset, not a pointer to the RbxCamera
+	};
+
+	// HOOKED
+	typedef Camera* (__thiscall* Camera__constructor_t)(Camera* _this);
+	extern Camera__constructor_t Camera__constructor_orig;
 }
