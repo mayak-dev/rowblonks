@@ -13,7 +13,7 @@ namespace RBX
 
 namespace Lua
 {
-	RBX::Instance* checkInstance(lua_State* L, int n);
+	RBX::Instance* checkInstance(lua_State* L, int n, void* downcastTypeDesc = nullptr, const char* className = nullptr);
 
 	std::pair<RBX::ScriptContext*, RBX::DataModel*> getScriptContextAndDataModel(lua_State* L);
 

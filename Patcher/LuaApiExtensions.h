@@ -21,6 +21,10 @@ namespace Lua
 
 		int produceGameChat(lua_State* L);
 
+		// ===== functionality for camera manipulation =====
+
+		int setCameraFov(lua_State* L);
+
 		// ===== functionality for local corescripts and libraries =====
 
 		int addLocalCoreScript(lua_State* L);

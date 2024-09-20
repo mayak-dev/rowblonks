@@ -11,6 +11,8 @@ static const luaL_Reg mayaLib[] = {
 
     { "ProduceGameChat", Lua::Api::produceGameChat },
 
+    { "SetCameraFOV", Lua::Api::setCameraFov },
+
     { "AddLocalCoreScript", Lua::Api::addLocalCoreScript },
     { "AddLocalStarterScript", Lua::Api::addLocalStarterScript },
     { "RegisterLocalLibrary", Lua::Api::registerLocalLibrary },
@@ -100,6 +102,21 @@ int Lua::Api::produceGameChat(lua_State* L)
    
     auto players = RBX::DataModel__find__Players(dataModel);
     RBX::Players__gameChat(players, message);
+
+    return 0;
+}
+
+// ===== functionality for camera manipulation =====
+
+int Lua::Api::setCameraFov(lua_State* L)
+{
+    static const auto cameraTypeDesc = reinterpret_cast<void*>(Patches::resolveNewVa(0x00C51910));
+
+    auto camera = reinterpret_cast<RBX::Camera*>(Lua::checkInstance(L, 1, cameraTypeDesc, "Camera"));
+	float fov = static_cast<float>(luaL_checknumber(L, 2));
+
+    float fovRad = fov * M_PI / 180.0f;
+    RBX::RbxCamera__setFieldOfView(reinterpret_cast<RBX::RbxCamera*>(&camera->rbxCamera), fovRad);
 
     return 0;
 }

@@ -3,7 +3,7 @@
 #include "RBXDefs.h"
 #include "Patches.h"
 
-RBX::Instance* Lua::checkInstance(lua_State* L, int n)
+RBX::Instance* Lua::checkInstance(lua_State* L, int n, void* downcastTypeDesc, const char* className)
 {
     // userdata should be a boost::shared_ptr<RBX::Reflection::DescribedBase>
     // RBX::Reflection::DescribedBase* should be at sharedPtr[0]
@@ -12,8 +12,17 @@ RBX::Instance* Lua::checkInstance(lua_State* L, int n)
     static void* const describedBaseTypeDesc = reinterpret_cast<void*>(Patches::resolveNewVa(0x00C073F8));
     static void* const instanceTypeDesc = reinterpret_cast<void*>(Patches::resolveNewVa(0x00C071F8));
 
-    // result = dynamic_cast<RBX::Instance*>(ptr)
-    auto result = reinterpret_cast<RBX::Instance*>((*vc90::_RTDynamicCast)(ptr, 0, describedBaseTypeDesc, instanceTypeDesc, FALSE));
+    if (downcastTypeDesc == nullptr && className == nullptr)
+    {
+        downcastTypeDesc = instanceTypeDesc;
+        className = "Instance";
+    }
+    
+    // result = dynamic_cast<T*>(ptr), where T is a class derived from RBX::Reflection::DescribedBase
+    auto result = reinterpret_cast<RBX::Instance*>((*vc90::_RTDynamicCast)(ptr, 0, describedBaseTypeDesc, downcastTypeDesc, FALSE));
+    if (result == nullptr)
+        luaL_error(L, "Argument #%d is not a %s", n, className);
+
     return result;
 }
 
