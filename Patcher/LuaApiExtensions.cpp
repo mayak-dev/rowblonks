@@ -136,9 +136,9 @@ int Lua::Api::addLocalCoreScript(lua_State* L)
 
     auto coreScript = RBX::CoreScript::construct(source);
 
-    // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::CoreScript>
-    sub_61AF40((*vc90::operator_new)(8), coreScript, false);
+    uint32_t* sharedPtr[2];
+    sub_61AF40(sharedPtr, coreScript, false);
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(coreScript), true);
     RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(coreScript), name);
@@ -147,6 +147,10 @@ int Lua::Api::addLocalCoreScript(lua_State* L)
     RBX::ScriptContext* scriptContext = Lua::getScriptContextAndDataModel(L).first;
     if (parent != reinterpret_cast<RBX::Instance*>(scriptContext))
         RBX::ScriptContext__addScript(scriptContext, coreScript);
+
+    // atomically decrement the ref count of the boost::shared_ptr
+    InterlockedExchangeSubtract(*(sharedPtr + 1) + 1, 1);
+    InterlockedExchangeSubtract(*(sharedPtr + 1) + 2, 1);
 
     return 0;
 }
@@ -163,15 +167,19 @@ int Lua::Api::addLocalStarterScript(lua_State* L)
 
     auto starterScript = RBX::StarterScript::construct(source);
 
-    // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::StarterScript>
-    sub_61AE90((*vc90::operator_new)(8), starterScript, false);
+    uint32_t* sharedPtr[2];
+    sub_61AE90(sharedPtr, starterScript, false);
 
     RBX::Instance__setRobloxLocked(reinterpret_cast<RBX::Instance*>(starterScript), true);
     RBX::Instance__setName(reinterpret_cast<RBX::Instance*>(starterScript), name);
 
     RBX::ScriptContext* scriptContext = Lua::getScriptContextAndDataModel(L).first;
     RBX::Instance__setParent(reinterpret_cast<RBX::Instance*>(starterScript), reinterpret_cast<RBX::Instance*>(scriptContext));
+
+    // atomically decrement the ref count of the boost::shared_ptr
+    InterlockedExchangeSubtract(*(sharedPtr + 1) + 1, 1);
+    InterlockedExchangeSubtract(*(sharedPtr + 1) + 2, 1);
 
     return 0;
 }
@@ -188,9 +196,9 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
 
     auto script = RBX::Script::construct();
 
-    // i don't know a good place to put this
     // create a boost::shared_ptr<RBX::Script>
-    sub_428EE0((*vc90::operator_new)(8), script, false);
+    uint32_t* sharedPtr[2];
+    sub_428EE0(sharedPtr, script, false);
 
     std::stringstream sourceStream;
     
@@ -214,6 +222,10 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
     // this is NOT checking if a library was already registered with the given name
     auto res = sub_6145A0(*(reinterpret_cast<uint32_t**>(scriptContext) + 129) + 8, name);
     *res = script;
+
+    // atomically decrement the ref count of the boost::shared_ptr
+    InterlockedExchangeSubtract(*(sharedPtr + 1) + 1, 1);
+    InterlockedExchangeSubtract(*(sharedPtr + 1) + 2, 1);
 
     return 0;
 }
