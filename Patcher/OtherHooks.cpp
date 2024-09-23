@@ -36,7 +36,7 @@ void* ptrToHook_6668F6 = reinterpret_cast<void*>(Patches::resolveNewVa(0x006668F
 
 static float __stdcall getFlyCamAccelMultiplier(int steps)
 {
-	const float fpsRatio = 60.0f / Config::desiredFrameRate;
+	const float fpsRatio = 30.0f / Config::desiredFrameRate;
 
 	float multiplier = fpsRatio;
 
