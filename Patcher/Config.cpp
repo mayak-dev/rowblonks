@@ -5,7 +5,7 @@
 
 std::string Config::gameDirectory;
 
-float Config::desiredFrameRate;
+int Config::desiredFrameRate;
 bool Config::physicsFpsUnlocked;
 float Config::cameraFov;
 
@@ -34,7 +34,7 @@ void Config::init()
 
 	INIReader ini(gameDirectory + "/rowblonks.ini");
 
-	desiredFrameRate = static_cast<float>(ini.GetReal("Game", "DesiredFrameRate", 60.0));
+	desiredFrameRate = ini.GetInteger("Game", "DesiredFrameRate", 60);
 	physicsFpsUnlocked = ini.GetBoolean("Game", "PhysicsFpsUnlocked", true);
 	cameraFov = static_cast<float>(ini.GetReal("Game", "CameraFov", 70.0));
 

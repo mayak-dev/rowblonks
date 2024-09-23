@@ -71,8 +71,8 @@ static const std::unordered_map<void*, void*> hooks = {
     { &sub_79F6A0_orig, sub_79F6A0_hook },
     { &sub_79F680_orig, sub_79F680_hook },
     { &sub_79F6B0_orig, sub_79F6B0_hook },
-    { &ptrToHook_7A3221, inlineHook_7A3221 },
-    { &ptrToHook_7A39E1, inlineHook_7A39E1 },
+    { &ptrToHook_7A3203, inlineHook_7A3203 },
+    { &ptrToHook_7A39C3, inlineHook_7A39C3 },
 };
 
 static std::runtime_error patchError(const char* format, ...)
@@ -182,7 +182,7 @@ void Patches::init()
     // the getter for this constant was optimized out in some places, so we have to overwrite the value directly
     // it is used for calculating how forces are applied over each kernel iteration
     if (Config::physicsFpsUnlocked)
-        writeValue(reinterpret_cast<float*>(resolveNewVa(0x00A9B6A4)), 1.0f / (19.0f * 4.0f * Config::desiredFrameRate), PAGE_READWRITE);
+        writeValue(reinterpret_cast<float*>(resolveNewVa(0x00A9B6A4)), 1.0f / (19.0f * 8.0f * Config::desiredFrameRate), PAGE_READWRITE);
 
     initHooks();
 }

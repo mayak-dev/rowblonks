@@ -62,10 +62,10 @@ double sub_79F6B0_hook();
 
 // ===== unlock fps (motor[6d] physics) =====
 
-extern void* ptrToHook_7A3221;
+extern void* ptrToHook_7A3203;
 
-void inlineHook_7A3221();
+void inlineHook_7A3203();
 
-extern void* ptrToHook_7A39E1;
+extern void* ptrToHook_7A39C3;
 
-void inlineHook_7A39E1();
+void inlineHook_7A39C3();

@@ -4,7 +4,7 @@ namespace Config
 {
 	extern std::string gameDirectory;
 
-	extern float desiredFrameRate;
+	extern int desiredFrameRate;
 	extern bool physicsFpsUnlocked;
 	extern float cameraFov;
 

@@ -384,7 +384,7 @@ void __fastcall RBX::RotateConnector__setRotationalGoal_hook(RBX::RotateConnecto
 	RBX::RotateConnector__setRotationalGoal_orig(_this, goal);
 
 	if (Config::physicsFpsUnlocked)
-		_this->increment *= 60.0f / Config::desiredFrameRate;
+		_this->increment *= 30.0f / Config::desiredFrameRate;
 }
 
 RBX::RotateConnector__setVelocityGoal_t RBX::RotateConnector__setVelocityGoal_orig = reinterpret_cast<RBX::RotateConnector__setVelocityGoal_t>(Patches::resolveNewVa(0x0079B390));
@@ -395,7 +395,7 @@ void __fastcall RBX::RotateConnector__setVelocityGoal_hook(RBX::RotateConnector*
 	RBX::RotateConnector__setVelocityGoal_orig(_this, goal);
 
 	if (Config::physicsFpsUnlocked)
-		_this->increment *= 60.0f / Config::desiredFrameRate;
+		_this->increment *= 30.0f / Config::desiredFrameRate;
 }
 
 // ==== `RBX::Camera` member function hooks =====

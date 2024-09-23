@@ -34,7 +34,7 @@ void __cdecl sub_794AF0_hook(char a1, int a2, int a3, int a4, int a5, int a6, in
 
 void* ptrToHook_6668F6 = reinterpret_cast<void*>(Patches::resolveNewVa(0x006668F6));
 
-static float __stdcall getFlyCamAccelMultiplier(int steps)
+static float getFlyCamAccelMultiplier(int steps)
 {
 	const float fpsRatio = 30.0f / Config::desiredFrameRate;
 
@@ -60,6 +60,9 @@ void __declspec(naked) inlineHook_6668F6()
 	{
 		push [esp + 0x98]
 		call getFlyCamAccelMultiplier
+		add esp, 4
+
+		// pop the result from st(0) to where its needed
 		fstp [esp + 0x14]
 
 		// jump to original code, skipping the original calculation
@@ -96,7 +99,7 @@ void __declspec(naked) inlineHook_529031()
 
 void* ptrToHook_613019 = reinterpret_cast<void*>(Patches::resolveNewVa(0x00613019));
 
-static void __stdcall xmlParseAttributesOnSyntaxError()
+static void xmlParseAttributesOnSyntaxError()
 {
 	auto error = vc90::std::runtime_error::construct("TextXmlParser::parseAttributes - invalid syntax for assigning attributes");
 	vc90::std::runtime_error::raise(error);
@@ -140,7 +143,7 @@ sub_79F680_t sub_79F680_orig = reinterpret_cast<sub_79F680_t>(Patches::resolveNe
 int sub_79F680_hook()
 {
 	if (Config::physicsFpsUnlocked)
-		return static_cast<int>(4 * Config::desiredFrameRate);
+		return 8 * Config::desiredFrameRate;
 
 	return 240;
 }
@@ -150,14 +153,14 @@ sub_79F6B0_t sub_79F6B0_orig = reinterpret_cast<sub_79F6B0_t>(Patches::resolveNe
 double sub_79F6B0_hook()
 {
 	if (Config::physicsFpsUnlocked)
-		return 1.0 / (4.0 * Config::desiredFrameRate);
+		return 1.0 / (8.0 * Config::desiredFrameRate);
 
 	return 1.0 / 240.0;
 }
 
 // ===== unlock fps (motor[6d] physics) =====
 
-static float __stdcall getAdjustedMaxVelocity(float velocity)
+static float getAdjustedMaxVelocity(float velocity)
 {
 	if (Config::physicsFpsUnlocked)
 		return velocity * (30.0f / Config::desiredFrameRate);
@@ -165,30 +168,56 @@ static float __stdcall getAdjustedMaxVelocity(float velocity)
 	return velocity;
 }
 
-void* ptrToHook_7A3221 = reinterpret_cast<void*>(Patches::resolveNewVa(0x007A3221));
+void* ptrToHook_7A3203 = reinterpret_cast<void*>(Patches::resolveNewVa(0x007A3203));
 
-void __declspec(naked) inlineHook_7A3221()
+static const void* ptr_7A321F = reinterpret_cast<void*>(Patches::resolveNewVa(0x007A321F));
+
+void __declspec(naked) inlineHook_7A3203()
 {
 	__asm
 	{
-		sub esp, 4
-		fstp [esp]
-		call getAdjustedMaxVelocity
+		// overwritten instructions
+		push esi
+		mov esi, ecx
 
-		jmp [ptrToHook_7A3221]
+		// take original velocity and store adjusted value in st(0)
+		push [esi + 0xD0]
+		call getAdjustedMaxVelocity
+		add esp, 4
+		
+		// SSE register setup from original code
+		xorps xmm1, xmm1
+		movss xmm3, [esi + 0xD4]
+		movss xmm0, [esi + 0xCC]
+
+		// jump to fabs
+		jmp [ptr_7A321F]
 	}
 }
 
-void* ptrToHook_7A39E1 = reinterpret_cast<void*>(Patches::resolveNewVa(0x007A39E1));
+void* ptrToHook_7A39C3 = reinterpret_cast<void*>(Patches::resolveNewVa(0x007A39C3));
 
-void __declspec(naked) inlineHook_7A39E1()
+static const void* ptr_7A39DF = reinterpret_cast<void*>(Patches::resolveNewVa(0x007A39DF));
+
+void __declspec(naked) inlineHook_7A39C3()
 {
 	__asm
 	{
-		sub esp, 4
-		fstp [esp]
-		call getAdjustedMaxVelocity
+		// overwritten instructions
+		push esi
+		mov esi, ecx
 
-		jmp [ptrToHook_7A39E1]
+		// take original velocity and store adjusted value in st(0)
+		push [esi + 0xA8]
+		call getAdjustedMaxVelocity
+		add esp, 4
+
+		// SSE register setup from original code
+		xorps xmm4, xmm4
+		movss xmm1, [esi + 0xAC]
+		movss xmm2, [esi + 0x98]
+
+		// jump to fabs
+		jmp [ptr_7A39DF]
 	}
 }
