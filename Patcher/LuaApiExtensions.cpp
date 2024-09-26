@@ -150,7 +150,6 @@ int Lua::Api::addLocalCoreScript(lua_State* L)
 
     // atomically decrement the ref count of the boost::shared_ptr
     InterlockedExchangeSubtract(*(sharedPtr + 1) + 1, 1);
-    InterlockedExchangeSubtract(*(sharedPtr + 1) + 2, 1);
 
     return 0;
 }
@@ -179,7 +178,6 @@ int Lua::Api::addLocalStarterScript(lua_State* L)
 
     // atomically decrement the ref count of the boost::shared_ptr
     InterlockedExchangeSubtract(*(sharedPtr + 1) + 1, 1);
-    InterlockedExchangeSubtract(*(sharedPtr + 1) + 2, 1);
 
     return 0;
 }
@@ -225,7 +223,6 @@ int Lua::Api::registerLocalLibrary(lua_State* L)
 
     // atomically decrement the ref count of the boost::shared_ptr
     InterlockedExchangeSubtract(*(sharedPtr + 1) + 1, 1);
-    InterlockedExchangeSubtract(*(sharedPtr + 1) + 2, 1);
 
     return 0;
 }
