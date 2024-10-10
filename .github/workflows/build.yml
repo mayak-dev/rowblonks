@@ -1,0 +1,27 @@
+name: Build DLL
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+    runs-on: windows-latest
+    env:
+        SolutionName: rowblonks
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build DLL
+      run: msbuild ${{ env.SolutionName }}.sln /m /p:PlatformToolset=v143 /p:Configuration=${{ matrix.configuration }}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.SolutionName }}-${{ matrix.configuration }}
+        path: ${{ matrix.configuration }}
