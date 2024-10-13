@@ -74,7 +74,7 @@ const char* __cdecl RBX::ContentProvider__verifyScriptSignature_hook(const char*
 	if (endPos == std::string::npos)
 		return source;
 
-	return &copy[endPos + 1];
+	return &source[endPos + 1];
 }
 
 RBX::ContentProvider__verifyRequestedScriptSignature_t RBX::ContentProvider__verifyRequestedScriptSignature_orig = reinterpret_cast<RBX::ContentProvider__verifyRequestedScriptSignature_t>(Patches::resolveNewVa(0x00654B90));
@@ -95,7 +95,7 @@ RBX::ContentId__convertLegacyContent_t RBX::ContentId__convertLegacyContent_orig
 // as well as in other places, making it a good spot to modify the ContentId
 void __fastcall RBX::ContentId__convertLegacyContent_hook(RBX::ContentId* _this)
 {
-	ContentId__convertLegacyContent_orig(_this);
+	RBX::ContentId__convertLegacyContent_orig(_this);
 
 	UrlHelper urlHelper(_this->id);
 
