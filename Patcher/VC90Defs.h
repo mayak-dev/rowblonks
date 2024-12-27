@@ -36,6 +36,8 @@ namespace vc90
 
 		const auto runtime_error__constructor = reinterpret_cast<class runtime_error* (__thiscall*)(runtime_error* _this, const ::std::string& message)>(Patches::resolveNewVa(0x0040A950));
 
+		const auto runtime_error_ThrowInfo = reinterpret_cast<void*>(Patches::resolveNewVa(0x00B89120));
+
 		class runtime_error
 		{
 		public:
@@ -52,7 +54,7 @@ namespace vc90
 			// helper to throw
 			static void raise(runtime_error* error)
 			{
-				(*_CxxThrowException)(error, reinterpret_cast<void*>(0x00B89120));
+				(*_CxxThrowException)(error, runtime_error_ThrowInfo);
 			}
 		};
 	}
