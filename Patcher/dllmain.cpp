@@ -2,6 +2,7 @@
 
 #include "Config.h"
 #include "Patches.h"
+#include "RBXCookieJar.h"
 
 // imported functions will be patched to include this, forcing the DLL to be loaded
 void __declspec(dllexport) nothing() {}
@@ -14,6 +15,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         {
             Config::init();
             Patches::init();
+            RBXCookieJar::read();
         }
         catch (const std::runtime_error& error)
         {

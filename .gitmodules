@@ -4,3 +4,9 @@
 [submodule "inih"]
 	path = inih
 	url = https://github.com/benhoyt/inih
+[submodule "rapidjson"]
+	path = rapidjson
+	url = https://github.com/Tencent/rapidjson
+[submodule "cpp-base64"]
+	path = cpp-base64
+	url = https://github.com/ReneNyffenegger/cpp-base64

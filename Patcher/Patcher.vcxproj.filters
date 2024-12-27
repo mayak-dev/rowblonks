@@ -16,6 +16,9 @@
     <Filter Include="inih">
       <UniqueIdentifier>{52fefdae-c609-4121-83c8-d3efa3dbc284}</UniqueIdentifier>
     </Filter>
+    <Filter Include="base64">
+      <UniqueIdentifier>{4b98b602-5867-4a2f-b950-d8302177f383}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -57,6 +60,12 @@
     <ClInclude Include="..\inih\ini.h">
       <Filter>inih</Filter>
     </ClInclude>
+    <ClInclude Include="RBXCookieJar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp-base64\base64.h">
+      <Filter>base64</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -94,6 +103,12 @@
     </ClCompile>
     <ClCompile Include="LuaBitOp.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RBXCookieJar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp-base64\base64.cpp">
+      <Filter>base64</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

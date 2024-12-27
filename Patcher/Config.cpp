@@ -24,6 +24,8 @@ std::vector<std::string> Config::assetOverrides = {
 	"1014653", "1014654", "1014655",			// LinkedRocketLauncher
 };
 
+bool Config::readPlayerBetaCookieJar;
+
 bool Config::initialized;
 
 void Config::init()
@@ -48,6 +50,8 @@ void Config::init()
 		while (std::getline(sstream, assetId, ','))
 			assetOverrides.push_back(assetId);
 	}
+
+	readPlayerBetaCookieJar = ini.GetBoolean("Game", "ReadPlayerBetaCookieJar", true);
 
 	desiredFpsOverridesNetworkDataRates = ini.GetBoolean("Network", "DesiredFpsOverridesNetworkDataRates", true);
 

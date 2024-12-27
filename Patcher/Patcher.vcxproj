@@ -57,13 +57,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Detours\include;$(SolutionDir)inih\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Detours\include;$(SolutionDir)inih\cpp;$(SolutionDir)rapidjson\include;$(SolutionDir)cpp-base64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>$(SolutionDir)Detours\lib.X86\detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Detours\lib.X86\detours.lib;wininet.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(ProjectDir)rowblonks.ini" "$(OutDir)rowblonks.ini"</Command>
@@ -79,7 +79,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Detours\include;$(SolutionDir)inih\cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Detours\include;$(SolutionDir)inih\cpp;$(SolutionDir)rapidjson\include;$(SolutionDir)cpp-base64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -87,13 +87,14 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>$(SolutionDir)Detours\lib.X86\detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Detours\lib.X86\detours.lib;wininet.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(ProjectDir)rowblonks.ini" "$(OutDir)rowblonks.ini"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\cpp-base64\base64.h" />
     <ClInclude Include="..\inih\cpp\INIReader.h" />
     <ClInclude Include="..\inih\ini.h" />
     <ClInclude Include="LuaApiExtensions.h" />
@@ -102,6 +103,7 @@
     <ClInclude Include="OtherHooks.h" />
     <ClInclude Include="Patches.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RBXCookieJar.h" />
     <ClInclude Include="RBXDefs.h" />
     <ClInclude Include="RBXHooks.h" />
     <ClInclude Include="Config.h" />
@@ -109,6 +111,10 @@
     <ClInclude Include="VC90Defs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\cpp-base64\base64.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\inih\cpp\INIReader.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -128,6 +134,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="RBXCookieJar.cpp" />
     <ClCompile Include="RBXHooks.cpp" />
     <ClCompile Include="UrlHelper.cpp" />
   </ItemGroup>

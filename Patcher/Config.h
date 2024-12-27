@@ -15,6 +15,8 @@ namespace Config
 
 	extern std::vector<std::string> assetOverrides;
 
+	extern bool readPlayerBetaCookieJar;
+
 	void init();
 
 	extern bool initialized;
