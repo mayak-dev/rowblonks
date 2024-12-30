@@ -21,14 +21,14 @@ void RBXCookieJar::read()
 	path.resize(MAX_PATH);
 
 	if (SHGetFolderPath(nullptr, CSIDL_LOCAL_APPDATA, nullptr, 0, &path[0]) != S_OK)
-		throw std::runtime_error("Could not get LocalAppData path");
+		return;
 
 	path.resize(path.find('\0'));
 	path += "\\Roblox\\LocalStorage\\RobloxCookies.dat";
 
 	std::ifstream cookieJarFile(path);
 	if (!cookieJarFile.is_open())
-		throw std::runtime_error("Could not open Roblox cookie jar");
+		return;
 
 	// read and validate json data
 
@@ -39,15 +39,15 @@ void RBXCookieJar::read()
 	cookieJarFile.close();
 
 	if (document.HasParseError())
-		throw std::runtime_error("Could not parse Roblox cookie jar");
+		return;
 
 	auto& version = document["CookiesVersion"];
 	if (!version.IsString() || std::strcmp(version.GetString(), "1") != 0)
-		throw std::runtime_error("Unsupported Roblox cookie jar version");
+		return;
 
 	auto& data = document["CookiesData"];
 	if (!data.IsString())
-		throw std::runtime_error("Invalid Roblox cookie jar data");
+		return;
 
 	// decrypt the cookie jar data
 
@@ -60,7 +60,7 @@ void RBXCookieJar::read()
 	DATA_BLOB cookiesDecryptedBlob;
 
 	if (!CryptUnprotectData(&cookiesEncryptedBlob, nullptr, nullptr, nullptr, nullptr, 0, &cookiesDecryptedBlob))
-		throw std::runtime_error("Could not decrypt Roblox cookie jar data");
+		return;
 	
 	const std::string cookiesDecrypted(reinterpret_cast<char*>(cookiesDecryptedBlob.pbData), cookiesDecryptedBlob.cbData);
 	LocalFree(cookiesDecryptedBlob.pbData);
@@ -83,6 +83,6 @@ void RBXCookieJar::read()
 
 	std::string roblosecurity = cookiesDecrypted.substr(roblosecurityPos, roblosecuritySize);
 
-	// authenticate to avoid rate limits (such as that of the assetdelivery API we use)
-	InternetSetCookie("https://roblox.com", ".ROBLOSECURITY", roblosecurity.c_str());
+	// authenticate to avoid assetdelivery rate limits
+	InternetSetCookie("https://assetdelivery.roblox.com", ".ROBLOSECURITY", roblosecurity.c_str());
 }
